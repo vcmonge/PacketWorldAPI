@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="catalogo">
+    <select id="obtener-estatus-envio" resultType="pojo.EstatusEnvio">
+        SELECT * FROM ESTATUS_ENVIO
+    </select>
+    
+    <select id="obtener-rol" resultType="pojo.Rol">
+        SELECT * FROM ROL
+    </select>
+    
+    <select id="obtener-tipo-unidad" resultType="pojo.TipoUnidad">
+        SELECT * FROM TIPO_UNIDAD
+    </select>
+</mapper>
