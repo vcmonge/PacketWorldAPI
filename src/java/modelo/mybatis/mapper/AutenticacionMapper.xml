@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="autenticacion">
+
+    <select id="conductor" parameterType="map" resultType="pojo.Conductor">
+        SELECT 
+            c.idColaborador,
+            c.nombre,
+            c.apellidoPaterno,
+            c.apellidoMaterno,
+            c.CURP,
+            c.correo,
+            c.noPersonal,
+            c.contrasenia,
+            c.fotografia,
+            c.idRol,
+            c.idSucursal,
+            d.numero_licencia AS numeroLicencia
+        FROM COLABORADOR c
+        INNER JOIN CONDUCTOR d ON c.idColaborador = d.idConductor
+        WHERE c.noPersonal = #{noPersonal} 
+          AND c.contrasenia = #{password}
+    </select>
+    
+</mapper>
