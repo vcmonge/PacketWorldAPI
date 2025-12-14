@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="envio">
+    <select id="obtener-envios-conductor" parameterType="int" resultType="pojo.Envio">
+        SELECT
+            e.idEnvio,
+            e.noGuia,
+            e.costo,
+            e.destinatarioNombre,
+            e.destinatarioApellidoPaterno,
+            e.destinatarioApellidoMaterno,
+            e.numeroDestino,
+            e.calleDestino,
+            cl.nombre AS coloniaDestino,
+            cl.ciudad AS ciudadDestino,
+            m.nombre AS municipioDestino,
+            est.nombre AS estadoDestino,
+            s.nombre AS sucursal,
+            e.idConductor,
+            CONCAT_WS(' ', cb.nombre, cb.apellidoPaterno, cb.apellidoMaterno) AS conductor,
+            CONCAT_WS(' ', cli.nombre, cli.apellidoPaterno, cli.apellidoMaterno) AS cliente,
+            cli.telefono AS clienteTelefono,
+            cli.correo AS clienteCorreo,
+            ee.nombre AS estatus
+        FROM envio e
+             INNER JOIN estatus_envio ee ON ee.idEstatusEnvio = e.idEstatusEnvio
+             INNER JOIN colonias cl ON cl.id = e.idColoniaDestino
+             INNER JOIN municipios m ON m.id = cl.municipio
+             INNER JOIN estados est ON est.id = m.estado
+             INNER JOIN sucursal s ON e.idSucursalOrigen = s.idSucursal
+             INNER JOIN cliente cli ON cli.idCliente = e.idCliente
+             LEFT JOIN colaborador cb ON cb.idColaborador = e.idConductor
+        WHERE e.idConductor = #{idConductor};
+    </select>
+</mapper>

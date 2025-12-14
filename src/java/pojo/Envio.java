@@ -8,73 +8,59 @@ public class Envio {
     private String destinatarioNombre;
     private String destinatarioApellidoPaterno;
     private String destinatarioApellidoMaterno;
+    private String numeroDestino;
+    private String calleDestino;
     
     // Llaves foráneas (IDs)
     private Integer idEstatusEnvio;
     private Integer idSucursalOrigen;
     private Integer idConductor;
     private Integer idCliente;
-    private Integer idDireccionDestino;
+    private Integer idColoniaDestino;
+    
+    // Informacion recolectada de FK
+    private String coloniaDestino;
+    private String ciudadDestino;
+    private String municipioDestino;
+    private String estadoDestino;
+    
+    private String conductor;
+    
+    private String cliente;
+    private String clienteTelefono;
+    private String clienteCorreo;
+    
+    private String sucursal;
+    
+    private String estatus;
         
     public Envio() {
     }
 
-    public Envio(Integer idEnvio, String noGuia, Double costo, String destinatarioNombre, String destinatarioApellidoPaterno, String destinatarioApellidoMaterno, Integer idEstatusEnvio, Integer idSucursalOrigen, Integer idConductor, Integer idCliente, Integer idDireccionDestino) {
+    public Envio(Integer idEnvio, String noGuia, Double costo, String destinatarioNombre, String destinatarioApellidoPaterno, String destinatarioApellidoMaterno, String numeroDestino, String calleDestino, Integer idEstatusEnvio, Integer idSucursalOrigen, Integer idConductor, Integer idCliente, Integer idColoniaDestino, String coloniaDestino, String ciudadDestino, String municipioDestino, String estadoDestino, String conductor, String cliente, String clienteTelefono, String clienteCorreo, String sucursal, String estatus) {
         this.idEnvio = idEnvio;
         this.noGuia = noGuia;
         this.costo = costo;
         this.destinatarioNombre = destinatarioNombre;
         this.destinatarioApellidoPaterno = destinatarioApellidoPaterno;
         this.destinatarioApellidoMaterno = destinatarioApellidoMaterno;
+        this.numeroDestino = numeroDestino;
+        this.calleDestino = calleDestino;
         this.idEstatusEnvio = idEstatusEnvio;
         this.idSucursalOrigen = idSucursalOrigen;
         this.idConductor = idConductor;
         this.idCliente = idCliente;
-        this.idDireccionDestino = idDireccionDestino;
-    }
-
-    public Integer getIdEnvio() {
-        return idEnvio;
-    }
-
-    public String getNoGuia() {
-        return noGuia;
-    }
-
-    public Double getCosto() {
-        return costo;
-    }
-
-    public String getDestinatarioNombre() {
-        return destinatarioNombre;
-    }
-
-    public String getDestinatarioApellidoPaterno() {
-        return destinatarioApellidoPaterno;
-    }
-
-    public String getDestinatarioApellidoMaterno() {
-        return destinatarioApellidoMaterno;
-    }
-
-    public Integer getIdEstatusEnvio() {
-        return idEstatusEnvio;
-    }
-
-    public Integer getIdSucursalOrigen() {
-        return idSucursalOrigen;
-    }
-
-    public Integer getIdConductor() {
-        return idConductor;
-    }
-
-    public Integer getIdCliente() {
-        return idCliente;
-    }
-
-    public Integer getIdDireccionDestino() {
-        return idDireccionDestino;
+        this.idColoniaDestino = idColoniaDestino;
+        this.coloniaDestino = coloniaDestino;
+        this.ciudadDestino = ciudadDestino;
+        this.municipioDestino = municipioDestino;
+        this.estadoDestino = estadoDestino;
+        this.conductor = conductor;
+        this.cliente = cliente;
+        this.clienteTelefono = clienteTelefono;
+        this.clienteCorreo = clienteCorreo;
+        this.sucursal = sucursal;
+        this.estatus = estatus;
     }
 
     public void setIdEnvio(Integer idEnvio) {
@@ -101,6 +87,14 @@ public class Envio {
         this.destinatarioApellidoMaterno = destinatarioApellidoMaterno;
     }
 
+    public void setNumeroDestino(String numeroDestino) {
+        this.numeroDestino = numeroDestino;
+    }
+
+    public void setCalleDestino(String calleDestino) {
+        this.calleDestino = calleDestino;
+    }
+
     public void setIdEstatusEnvio(Integer idEstatusEnvio) {
         this.idEstatusEnvio = idEstatusEnvio;
     }
@@ -117,8 +111,141 @@ public class Envio {
         this.idCliente = idCliente;
     }
 
-    public void setIdDireccionDestino(Integer idDireccionDestino) {
-        this.idDireccionDestino = idDireccionDestino;
+    public void setIdColoniaDestino(Integer idColoniaDestino) {
+        this.idColoniaDestino = idColoniaDestino;
     }
+
+    public void setColoniaDestino(String coloniaDestino) {
+        this.coloniaDestino = coloniaDestino;
+    }
+
+    public void setCiudadDestino(String ciudadDestino) {
+        this.ciudadDestino = ciudadDestino;
+    }
+
+    public void setMunicipioDestino(String municipioDestino) {
+        this.municipioDestino = municipioDestino;
+    }
+
+    public void setEstadoDestino(String estadoDestino) {
+        this.estadoDestino = estadoDestino;
+    }
+
+    public void setConductor(String conductor) {
+        this.conductor = conductor;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
+    }
+
+    public void setClienteTelefono(String clienteTelefono) {
+        this.clienteTelefono = clienteTelefono;
+    }
+
+    public void setClienteCorreo(String clienteCorreo) {
+        this.clienteCorreo = clienteCorreo;
+    }
+
+    public void setSucursal(String sucursal) {
+        this.sucursal = sucursal;
+    }
+
+    public void setEstatus(String estatus) {
+        this.estatus = estatus;
+    }
+
+    public Integer getIdEnvio() {
+        return idEnvio;
+    }
+
+    public String getNoGuia() {
+        return noGuia;
+    }
+
+    public Double getCosto() {
+        return costo;
+    }
+
+    public String getDestinatarioNombre() {
+        return destinatarioNombre;
+    }
+
+    public String getDestinatarioApellidoPaterno() {
+        return destinatarioApellidoPaterno;
+    }
+
+    public String getDestinatarioApellidoMaterno() {
+        return destinatarioApellidoMaterno;
+    }
+
+    public String getNumeroDestino() {
+        return numeroDestino;
+    }
+
+    public String getCalleDestino() {
+        return calleDestino;
+    }
+
+    public Integer getIdEstatusEnvio() {
+        return idEstatusEnvio;
+    }
+
+    public Integer getIdSucursalOrigen() {
+        return idSucursalOrigen;
+    }
+
+    public Integer getIdConductor() {
+        return idConductor;
+    }
+
+    public Integer getIdCliente() {
+        return idCliente;
+    }
+
+    public Integer getIdColoniaDestino() {
+        return idColoniaDestino;
+    }
+
+    public String getColoniaDestino() {
+        return coloniaDestino;
+    }
+
+    public String getCiudadDestino() {
+        return ciudadDestino;
+    }
+
+    public String getMunicipioDestino() {
+        return municipioDestino;
+    }
+
+    public String getEstadoDestino() {
+        return estadoDestino;
+    }
+
+    public String getConductor() {
+        return conductor;
+    }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public String getClienteTelefono() {
+        return clienteTelefono;
+    }
+
+    public String getClienteCorreo() {
+        return clienteCorreo;
+    }
+
+    public String getSucursal() {
+        return sucursal;
+    }
+
+    public String getEstatus() {
+        return estatus;
+    }
+
 
 }
