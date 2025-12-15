@@ -88,4 +88,28 @@ public class ColaboradorWS {
     public Respuesta eliminar(@PathParam("idColaborador") int idColaborador) {
         return ColaboradorImp.eliminarColaborador(idColaborador);
     }
+
+    // URL: .../ws/colaborador/buscar-nombre/Juan%20Perez
+    @Path("buscar-nombre/{nombre}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Colaborador> buscarPorNombre(@PathParam("nombre") String nombre) {
+        return ColaboradorImp.buscarPorNombre(nombre);
+    }
+
+    // URL: .../ws/colaborador/buscar-rol/Conductor
+    @Path("buscar-rol/{rol}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Colaborador> buscarPorRol(@PathParam("rol") String rol) {
+        return ColaboradorImp.buscarPorRol(rol);
+    }
+
+    // URL: .../ws/colaborador/buscar-nopersonal/C001
+    @Path("buscar-nopersonal/{noPersonal}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Colaborador> buscarPorNoPersonal(@PathParam("noPersonal") String noPersonal) {
+        return ColaboradorImp.buscarPorNoPersonal(noPersonal);
+    }
 }
