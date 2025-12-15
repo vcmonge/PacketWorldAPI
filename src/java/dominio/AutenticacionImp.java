@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
+import pojo.Colaborador;
 import pojo.Conductor;
 
 /**
@@ -24,7 +25,7 @@ public class AutenticacionImp {
                 HashMap<String, String> parametros = new LinkedHashMap<>();
                 parametros.put("noPersonal", noPersonal);
                 parametros.put("password", password);
-                Conductor conductor = conexionBD.selectOne("autenticacion.conductor", parametros);
+                Colaborador conductor = conexionBD.selectOne("autenticacion.conductor", parametros);
                 if (conductor != null) {
                     respuesta.setError(false);
                     respuesta.setMensaje("Credenciales correctas: " + conductor.getNombre());

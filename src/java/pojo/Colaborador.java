@@ -21,11 +21,12 @@ public class Colaborador {
     private String fotoBase64;
     private Integer idRol;
     private Integer idSucursal;
+    private String numeroLicencia;
 
     public Colaborador() {
     }
 
-    public Colaborador(Integer idColaborador, String nombre, String apellidoPaterno, String apellidoMaterno, String curp, String correo, String noPersonal, String contrasenia, byte[] fotografia, String fotoBase64, Integer idRol, Integer idSucursal) {
+    public Colaborador(Integer idColaborador, String nombre, String apellidoPaterno, String apellidoMaterno, String curp, String correo, String noPersonal, String contrasenia, byte[] fotografia, String fotoBase64, Integer idRol, Integer idSucursal, String numeroLicencia) {
         this.idColaborador = idColaborador;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -38,6 +39,7 @@ public class Colaborador {
         this.fotoBase64 = fotoBase64;
         this.idRol = idRol;
         this.idSucursal = idSucursal;
+        this.numeroLicencia = numeroLicencia;
     }
 
     public Integer getIdColaborador() {
@@ -135,5 +137,12 @@ public class Colaborador {
     public void setIdSucursal(Integer idSucursal) {
         this.idSucursal = idSucursal;
     }
-    
+
+    public String getNumeroLicencia() {
+        return numeroLicencia;
+    }
+
+    public void setNumeroLicencia(String numeroLicencia) {
+        this.numeroLicencia = numeroLicencia;
+    }
 }

@@ -4,24 +4,71 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="colaborador">
+
     <select id="obtener-todos" resultType="pojo.Colaborador">
         SELECT 
-            c.idColaborador,
-            c.nombre,
-            c.apellidoPaterno,
-            c.apellidoMaterno,
-            c.CURP,
-            c.correo,
-            c.noPersonal,
-            -- Datos de Rol
-            c.idRol,
-            r.rol AS nombreRol,
-            -- Datos de Sucursal
-            c.idSucursal,
-            s.nombre AS nombreSucursal,
-            s.codigo AS codigoSucursal
+            c.idColaborador, c.nombre, c.apellidoPaterno, c.apellidoMaterno, 
+            c.curp, c.correo, c.noPersonal, 
+            c.idRol, r.rol AS nombreRol,
+            c.idSucursal, s.nombre AS nombreSucursal, s.codigo AS codigoSucursal,
+            cond.numero_licencia AS numeroLicencia
         FROM colaborador c
         INNER JOIN rol r ON c.idRol = r.idRol
-        INNER JOIN sucursal s ON c.idSucursal = s.idSucursal;
+        INNER JOIN sucursal s ON c.idSucursal = s.idSucursal
+        LEFT JOIN conductor cond ON c.idColaborador = cond.idConductor;
+    </select>
+    
+    <insert id="registrar" parameterType="pojo.Colaborador" useGeneratedKeys="true" keyProperty="idColaborador">
+        INSERT INTO colaborador (
+            nombre, apellidoPaterno, apellidoMaterno, CURP, correo, 
+            noPersonal, contrasenia, idRol, idSucursal
+        ) VALUES (
+            #{nombre}, #{apellidoPaterno}, #{apellidoMaterno}, #{curp}, #{correo}, 
+            #{noPersonal}, #{contrasenia}, #{idRol}, #{idSucursal}
+        )
+    </insert>
+    
+    <insert id="registrarConductor" parameterType="pojo.Colaborador">
+        INSERT INTO conductor (idConductor, numero_licencia)
+        VALUES (#{idColaborador}, #{numeroLicencia})
+    </insert>
+    
+    <update id="editar" parameterType="pojo.Colaborador">
+        UPDATE colaborador SET 
+            nombre = #{nombre},
+            apellidoPaterno = #{apellidoPaterno},
+            apellidoMaterno = #{apellidoMaterno},
+            CURP = #{curp},
+            correo = #{correo},
+            contrasenia = #{contrasenia},
+            idSucursal = #{idSucursal}
+        WHERE idColaborador = #{idColaborador}
+    </update>
+
+    <update id="editarConductor" parameterType="pojo.Colaborador">
+        UPDATE conductor SET
+            numero_licencia = #{numeroLicencia}
+        WHERE idConductor = #{idColaborador}
+    </update>
+    
+    <delete id="eliminarConductor" parameterType="int">
+        DELETE FROM conductor WHERE idConductor = #{idColaborador}
+    </delete>
+
+    <delete id="eliminar" parameterType="int">
+        DELETE FROM colaborador WHERE idColaborador = #{idColaborador}
+    </delete>
+    
+    <select id="obtenerPorNoPersonal" parameterType="string" resultType="pojo.Colaborador">
+        SELECT 
+            c.*, 
+            r.rol AS nombreRol,
+            s.nombre AS nombreSucursal, s.codigo AS codigoSucursal,
+            cond.numero_licencia AS numeroLicencia
+        FROM colaborador c
+        INNER JOIN rol r ON c.idRol = r.idRol
+        INNER JOIN sucursal s ON c.idSucursal = s.idSucursal
+        LEFT JOIN conductor cond ON c.idColaborador = cond.idConductor
+        WHERE c.noPersonal = #{noPersonal}
     </select>
 </mapper>

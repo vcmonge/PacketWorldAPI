@@ -4,7 +4,7 @@
  */
 package dto;
 
-import pojo.Conductor;
+import pojo.Colaborador;
 
 /**
  *
@@ -13,12 +13,12 @@ import pojo.Conductor;
 public class RSAutenticacionConductor {
     private String mensaje;
     private boolean error;
-    private Conductor conductor;
+    private Colaborador conductor;
 
     public RSAutenticacionConductor() {
     }
 
-    public RSAutenticacionConductor(String mensaje, boolean error, Conductor conductor) {
+    public RSAutenticacionConductor(String mensaje, boolean error, Colaborador conductor) {
         this.mensaje = mensaje;
         this.error = error;
         this.conductor = conductor;
@@ -40,12 +40,11 @@ public class RSAutenticacionConductor {
         this.error = error;
     }
 
-    public Conductor getConductor() {
+    public Colaborador getConductor() {
         return conductor;
     }
 
-    public void setConductor(Conductor conductor) {
+    public void setConductor(Colaborador conductor) {
         this.conductor = conductor;
-    }
-    
+    }    
 }
