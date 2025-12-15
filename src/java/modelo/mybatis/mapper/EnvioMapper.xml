@@ -101,4 +101,22 @@
             #{idCliente}
         )
     </insert>
+    <update id="actualizar-estatus-envio" parameterType="map">
+        UPDATE ENVIO 
+        SET idEstatusEnvio = #{idEstatusEnvio} 
+        WHERE idEnvio = #{idEnvio}
+    </update>
+    <insert id="registrar-historial-estatus" parameterType="pojo.EnvioHistorialEstatus">
+        INSERT INTO ENVIO_HISTORIAL_ESTATUS (
+            idEnvio,
+            idColaborador,
+            idEstatusEnvio,
+            comentario) 
+        VALUES (
+            #{idEnvio},
+            #{idColaborador},
+            #{idEstatusEnvio},
+            #{comentario}
+        )
+    </insert>
 </mapper>

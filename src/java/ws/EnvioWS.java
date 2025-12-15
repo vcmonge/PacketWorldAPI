@@ -14,6 +14,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import pojo.Envio;
+import pojo.EnvioHistorialEstatus;
 import utilidades.Validaciones;
 
 @Path("envio")
@@ -68,5 +69,18 @@ public class EnvioWS {
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
+    }
+    @Path("actualizar-estatus")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta actualizarEstatus(String json){
+       Gson gson = new Gson();
+       try {
+           EnvioHistorialEstatus envioHistorialEstatus = gson.fromJson(json, EnvioHistorialEstatus.class);
+           return EnvioImp.actualizarEstatus(envioHistorialEstatus);
+       } catch (Exception e) {
+           throw new BadRequestException(e.getMessage());
+       }
     }
 }
