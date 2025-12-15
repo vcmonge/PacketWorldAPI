@@ -72,4 +72,33 @@
              LEFT JOIN colaborador cb ON cb.idColaborador = e.idConductor 
         WHERE e.noGuia = #{noGuia} 
     </select>
+    <insert id="crear-envio" parameterType="pojo.Envio">
+        INSERT INTO ENVIO (
+            noGuia, 
+            costo, 
+            destinatarioNombre, 
+            destinatarioApellidoPaterno, 
+            destinatarioApellidoMaterno, 
+            numeroDestino,
+            calleDestino,
+            idColoniaDestino,
+            idEstatusEnvio, 
+            idSucursalOrigen, 
+            idConductor,
+            idCliente
+        ) VALUES (
+            #{noGuia}, 
+            #{costo}, 
+            #{destinatarioNombre}, 
+            #{destinatarioApellidoPaterno}, 
+            #{destinatarioApellidoMaterno}, 
+            #{numeroDestino}, 
+            #{calleDestino}, 
+            #{idColoniaDestino}, 
+            #{idEstatusEnvio}, 
+            #{idSucursalOrigen}, 
+            #{idConductor}, 
+            #{idCliente}
+        )
+    </insert>
 </mapper>

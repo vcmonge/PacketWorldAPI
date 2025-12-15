@@ -1,11 +1,14 @@
 
 package ws;
 
+import com.google.gson.Gson;
 import dominio.EnvioImp;
 import dto.Respuesta;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -51,5 +54,19 @@ public class EnvioWS {
             throw new BadRequestException();
         }
         return EnvioImp.obtenerEnvio(noGuia);
+    }
+    
+    @Path("crear-envio")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta crearEnvio(String json){
+        Gson gson = new Gson();
+        try {
+            Envio envio = gson.fromJson(json, Envio.class);
+            return EnvioImp.crearEnvio(envio);
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
     }
 }
