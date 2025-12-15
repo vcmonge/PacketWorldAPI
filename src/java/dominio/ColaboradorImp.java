@@ -153,4 +153,52 @@ public class ColaboradorImp {
         }
         return mensaje;
     }
+    
+    // Opción 1: Buscar por Nombre
+    public static List<Colaborador> buscarPorNombre(String nombre) {
+        List<Colaborador> colaboradores = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                colaboradores = conexionBD.selectList("colaborador.buscarPorNombre", nombre);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return colaboradores;
+    }
+
+    // Opción 2: Buscar por Rol
+    public static List<Colaborador> buscarPorRol(String rol) {
+        List<Colaborador> colaboradores = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                colaboradores = conexionBD.selectList("colaborador.buscarPorRol", rol);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return colaboradores;
+    }
+
+    // Opción 3: Buscar por No. Personal
+    public static List<Colaborador> buscarPorNoPersonal(String noPersonal) {
+        List<Colaborador> colaboradores = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                colaboradores = conexionBD.selectList("colaborador.buscarPorNoPersonal", noPersonal);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return colaboradores;
+    }
 }
