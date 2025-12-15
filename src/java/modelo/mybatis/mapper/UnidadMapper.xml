@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="unidad">
+    <select id="obtenerTodas" resultType="pojo.Unidad">
+        SELECT 
+            u.idUnidad,
+            u.marca,
+            u.modelo,
+            u.anio,
+            u.VIN,
+            u.NII,   
+            u.estatus,
+            u.idTipoUnidad,
+            t.tipo AS nombreTipoUnidad
+        FROM unidad u
+        INNER JOIN tipo_unidad t ON u.idTipoUnidad = t.idTipoUnidad
+        WHERE u.estatus = 'activa' 
+    </select>
+
+    <insert id="registrar" parameterType="pojo.Unidad" useGeneratedKeys="true" keyProperty="idUnidad">
+        INSERT INTO unidad (
+            marca, modelo, anio, VIN, estatus, idTipoUnidad
+        ) VALUES (
+            #{marca}, #{modelo}, #{anio}, #{vin}, 'activa', #{idTipoUnidad}
+        )
+    </insert>
+
+    <update id="editar" parameterType="pojo.Unidad">
+        UPDATE unidad SET
+            marca = #{marca},
+            modelo = #{modelo},
+            anio = #{anio},
+            idTipoUnidad = #{idTipoUnidad}
+        WHERE idUnidad = #{idUnidad}
+    </update>
+
+    <update id="actualizarEstatusBaja" parameterType="int">
+        UPDATE unidad SET estatus = 'baja' WHERE idUnidad = #{idUnidad}
+    </update>
+
+    <insert id="registrarBaja" parameterType="pojo.UnidadBaja">
+        INSERT INTO unidad_baja (idUnidad, motivoBaja, idColaborador)
+        VALUES (#{idUnidad}, #{motivoBaja}, #{idColaborador})
+    </insert>
+
+    <select id="obtenerTipos" resultType="pojo.TipoUnidad">
+        SELECT idTipoUnidad, tipo FROM tipo_unidad
+    </select>
+</mapper>
