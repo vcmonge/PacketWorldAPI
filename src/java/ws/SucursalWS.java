@@ -2,6 +2,7 @@ package ws;
 
 import com.google.gson.Gson;
 import dominio.SucursalImp;
+import dto.RSSucursales;
 import dto.Respuesta;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -18,15 +19,14 @@ import pojo.Sucursal;
 @Path("sucursales")
 public class SucursalWS {
     
-   // En el método GET:
     @GET
     @Path("getAll")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllSucursales() {
-        // Cambio de tipo Respuesta a RSSucursales
-        RSSucursales respuesta = SucursalImp.getAllSucursales(); 
+        // Ahora captura un RSSucursales en lugar de Respuesta genérica
+        RSSucursales respuesta = SucursalImp.getAllSucursales();
         return Response.status(Response.Status.OK).entity(respuesta).build();
-    }   
+    }
     
     @POST
     @Path("registrar")
@@ -36,10 +36,10 @@ public class SucursalWS {
         Gson gson = new Gson();
         Sucursal sucursal = gson.fromJson(json, Sucursal.class);
         
-        // Validación básica de campos requeridos
+        // Validación básica
         if (sucursal.getNombre() == null || sucursal.getCalle() == null || sucursal.getCp() == null) {
              return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new Respuesta(true, "Datos obligatorios faltantes.", null))
+                    .entity(new Respuesta(true, "Datos obligatorios faltantes."))
                     .build();
         }
 
@@ -57,7 +57,7 @@ public class SucursalWS {
         
         if (sucursal.getIdSucursal() == null || sucursal.getIdSucursal() <= 0) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new Respuesta(true, "ID de sucursal inválido.", null))
+                    .entity(new Respuesta(true, "ID de sucursal inválido."))
                     .build();
         }
 
@@ -71,7 +71,7 @@ public class SucursalWS {
     public Response eliminarSucursal(@PathParam("idSucursal") Integer idSucursal) {
         if (idSucursal == null || idSucursal <= 0) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new Respuesta(true, "ID de sucursal inválido.", null))
+                    .entity(new Respuesta(true, "ID de sucursal inválido."))
                     .build();
         }
         
