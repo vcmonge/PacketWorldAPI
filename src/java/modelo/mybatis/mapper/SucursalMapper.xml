@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="modelo.mybatis.mapper.SucursalMapper">
+
+    <resultMap id="mapSucursal" type="pojo.Sucursal">
+        <id property="idSucursal" column="idSucursal" />
+        <result property="nombre" column="nombre" />
+        <result property="calle" column="calle" />
+        <result property="numero" column="numero" />
+        <result property="colonia" column="colonia" />
+        <result property="cp" column="cp" />
+        <result property="ciudad" column="ciudad" />
+        <result property="estado" column="estado" />
+        <result property="telefono" column="telefono" />
+        <result property="latitud" column="latitud" />
+        <result property="longitud" column="longitud" />
+        <result property="estatus" column="estatus" />
+    </resultMap>
+
+    <select id="getAllSucursales" resultMap="mapSucursal">
+        SELECT * FROM sucursal 
+        ORDER BY nombre ASC
+    </select>
+    
+    <select id="getSucursalesActivas" resultMap="mapSucursal">
+        SELECT * FROM sucursal 
+        WHERE estatus = 1
+        ORDER BY nombre ASC
+    </select>
+
+    <insert id="registrarSucursal" parameterType="pojo.Sucursal">
+        INSERT INTO sucursal 
+        (nombre, calle, numero, colonia, cp, ciudad, estado, telefono, latitud, longitud, estatus)
+        VALUES 
+        (#{nombre}, #{calle}, #{numero}, #{colonia}, #{cp}, #{ciudad}, #{estado}, #{telefono}, #{latitud}, #{longitud}, 1)
+    </insert>
+
+    <update id="editarSucursal" parameterType="pojo.Sucursal">
+        UPDATE sucursal SET
+            nombre = #{nombre},
+            calle = #{calle},
+            numero = #{numero},
+            colonia = #{colonia},
+            cp = #{cp},
+            ciudad = #{ciudad},
+            estado = #{estado},
+            telefono = #{telefono},
+            latitud = #{latitud},
+            longitud = #{longitud}
+        WHERE idSucursal = #{idSucursal}
+    </update>
+
+    <update id="eliminarSucursal" parameterType="int">
+        UPDATE sucursal 
+        SET estatus = 0 
+        WHERE idSucursal = #{idSucursal}
+    </update>
+
+</mapper>
