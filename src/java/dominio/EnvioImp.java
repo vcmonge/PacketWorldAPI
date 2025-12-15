@@ -39,4 +39,21 @@ public class EnvioImp {
         
         return envios;
     }
+    
+    public static Envio obtenerEnvio(String noGuia){
+        Envio envio = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        
+        if (conexionBD != null) {
+            try {
+                envio = conexionBD.selectOne("envio.obtener-envio", noGuia);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        
+        return envio;
+    }
 }

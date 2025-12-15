@@ -42,4 +42,14 @@ public class EnvioWS {
         
         return EnvioImp.obtenerEnviosConductor(id);
     }
+    
+    @Path("obtener-envio/{noGuia}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Envio obtenerEnvio(@PathParam("noGuia") String noGuia){
+        if (Validaciones.esVacio(noGuia)){
+            throw new BadRequestException();
+        }
+        return EnvioImp.obtenerEnvio(noGuia);
+    }
 }

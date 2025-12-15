@@ -23,6 +23,7 @@ public class Envio {
     private String ciudadDestino;
     private String municipioDestino;
     private String estadoDestino;
+    private String codigoPostalDestino;
     
     private String conductor;
     
@@ -31,13 +32,14 @@ public class Envio {
     private String clienteCorreo;
     
     private String sucursal;
+    private String sucursalDireccion;
     
     private String estatus;
         
     public Envio() {
     }
 
-    public Envio(Integer idEnvio, String noGuia, Double costo, String destinatarioNombre, String destinatarioApellidoPaterno, String destinatarioApellidoMaterno, String numeroDestino, String calleDestino, Integer idEstatusEnvio, Integer idSucursalOrigen, Integer idConductor, Integer idCliente, Integer idColoniaDestino, String coloniaDestino, String ciudadDestino, String municipioDestino, String estadoDestino, String conductor, String cliente, String clienteTelefono, String clienteCorreo, String sucursal, String estatus) {
+    public Envio(Integer idEnvio, String noGuia, Double costo, String destinatarioNombre, String destinatarioApellidoPaterno, String destinatarioApellidoMaterno, String numeroDestino, String calleDestino, Integer idEstatusEnvio, Integer idSucursalOrigen, Integer idConductor, Integer idCliente, Integer idColoniaDestino, String coloniaDestino, String ciudadDestino, String municipioDestino, String estadoDestino, String codigoPostalDestino, String conductor, String cliente, String clienteTelefono, String clienteCorreo, String sucursal, String sucursalDireccion, String estatus) {
         this.idEnvio = idEnvio;
         this.noGuia = noGuia;
         this.costo = costo;
@@ -55,11 +57,13 @@ public class Envio {
         this.ciudadDestino = ciudadDestino;
         this.municipioDestino = municipioDestino;
         this.estadoDestino = estadoDestino;
+        this.codigoPostalDestino = codigoPostalDestino;
         this.conductor = conductor;
         this.cliente = cliente;
         this.clienteTelefono = clienteTelefono;
         this.clienteCorreo = clienteCorreo;
         this.sucursal = sucursal;
+        this.sucursalDireccion = sucursalDireccion;
         this.estatus = estatus;
     }
 
@@ -247,5 +251,20 @@ public class Envio {
         return estatus;
     }
 
+    public String getCodigoPostalDestino() {
+        return codigoPostalDestino;
+    }
+
+    public void setCodigoPostalDestino(String codigoPostalDestino) {
+        this.codigoPostalDestino = codigoPostalDestino;
+    }
+
+    public String getSucursalDireccion() {
+        return sucursalDireccion;
+    }
+
+    public void setSucursalDireccion(String sucursalDireccion) {
+        this.sucursalDireccion = sucursalDireccion;
+    }
 
 }
