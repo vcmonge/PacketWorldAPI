@@ -5,7 +5,7 @@
 package ws;
 
 import dominio.AutenticacionImp;
-import dto.RSAutenticacionConductor;
+import dto.RSAutenticacionColaborador;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -19,10 +19,10 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("autenticacion")
 public class AutenticacionWS {
-    @Path("conductor")
+    @Path("movil")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public RSAutenticacionConductor autenticarConductor(
+    public RSAutenticacionColaborador autenticarConductor(
             @FormParam("noPersonal") String noPersonal,
             @FormParam("password") String password) {
         if (noPersonal != null && !noPersonal.isEmpty()
@@ -31,4 +31,19 @@ public class AutenticacionWS {
         }
         throw new BadRequestException();
     }
+    
+    @Path("escritorio")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public RSAutenticacionColaborador autenticarEscritorio(
+            @FormParam("noPersonal") String noPersonal,
+            @FormParam("password") String password) {
+        if (noPersonal != null && !noPersonal.isEmpty()
+                && password != null && !password.isEmpty()) {
+            return AutenticacionImp.iniciarSesionEscritorio(noPersonal, password);
+        }
+        throw new BadRequestException();
+    }
+    
+    
 }

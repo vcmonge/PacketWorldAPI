@@ -25,4 +25,18 @@
           AND c.contrasenia = #{password}
     </select>
     
+    <select id="loginEscritorio" resultType="pojo.Colaborador">
+        SELECT 
+            c.idColaborador, c.nombre, c.apellidoPaterno, c.apellidoMaterno, 
+            c.curp, c.correo, c.noPersonal, c.contrasenia, c.fotografia,
+            c.idRol, r.rol AS nombreRol,
+            c.idSucursal, s.nombre AS nombreSucursal
+        FROM colaborador c
+        INNER JOIN rol r ON c.idRol = r.idRol
+        INNER JOIN sucursal s ON c.idSucursal = s.idSucursal
+        WHERE c.noPersonal = #{noPersonal} 
+          AND c.contrasenia = #{password}
+          -- AQUÍ ESTÁ EL FILTRO MÁGICO
+          AND r.rol != 'Conductor'
+    </select>
 </mapper>

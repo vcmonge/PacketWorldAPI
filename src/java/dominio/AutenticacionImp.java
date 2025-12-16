@@ -4,7 +4,7 @@
  */
 package dominio;
 
-import dto.RSAutenticacionConductor;
+import dto.RSAutenticacionColaborador;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import modelo.mybatis.MyBatisUtil;
@@ -17,8 +17,8 @@ import pojo.Conductor;
  * @author julia
  */
 public class AutenticacionImp {
-    public static RSAutenticacionConductor autenticacionConductor (String noPersonal, String password) {
-        RSAutenticacionConductor respuesta = new RSAutenticacionConductor();
+    public static RSAutenticacionColaborador autenticacionConductor (String noPersonal, String password) {
+        RSAutenticacionColaborador respuesta = new RSAutenticacionColaborador();
         SqlSession conexionBD = MyBatisUtil.getSession();
         if (conexionBD != null) {
             try {
@@ -29,7 +29,7 @@ public class AutenticacionImp {
                 if (conductor != null) {
                     respuesta.setError(false);
                     respuesta.setMensaje("Credenciales correctas: " + conductor.getNombre());
-                    respuesta.setConductor(conductor);
+                    respuesta.setColaborador(conductor);
                 } else {
                     respuesta.setError(true);
                     respuesta.setMensaje("Credenciales incorrectas.");
@@ -44,4 +44,42 @@ public class AutenticacionImp {
         }
         return respuesta;
     }
+    
+        public static RSAutenticacionColaborador iniciarSesionEscritorio(String noPersonal, String password) {
+        RSAutenticacionColaborador respuesta = new RSAutenticacionColaborador();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                HashMap<String, String> parametros = new HashMap<>();
+                parametros.put("noPersonal", noPersonal);
+                parametros.put("password", password);
+
+                // La consulta ya filtra a los conductores.
+                Colaborador colaborador = conexionBD.selectOne("autenticacion.loginEscritorio", parametros);
+
+                if (colaborador != null) {
+                    // Si llegamos aquí, GARANTIZADO que NO es conductor.
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Bienvenido(a) " + colaborador.getNombre());
+                    respuesta.setColaborador(colaborador);
+                } else {
+                    respuesta.setError(true);
+                    // Mensaje genérico de seguridad
+                    respuesta.setMensaje("Credenciales incorrectas o no tiene permisos para acceder.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                respuesta.setError(true);
+                respuesta.setMensaje("Error en el servidor.");
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setError(true);
+            respuesta.setMensaje("Sin conexión a la base de datos.");
+        }
+        return respuesta;
+    }
+    
 }
