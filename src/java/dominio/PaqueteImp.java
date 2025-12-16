@@ -22,6 +22,7 @@ public class PaqueteImp {
                 if (paquetes.isEmpty()){
                     respuesta.setMensaje("El envio no tiene paquetes.");
                 } else {
+                    respuesta.setError(false);
                     respuesta.setMensaje(paquetes.size() + " paquetes obtenidos.");
                 }
                 respuesta.setPaquetes(paquetes);
