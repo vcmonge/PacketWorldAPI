@@ -8,62 +8,46 @@ public class Envio {
     private String destinatarioNombre;
     private String destinatarioApellidoPaterno;
     private String destinatarioApellidoMaterno;
-    private String numeroDestino;
-    private String calleDestino;
     
     // Llaves foráneas (IDs)
     private Integer idEstatusEnvio;
     private Integer idSucursalOrigen;
     private Integer idConductor;
     private Integer idCliente;
-    private Integer idColoniaDestino;
+    private Integer destinatarioIdDireccion;
     
     // Informacion recolectada de FK
-    private String coloniaDestino;
-    private String ciudadDestino;
-    private String municipioDestino;
-    private String estadoDestino;
-    private String codigoPostalDestino;
-    
+    private String destinatarioDireccion;
+    private String sucursal;
+    private String sucursalDireccion;
     private String conductor;
-    
     private String cliente;
     private String clienteTelefono;
     private String clienteCorreo;
-    
-    private String sucursal;
-    private String sucursalDireccion;
-    
     private String estatus;
         
     public Envio() {
     }
 
-    public Envio(Integer idEnvio, String noGuia, Double costo, String destinatarioNombre, String destinatarioApellidoPaterno, String destinatarioApellidoMaterno, String numeroDestino, String calleDestino, Integer idEstatusEnvio, Integer idSucursalOrigen, Integer idConductor, Integer idCliente, Integer idColoniaDestino, String coloniaDestino, String ciudadDestino, String municipioDestino, String estadoDestino, String codigoPostalDestino, String conductor, String cliente, String clienteTelefono, String clienteCorreo, String sucursal, String sucursalDireccion, String estatus) {
+    public Envio(Integer idEnvio, String noGuia, Double costo, String destinatarioNombre, String destinatarioApellidoPaterno, String destinatarioApellidoMaterno, Integer idEstatusEnvio, Integer idSucursalOrigen, Integer idConductor, Integer idCliente, Integer destinatarioIdDireccion, String destinatarioDireccion, String sucursal, String sucursalDireccion, String conductor, String cliente, String clienteTelefono, String clienteCorreo, String estatus) {
         this.idEnvio = idEnvio;
         this.noGuia = noGuia;
         this.costo = costo;
         this.destinatarioNombre = destinatarioNombre;
         this.destinatarioApellidoPaterno = destinatarioApellidoPaterno;
         this.destinatarioApellidoMaterno = destinatarioApellidoMaterno;
-        this.numeroDestino = numeroDestino;
-        this.calleDestino = calleDestino;
         this.idEstatusEnvio = idEstatusEnvio;
         this.idSucursalOrigen = idSucursalOrigen;
         this.idConductor = idConductor;
         this.idCliente = idCliente;
-        this.idColoniaDestino = idColoniaDestino;
-        this.coloniaDestino = coloniaDestino;
-        this.ciudadDestino = ciudadDestino;
-        this.municipioDestino = municipioDestino;
-        this.estadoDestino = estadoDestino;
-        this.codigoPostalDestino = codigoPostalDestino;
+        this.destinatarioIdDireccion = destinatarioIdDireccion;
+        this.destinatarioDireccion = destinatarioDireccion;
+        this.sucursal = sucursal;
+        this.sucursalDireccion = sucursalDireccion;
         this.conductor = conductor;
         this.cliente = cliente;
         this.clienteTelefono = clienteTelefono;
         this.clienteCorreo = clienteCorreo;
-        this.sucursal = sucursal;
-        this.sucursalDireccion = sucursalDireccion;
         this.estatus = estatus;
     }
 
@@ -91,14 +75,6 @@ public class Envio {
         this.destinatarioApellidoMaterno = destinatarioApellidoMaterno;
     }
 
-    public void setNumeroDestino(String numeroDestino) {
-        this.numeroDestino = numeroDestino;
-    }
-
-    public void setCalleDestino(String calleDestino) {
-        this.calleDestino = calleDestino;
-    }
-
     public void setIdEstatusEnvio(Integer idEstatusEnvio) {
         this.idEstatusEnvio = idEstatusEnvio;
     }
@@ -115,24 +91,20 @@ public class Envio {
         this.idCliente = idCliente;
     }
 
-    public void setIdColoniaDestino(Integer idColoniaDestino) {
-        this.idColoniaDestino = idColoniaDestino;
+    public void setDestinatarioIdDireccion(Integer destinatarioIdDireccion) {
+        this.destinatarioIdDireccion = destinatarioIdDireccion;
     }
 
-    public void setColoniaDestino(String coloniaDestino) {
-        this.coloniaDestino = coloniaDestino;
+    public void setDestinatarioDireccion(String destinatarioDireccion) {
+        this.destinatarioDireccion = destinatarioDireccion;
     }
 
-    public void setCiudadDestino(String ciudadDestino) {
-        this.ciudadDestino = ciudadDestino;
+    public void setSucursal(String sucursal) {
+        this.sucursal = sucursal;
     }
 
-    public void setMunicipioDestino(String municipioDestino) {
-        this.municipioDestino = municipioDestino;
-    }
-
-    public void setEstadoDestino(String estadoDestino) {
-        this.estadoDestino = estadoDestino;
+    public void setSucursalDireccion(String sucursalDireccion) {
+        this.sucursalDireccion = sucursalDireccion;
     }
 
     public void setConductor(String conductor) {
@@ -149,10 +121,6 @@ public class Envio {
 
     public void setClienteCorreo(String clienteCorreo) {
         this.clienteCorreo = clienteCorreo;
-    }
-
-    public void setSucursal(String sucursal) {
-        this.sucursal = sucursal;
     }
 
     public void setEstatus(String estatus) {
@@ -183,14 +151,6 @@ public class Envio {
         return destinatarioApellidoMaterno;
     }
 
-    public String getNumeroDestino() {
-        return numeroDestino;
-    }
-
-    public String getCalleDestino() {
-        return calleDestino;
-    }
-
     public Integer getIdEstatusEnvio() {
         return idEstatusEnvio;
     }
@@ -207,24 +167,20 @@ public class Envio {
         return idCliente;
     }
 
-    public Integer getIdColoniaDestino() {
-        return idColoniaDestino;
+    public Integer getDestinatarioIdDireccion() {
+        return destinatarioIdDireccion;
     }
 
-    public String getColoniaDestino() {
-        return coloniaDestino;
+    public String getDestinatarioDireccion() {
+        return destinatarioDireccion;
     }
 
-    public String getCiudadDestino() {
-        return ciudadDestino;
+    public String getSucursal() {
+        return sucursal;
     }
 
-    public String getMunicipioDestino() {
-        return municipioDestino;
-    }
-
-    public String getEstadoDestino() {
-        return estadoDestino;
+    public String getSucursalDireccion() {
+        return sucursalDireccion;
     }
 
     public String getConductor() {
@@ -243,28 +199,9 @@ public class Envio {
         return clienteCorreo;
     }
 
-    public String getSucursal() {
-        return sucursal;
-    }
-
     public String getEstatus() {
         return estatus;
     }
 
-    public String getCodigoPostalDestino() {
-        return codigoPostalDestino;
-    }
-
-    public void setCodigoPostalDestino(String codigoPostalDestino) {
-        this.codigoPostalDestino = codigoPostalDestino;
-    }
-
-    public String getSucursalDireccion() {
-        return sucursalDireccion;
-    }
-
-    public void setSucursalDireccion(String sucursalDireccion) {
-        this.sucursalDireccion = sucursalDireccion;
-    }
 
 }
