@@ -45,13 +45,13 @@ public class EnvioImp {
         return envios;
     }
     
-    public static Envio obtenerEnvio(String noGuia){
-        Envio envio = null;
+    public static List<Envio> obtenerEnvio(String noGuia){
+        List<Envio> envio = null;
         SqlSession conexionBD = MyBatisUtil.getSession();
         
         if (conexionBD != null) {
             try {
-                envio = conexionBD.selectOne("envio.obtener-envio", noGuia);
+                envio = conexionBD.selectList("envio.obtener-envio", noGuia);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {

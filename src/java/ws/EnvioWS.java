@@ -50,7 +50,7 @@ public class EnvioWS {
     @Path("obtener-envio/{noGuia}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Envio obtenerEnvio(@PathParam("noGuia") String noGuia){
+    public List<Envio> obtenerEnvio(@PathParam("noGuia") String noGuia){
         if (Validaciones.esVacio(noGuia)){
             throw new BadRequestException();
         }
