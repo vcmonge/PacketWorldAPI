@@ -3,8 +3,8 @@ package ws;
 
 import com.google.gson.Gson;
 import dominio.DireccionImp;
-import dto.RSColonias;
 import dto.Respuesta;
+import java.util.List;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -42,10 +42,10 @@ public class DireccionWS {
         }
     }
     
-    @Path("obtener-colonias-codigo-postal/{codigoPostal}")
+    @Path("obtener-direccion-codigo-postal/{codigoPostal}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public RSColonias obtenerColoniasCodigoPostal(@PathParam("codigoPostal") String codigoPostal){
+    public List<Direccion> obtenerDireccionCodigoPostal(@PathParam("codigoPostal") String codigoPostal){
          if (Validaciones.esVacio(codigoPostal)) {
              throw new BadRequestException();
          }
@@ -56,7 +56,7 @@ public class DireccionWS {
 
          int cp = Integer.parseInt(codigoPostal);
 
-         return DireccionImp.obtenerColoniasCodigoPostal(cp);
+         return DireccionImp.obtenerDireccionCodigoPostal(cp);
     }
    
 }

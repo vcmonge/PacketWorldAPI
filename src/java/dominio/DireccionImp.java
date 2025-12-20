@@ -1,7 +1,6 @@
 
 package dominio;
 
-import dto.RSColonias;
 import dto.Respuesta;
 import java.util.List;
 import modelo.mybatis.MyBatisUtil;
@@ -38,30 +37,20 @@ public class DireccionImp {
         return respuesta;
     }
     
-    public static RSColonias obtenerColoniasCodigoPostal(int codigoPostal){
-        RSColonias respuesta = new RSColonias();
-        respuesta.setError(true);
+    public static List<Direccion> obtenerDireccionCodigoPostal(int codigoPostal){
         List<Direccion> colonias = null;
         SqlSession conexionBD = MyBatisUtil.getSession();
         
         if (conexionBD != null) {
             try {
                 colonias = conexionBD.selectList("direccion.obtener-colonias-codigo_postal", codigoPostal);
-                if (!colonias.isEmpty()) {
-                    respuesta.setError(false);
-                    respuesta.setColonias(colonias);
-                } else {
-                    respuesta.setMensaje("No se encontró información asociada a ese código postal.");
-                }
             } catch (Exception e) {
-                respuesta.setMensaje(e.getMessage());
+                e.printStackTrace();
             } finally {
                 conexionBD.close();
             }
-        } else {
-            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
         }
         
-        return respuesta;
+        return colonias;
     }
 }
