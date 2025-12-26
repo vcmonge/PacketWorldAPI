@@ -1,9 +1,18 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package ws;
 
-import com.google.gson.Gson;
+/**
+ *
+ * @author HECTO
+ */
 import dominio.SucursalImp;
-import dto.RSSucursales;
+import dto.RSSucursal;
 import dto.Respuesta;
+import java.util.List;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -13,69 +22,51 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import pojo.Sucursal;
 
-@Path("sucursales")
+@Path("sucursal")
 public class SucursalWS {
     
+    @Path("obtener-todos")
     @GET
-    @Path("getAll")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllSucursales() {
-        // Ahora captura un RSSucursales en lugar de Respuesta genérica
-        RSSucursales respuesta = SucursalImp.getAllSucursales();
-        return Response.status(Response.Status.OK).entity(respuesta).build();
+    public List<Sucursal> obtenerSucursales() {
+        return SucursalImp.obtenerSucursales();
     }
     
-    @POST
     @Path("registrar")
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registrarSucursal(String json) {
-        Gson gson = new Gson();
-        Sucursal sucursal = gson.fromJson(json, Sucursal.class);
-        
-        // Validación básica
-        if (sucursal.getNombre() == null || sucursal.getCalle() == null || sucursal.getCp() == null) {
-             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new Respuesta(true, "Datos obligatorios faltantes."))
-                    .build();
+    public RSSucursal registrarSucursal(Sucursal sucursal) {
+        // Validaciones básicas antes de enviar a la capa lógica
+        if (sucursal != null && sucursal.getNombre() != null && !sucursal.getNombre().isEmpty() 
+            && sucursal.getCodigo() != null && !sucursal.getCodigo().isEmpty()
+            && sucursal.getCalle() != null && sucursal.getIdColonia() != null) {
+            return SucursalImp.registrarSucursal(sucursal);
         }
-
-        Respuesta respuesta = SucursalImp.registrarSucursal(sucursal);
-        return Response.status(Response.Status.OK).entity(respuesta).build();
+        throw new BadRequestException();
     }
     
-    @PUT
     @Path("editar")
+    @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response editarSucursal(String json) {
-        Gson gson = new Gson();
-        Sucursal sucursal = gson.fromJson(json, Sucursal.class);
-        
-        if (sucursal.getIdSucursal() == null || sucursal.getIdSucursal() <= 0) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new Respuesta(true, "ID de sucursal inválido."))
-                    .build();
+    public Respuesta editarSucursal(Sucursal sucursal) {
+        if (sucursal != null && sucursal.getIdSucursal() != null && sucursal.getIdSucursal() > 0
+            && sucursal.getIdDireccion() != null) {
+            return SucursalImp.editarSucursal(sucursal);
         }
-
-        Respuesta respuesta = SucursalImp.editarSucursal(sucursal);
-        return Response.status(Response.Status.OK).entity(respuesta).build();
+        throw new BadRequestException();
     }
     
-    @DELETE
     @Path("eliminar/{idSucursal}")
+    @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    public Response eliminarSucursal(@PathParam("idSucursal") Integer idSucursal) {
-        if (idSucursal == null || idSucursal <= 0) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new Respuesta(true, "ID de sucursal inválido."))
-                    .build();
+    public Respuesta eliminarSucursal(@PathParam("idSucursal") Integer idSucursal) {
+        if (idSucursal != null && idSucursal > 0) {
+            return SucursalImp.eliminarSucursal(idSucursal);
         }
-        
-        Respuesta respuesta = SucursalImp.eliminarSucursal(idSucursal);
-        return Response.status(Response.Status.OK).entity(respuesta).build();
+        throw new BadRequestException();
     }
 }

@@ -10,34 +10,36 @@ package pojo;
  */
 public class Sucursal {
     private Integer idSucursal;
+    private String codigo;
     private String nombre;
+    private String estatus;
+    private Integer idDireccion;
+    
+    // Atributos de dirección aplanados (sin objeto Direccion aparte)
     private String calle;
     private String numero;
-    private String colonia;
-    private Integer cp;
+    private Integer idColonia;
+    private String nombreColonia;
+    private String codigoPostal;
     private String ciudad;
     private String estado;
-    private String telefono;
-    private String latitud;
-    private String longitud;
-    private Integer estatus;
 
     public Sucursal() {
     }
 
-    public Sucursal(Integer idSucursal, String nombre, String calle, String numero, String colonia, Integer cp, String ciudad, String estado, String telefono, String latitud, String longitud, Integer estatus) {
+    public Sucursal(Integer idSucursal, String codigo, String nombre, String estatus, Integer idDireccion, String calle, String numero, Integer idColonia, String nombreColonia, String codigoPostal, String ciudad, String estado) {
         this.idSucursal = idSucursal;
+        this.codigo = codigo;
         this.nombre = nombre;
+        this.estatus = estatus;
+        this.idDireccion = idDireccion;
         this.calle = calle;
         this.numero = numero;
-        this.colonia = colonia;
-        this.cp = cp;
+        this.idColonia = idColonia;
+        this.nombreColonia = nombreColonia;
+        this.codigoPostal = codigoPostal;
         this.ciudad = ciudad;
         this.estado = estado;
-        this.telefono = telefono;
-        this.latitud = latitud;
-        this.longitud = longitud;
-        this.estatus = estatus;
     }
 
     public Integer getIdSucursal() {
@@ -48,12 +50,36 @@ public class Sucursal {
         this.idSucursal = idSucursal;
     }
 
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
     public String getNombre() {
         return nombre;
     }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getEstatus() {
+        return estatus;
+    }
+
+    public void setEstatus(String estatus) {
+        this.estatus = estatus;
+    }
+
+    public Integer getIdDireccion() {
+        return idDireccion;
+    }
+
+    public void setIdDireccion(Integer idDireccion) {
+        this.idDireccion = idDireccion;
     }
 
     public String getCalle() {
@@ -72,20 +98,28 @@ public class Sucursal {
         this.numero = numero;
     }
 
-    public String getColonia() {
-        return colonia;
+    public Integer getIdColonia() {
+        return idColonia;
     }
 
-    public void setColonia(String colonia) {
-        this.colonia = colonia;
+    public void setIdColonia(Integer idColonia) {
+        this.idColonia = idColonia;
     }
 
-    public Integer getCp() {
-        return cp;
+    public String getNombreColonia() {
+        return nombreColonia;
     }
 
-    public void setCp(Integer cp) {
-        this.cp = cp;
+    public void setNombreColonia(String nombreColonia) {
+        this.nombreColonia = nombreColonia;
+    }
+
+    public String getCodigoPostal() {
+        return codigoPostal;
+    }
+
+    public void setCodigoPostal(String codigoPostal) {
+        this.codigoPostal = codigoPostal;
     }
 
     public String getCiudad() {
@@ -103,38 +137,4 @@ public class Sucursal {
     public void setEstado(String estado) {
         this.estado = estado;
     }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getLatitud() {
-        return latitud;
-    }
-
-    public void setLatitud(String latitud) {
-        this.latitud = latitud;
-    }
-
-    public String getLongitud() {
-        return longitud;
-    }
-
-    public void setLongitud(String longitud) {
-        this.longitud = longitud;
-    }
-
-    public Integer getEstatus() {
-        return estatus;
-    }
-
-    public void setEstatus(Integer estatus) {
-        this.estatus = estatus;
-    }
-    
-    
 }

@@ -1,61 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="modelo.mybatis.mapper.SucursalMapper">
+<mapper namespace="sucursal">
 
-    <resultMap id="mapSucursal" type="pojo.Sucursal">
-        <id property="idSucursal" column="idSucursal" />
-        <result property="nombre" column="nombre" />
-        <result property="calle" column="calle" />
-        <result property="numero" column="numero" />
-        <result property="colonia" column="colonia" />
-        <result property="cp" column="cp" />
-        <result property="ciudad" column="ciudad" />
-        <result property="estado" column="estado" />
-        <result property="telefono" column="telefono" />
-        <result property="latitud" column="latitud" />
-        <result property="longitud" column="longitud" />
-        <result property="estatus" column="estatus" />
+    <resultMap id="sucursalResultMap" type="pojo.Sucursal">
+        <id property="idSucursal" column="idSucursal"/>
+        <result property="codigo" column="codigo"/>
+        <result property="nombre" column="nombre"/>
+        <result property="estatus" column="estatus"/>
+        <result property="idDireccion" column="idDireccion"/>
+        <result property="calle" column="calle"/>
+        <result property="numero" column="numero"/>
+        <result property="idColonia" column="idColonia"/>
+        <result property="nombreColonia" column="nombreColonia"/>
+        <result property="codigoPostal" column="codigo_postal"/>
+        <result property="ciudad" column="ciudad"/>
+        <result property="estado" column="estado"/>
     </resultMap>
 
-    <select id="getAllSucursales" resultMap="mapSucursal">
-        SELECT * FROM sucursal 
-        ORDER BY nombre ASC
+    <select id="obtenerTodos" resultMap="sucursalResultMap">
+        SELECT 
+            s.idSucursal, 
+            s.codigo, 
+            s.nombre, 
+            s.estatus, 
+            s.idDireccion,
+            d.calle,
+            d.numero,
+            d.idColonia,
+            c.nombre AS nombreColonia,
+            c.codigo_postal,
+            c.ciudad,
+            e.nombre AS estado
+        FROM sucursal s
+        INNER JOIN direccion d ON s.idDireccion = d.idDireccion
+        INNER JOIN colonias c ON d.idColonia = c.id
+        INNER JOIN municipios m ON c.municipio = m.id
+        INNER JOIN estados e ON m.estado = e.id
     </select>
     
-    <select id="getSucursalesActivas" resultMap="mapSucursal">
-        SELECT * FROM sucursal 
-        WHERE estatus = 1
-        ORDER BY nombre ASC
-    </select>
-
-    <insert id="registrarSucursal" parameterType="pojo.Sucursal">
-        INSERT INTO sucursal 
-        (nombre, calle, numero, colonia, cp, ciudad, estado, telefono, latitud, longitud, estatus)
-        VALUES 
-        (#{nombre}, #{calle}, #{numero}, #{colonia}, #{cp}, #{ciudad}, #{estado}, #{telefono}, #{latitud}, #{longitud}, 1)
+    <insert id="registrarDireccion" parameterType="pojo.Sucursal" useGeneratedKeys="true" keyProperty="idDireccion">
+        INSERT INTO direccion (
+            calle, 
+            numero, 
+            idColonia
+        ) VALUES (
+            #{calle}, 
+            #{numero}, 
+            #{idColonia}
+        )
     </insert>
 
-    <update id="editarSucursal" parameterType="pojo.Sucursal">
-        UPDATE sucursal SET
-            nombre = #{nombre},
-            calle = #{calle},
-            numero = #{numero},
-            colonia = #{colonia},
-            cp = #{cp},
-            ciudad = #{ciudad},
-            estado = #{estado},
-            telefono = #{telefono},
-            latitud = #{latitud},
-            longitud = #{longitud}
+    <insert id="registrar" parameterType="pojo.Sucursal">
+        INSERT INTO sucursal (
+            codigo,
+            nombre,
+            estatus,
+            idDireccion
+        ) VALUES (
+            #{codigo},
+            #{nombre},
+            #{estatus},
+            #{idDireccion}
+        )
+    </insert>
+    
+    <update id="editar" parameterType="pojo.Sucursal">
+        UPDATE sucursal
+        SET nombre = #{nombre}
         WHERE idSucursal = #{idSucursal}
     </update>
 
-    <update id="eliminarSucursal" parameterType="int">
+    <update id="editarDireccion" parameterType="pojo.Sucursal">
+        UPDATE direccion
+        SET calle = #{calle},
+            numero = #{numero},
+            idColonia = #{idColonia}
+        WHERE idDireccion = #{idDireccion}
+    </update>
+    
+    <update id="eliminar" parameterType="int">
         UPDATE sucursal 
-        SET estatus = 0 
+        SET estatus = 'inactiva' 
         WHERE idSucursal = #{idSucursal}
     </update>
 
