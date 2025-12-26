@@ -32,6 +32,21 @@ public class SucursalImp {
         return sucursales;
     }
     
+    public static List<Sucursal> obtenerSucursalesActivas() {
+        List<Sucursal> sucursales = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                sucursales = conexionBD.selectList("sucursal.obtenerActivas");
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return sucursales;
+    }
+    
     public static RSSucursal registrarSucursal(Sucursal sucursal) {
         RSSucursal respuesta = new RSSucursal();
         SqlSession conexionBD = MyBatisUtil.getSession();

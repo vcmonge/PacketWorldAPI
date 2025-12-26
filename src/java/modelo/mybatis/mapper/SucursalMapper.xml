@@ -19,7 +19,30 @@
         <result property="ciudad" column="ciudad"/>
         <result property="estado" column="estado"/>
     </resultMap>
-
+    
+    
+    <select id="obtenerActivas" resultMap="sucursalResultMap">
+        SELECT 
+            s.idSucursal, 
+            s.codigo, 
+            s.nombre, 
+            s.estatus, 
+            s.idDireccion,
+            d.calle,
+            d.numero,
+            d.idColonia,
+            c.nombre AS nombreColonia,
+            c.codigo_postal,
+            c.ciudad,
+            e.nombre AS estado
+        FROM sucursal s
+        INNER JOIN direccion d ON s.idDireccion = d.idDireccion
+        INNER JOIN colonias c ON d.idColonia = c.id
+        INNER JOIN municipios m ON c.municipio = m.id
+        INNER JOIN estados e ON m.estado = e.id
+        WHERE s.estatus = 'activa'
+    </select>
+    
     <select id="obtenerTodos" resultMap="sucursalResultMap">
         SELECT 
             s.idSucursal, 
