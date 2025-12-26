@@ -15,31 +15,29 @@ public class Sucursal {
     private String estatus;
     private Integer idDireccion;
     
-    // Atributos de dirección aplanados (sin objeto Direccion aparte)
+    // Campo visual (Concatenado desde Base de Datos)
+    private String direccionCompleta;
+
+    // Campos para Registro y Edición (Mapeo directo a tabla Direccion)
     private String calle;
     private String numero;
     private Integer idColonia;
-    private String nombreColonia;
-    private String codigoPostal;
-    private String ciudad;
-    private String estado;
+    private String nombreColonia; 
 
     public Sucursal() {
     }
 
-    public Sucursal(Integer idSucursal, String codigo, String nombre, String estatus, Integer idDireccion, String calle, String numero, Integer idColonia, String nombreColonia, String codigoPostal, String ciudad, String estado) {
+    public Sucursal(Integer idSucursal, String codigo, String nombre, String estatus, Integer idDireccion, String direccionCompleta, String calle, String numero, Integer idColonia, String nombreColonia) {
         this.idSucursal = idSucursal;
         this.codigo = codigo;
         this.nombre = nombre;
         this.estatus = estatus;
         this.idDireccion = idDireccion;
+        this.direccionCompleta = direccionCompleta;
         this.calle = calle;
         this.numero = numero;
         this.idColonia = idColonia;
         this.nombreColonia = nombreColonia;
-        this.codigoPostal = codigoPostal;
-        this.ciudad = ciudad;
-        this.estado = estado;
     }
 
     public Integer getIdSucursal() {
@@ -82,6 +80,14 @@ public class Sucursal {
         this.idDireccion = idDireccion;
     }
 
+    public String getDireccionCompleta() {
+        return direccionCompleta;
+    }
+
+    public void setDireccionCompleta(String direccionCompleta) {
+        this.direccionCompleta = direccionCompleta;
+    }
+
     public String getCalle() {
         return calle;
     }
@@ -112,29 +118,5 @@ public class Sucursal {
 
     public void setNombreColonia(String nombreColonia) {
         this.nombreColonia = nombreColonia;
-    }
-
-    public String getCodigoPostal() {
-        return codigoPostal;
-    }
-
-    public void setCodigoPostal(String codigoPostal) {
-        this.codigoPostal = codigoPostal;
-    }
-
-    public String getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
 }

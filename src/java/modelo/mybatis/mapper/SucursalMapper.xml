@@ -11,15 +11,35 @@
         <result property="nombre" column="nombre"/>
         <result property="estatus" column="estatus"/>
         <result property="idDireccion" column="idDireccion"/>
+        
+        <result property="direccionCompleta" column="direccionCompleta"/>
+        
         <result property="calle" column="calle"/>
         <result property="numero" column="numero"/>
         <result property="idColonia" column="idColonia"/>
         <result property="nombreColonia" column="nombreColonia"/>
-        <result property="codigoPostal" column="codigo_postal"/>
-        <result property="ciudad" column="ciudad"/>
-        <result property="estado" column="estado"/>
     </resultMap>
-    
+
+    <select id="obtenerTodos" resultMap="sucursalResultMap">
+        SELECT 
+            s.idSucursal, 
+            s.codigo, 
+            s.nombre, 
+            s.estatus, 
+            s.idDireccion,
+            /* Concatenación estilo Envío para mostrar todo en una línea */
+            CONCAT(d.calle, ' #', d.numero, ', Col. ', c.nombre, ', CP ', c.codigo_postal, ', ', m.nombre, ', ', e.nombre) AS direccionCompleta,
+            /* Datos crudos necesarios para los formularios de edición */
+            d.calle,
+            d.numero,
+            d.idColonia,
+            c.nombre AS nombreColonia
+        FROM sucursal s
+        INNER JOIN direccion d ON s.idDireccion = d.idDireccion
+        INNER JOIN colonias c ON d.idColonia = c.id
+        INNER JOIN municipios m ON c.municipio = m.id
+        INNER JOIN estados e ON m.estado = e.id
+    </select>
     
     <select id="obtenerActivas" resultMap="sucursalResultMap">
         SELECT 
@@ -28,13 +48,11 @@
             s.nombre, 
             s.estatus, 
             s.idDireccion,
+            CONCAT(d.calle, ' #', d.numero, ', Col. ', c.nombre, ', CP ', c.codigo_postal, ', ', m.nombre, ', ', e.nombre) AS direccionCompleta,
             d.calle,
             d.numero,
             d.idColonia,
-            c.nombre AS nombreColonia,
-            c.codigo_postal,
-            c.ciudad,
-            e.nombre AS estado
+            c.nombre AS nombreColonia
         FROM sucursal s
         INNER JOIN direccion d ON s.idDireccion = d.idDireccion
         INNER JOIN colonias c ON d.idColonia = c.id
@@ -42,72 +60,28 @@
         INNER JOIN estados e ON m.estado = e.id
         WHERE s.estatus = 'activa'
     </select>
-    
-    <select id="obtenerTodos" resultMap="sucursalResultMap">
-        SELECT 
-            s.idSucursal, 
-            s.codigo, 
-            s.nombre, 
-            s.estatus, 
-            s.idDireccion,
-            d.calle,
-            d.numero,
-            d.idColonia,
-            c.nombre AS nombreColonia,
-            c.codigo_postal,
-            c.ciudad,
-            e.nombre AS estado
-        FROM sucursal s
-        INNER JOIN direccion d ON s.idDireccion = d.idDireccion
-        INNER JOIN colonias c ON d.idColonia = c.id
-        INNER JOIN municipios m ON c.municipio = m.id
-        INNER JOIN estados e ON m.estado = e.id
-    </select>
-    
+
     <insert id="registrarDireccion" parameterType="pojo.Sucursal" useGeneratedKeys="true" keyProperty="idDireccion">
-        INSERT INTO direccion (
-            calle, 
-            numero, 
-            idColonia
-        ) VALUES (
-            #{calle}, 
-            #{numero}, 
-            #{idColonia}
-        )
+        INSERT INTO direccion (calle, numero, idColonia) 
+        VALUES (#{calle}, #{numero}, #{idColonia})
     </insert>
 
     <insert id="registrar" parameterType="pojo.Sucursal">
-        INSERT INTO sucursal (
-            codigo,
-            nombre,
-            estatus,
-            idDireccion
-        ) VALUES (
-            #{codigo},
-            #{nombre},
-            #{estatus},
-            #{idDireccion}
-        )
+        INSERT INTO sucursal (codigo, nombre, estatus, idDireccion) 
+        VALUES (#{codigo}, #{nombre}, #{estatus}, #{idDireccion})
     </insert>
     
     <update id="editar" parameterType="pojo.Sucursal">
-        UPDATE sucursal
-        SET nombre = #{nombre}
-        WHERE idSucursal = #{idSucursal}
+        UPDATE sucursal SET nombre = #{nombre} WHERE idSucursal = #{idSucursal}
     </update>
 
     <update id="editarDireccion" parameterType="pojo.Sucursal">
-        UPDATE direccion
-        SET calle = #{calle},
-            numero = #{numero},
-            idColonia = #{idColonia}
+        UPDATE direccion SET calle = #{calle}, numero = #{numero}, idColonia = #{idColonia}
         WHERE idDireccion = #{idDireccion}
     </update>
     
     <update id="eliminar" parameterType="int">
-        UPDATE sucursal 
-        SET estatus = 'inactiva' 
-        WHERE idSucursal = #{idSucursal}
+        UPDATE sucursal SET estatus = 'inactiva' WHERE idSucursal = #{idSucursal}
     </update>
 
 </mapper>

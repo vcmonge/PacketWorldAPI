@@ -46,9 +46,7 @@ public class SucursalWS {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public RSSucursal registrarSucursal(Sucursal sucursal) {
-        // Validaciones básicas antes de enviar a la capa lógica
         if (sucursal != null && sucursal.getNombre() != null && !sucursal.getNombre().isEmpty() 
-            && sucursal.getCodigo() != null && !sucursal.getCodigo().isEmpty()
             && sucursal.getCalle() != null && sucursal.getIdColonia() != null) {
             return SucursalImp.registrarSucursal(sucursal);
         }
@@ -60,7 +58,7 @@ public class SucursalWS {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Respuesta editarSucursal(Sucursal sucursal) {
-        if (sucursal != null && sucursal.getIdSucursal() != null && sucursal.getIdSucursal() > 0
+        if (sucursal != null && sucursal.getIdSucursal() != null && sucursal.getIdSucursal() > 0 
             && sucursal.getIdDireccion() != null) {
             return SucursalImp.editarSucursal(sucursal);
         }

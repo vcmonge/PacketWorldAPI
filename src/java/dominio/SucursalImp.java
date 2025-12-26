@@ -50,17 +50,13 @@ public class SucursalImp {
     public static RSSucursal registrarSucursal(Sucursal sucursal) {
         RSSucursal respuesta = new RSSucursal();
         SqlSession conexionBD = MyBatisUtil.getSession();
-        
         if (conexionBD != null) {
             try {
-                // 1. Insertar en tabla DIRECCION usando el objeto Sucursal.
-                // MyBatis llenará sucursal.idDireccion automáticamente gracias a useGeneratedKeys.
+                //Insertamos dirección (se llenará el idDireccion en el objeto sucursal)
                 int filasDireccion = conexionBD.insert("sucursal.registrarDireccion", sucursal);
                 
-                // 2. Validar que se generó el ID de dirección
                 if (filasDireccion > 0 && sucursal.getIdDireccion() != null) {
-                    
-                    // 3. Insertar en tabla SUCURSAL usando el mismo objeto (que ya tiene el idDireccion)
+                    //Insertamos sucursal usando el idDireccion generado
                     int filasSucursal = conexionBD.insert("sucursal.registrar", sucursal);
                     
                     if (filasSucursal > 0) {
@@ -70,43 +66,39 @@ public class SucursalImp {
                         respuesta.setSucursal(sucursal);
                     } else {
                         respuesta.setError(true);
-                        respuesta.setMensaje("Error al registrar la información de la sucursal.");
+                        respuesta.setMensaje("Error al registrar los datos de la sucursal.");
                     }
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("Error al registrar la dirección de la sucursal.");
+                    respuesta.setMensaje("Error al registrar la dirección.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 respuesta.setError(true);
-                respuesta.setMensaje("Error en la base de datos al guardar: " + e.getMessage());
+                respuesta.setMensaje("Error en la base de datos: " + e.getMessage());
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("No hay conexión con la base de datos.");
+            respuesta.setMensaje("Sin conexión a la base de datos.");
         }
-        
         return respuesta;
     }
     
     public static Respuesta editarSucursal(Sucursal sucursal) {
         Respuesta respuesta = new Respuesta();
         SqlSession conexionBD = MyBatisUtil.getSession();
-        
         if (conexionBD != null) {
             try {
-                // 1. Actualizar tabla SUCURSAL (solo nombre)
+                // Actualizamos ambas tablas
                 int filasSucursal = conexionBD.update("sucursal.editar", sucursal);
-                
-                // 2. Actualizar tabla DIRECCION (calle, numero, colonia) usando el mismo objeto Sucursal
                 int filasDireccion = conexionBD.update("sucursal.editarDireccion", sucursal);
                 
                 if (filasSucursal > 0 || filasDireccion > 0) {
                     conexionBD.commit();
                     respuesta.setError(false);
-                    respuesta.setMensaje("Información actualizada correctamente.");
+                    respuesta.setMensaje("Sucursal actualizada correctamente.");
                 } else {
                     respuesta.setError(true);
                     respuesta.setMensaje("No se pudo actualizar la información.");
@@ -114,46 +106,42 @@ public class SucursalImp {
             } catch (Exception e) {
                 e.printStackTrace();
                 respuesta.setError(true);
-                respuesta.setMensaje("Error al editar la sucursal: " + e.getMessage());
+                respuesta.setMensaje("Error al editar: " + e.getMessage());
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("No hay conexión con la base de datos.");
+            respuesta.setMensaje("Sin conexión a la base de datos.");
         }
-        
         return respuesta;
     }
     
     public static Respuesta eliminarSucursal(int idSucursal) {
         Respuesta respuesta = new Respuesta();
         SqlSession conexionBD = MyBatisUtil.getSession();
-        
         if (conexionBD != null) {
             try {
-                int filasAfectadas = conexionBD.update("sucursal.eliminar", idSucursal);
-                
-                if (filasAfectadas > 0) {
+                int filas = conexionBD.update("sucursal.eliminar", idSucursal);
+                if (filas > 0) {
                     conexionBD.commit();
                     respuesta.setError(false);
-                    respuesta.setMensaje("La sucursal ha sido dada de baja correctamente.");
+                    respuesta.setMensaje("Sucursal dada de baja correctamente.");
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se pudo dar de baja la sucursal.");
+                    respuesta.setMensaje("No se encontró la sucursal para dar de baja.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 respuesta.setError(true);
-                respuesta.setMensaje("Error al eliminar la sucursal: " + e.getMessage());
+                respuesta.setMensaje("Error al eliminar: " + e.getMessage());
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("No hay conexión con la base de datos.");
+            respuesta.setMensaje("Sin conexión a la base de datos.");
         }
-        
         return respuesta;
     }
 }
