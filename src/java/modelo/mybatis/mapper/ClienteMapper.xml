@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cliente">
+
+    <select id="obtenerTodos" resultType="pojo.Cliente">
+        SELECT 
+            cl.idCliente, 
+            cl.nombre, 
+            cl.apellidoPaterno, 
+            cl.apellidoMaterno, 
+            cl.telefono, 
+            cl.correo, 
+            cl.idDireccion,
+            d.calle,
+            d.numero,
+            d.idColonia,
+            col.nombre AS nombreColonia,
+            col.codigo_postal AS codigoPostal,
+            m.nombre AS ciudad,
+            e.nombre AS estado,
+            CONCAT(d.calle, ' #', d.numero, ', Col. ', col.nombre, ', CP ', col.codigo_postal, ', ', m.nombre, ', ', e.nombre) AS direccionCompleta
+        FROM cliente cl
+        INNER JOIN direccion d ON cl.idDireccion = d.idDireccion
+        INNER JOIN colonias col ON d.idColonia = col.id
+        INNER JOIN municipios m ON col.municipio = m.id
+        INNER JOIN estados e ON m.estado = e.id
+    </select>
+    
+    <select id="buscar" resultType="pojo.Cliente" parameterType="string">
+        SELECT 
+            cl.idCliente, 
+            cl.nombre, 
+            cl.apellidoPaterno, 
+            cl.apellidoMaterno, 
+            cl.telefono, 
+            cl.correo, 
+            cl.idDireccion,
+            d.calle,
+            d.numero,
+            d.idColonia,
+            col.nombre AS nombreColonia,
+            col.codigo_postal AS codigoPostal,
+            m.nombre AS ciudad,
+            e.nombre AS estado,
+            CONCAT(d.calle, ' #', d.numero, ', Col. ', col.nombre, ', CP ', col.codigo_postal, ', ', m.nombre, ', ', e.nombre) AS direccionCompleta
+        FROM cliente cl
+        INNER JOIN direccion d ON cl.idDireccion = d.idDireccion
+        INNER JOIN colonias col ON d.idColonia = col.id
+        INNER JOIN municipios m ON col.municipio = m.id
+        INNER JOIN estados e ON m.estado = e.id
+        WHERE cl.nombre LIKE '%${value}%' 
+           OR cl.apellidoPaterno LIKE '%${value}%' 
+           OR cl.apellidoMaterno LIKE '%${value}%'
+           OR cl.telefono LIKE '%${value}%' 
+           OR cl.correo LIKE '%${value}%'
+    </select>
+
+    <insert id="registrarDireccion" parameterType="pojo.Cliente" useGeneratedKeys="true" keyProperty="idDireccion">
+        INSERT INTO direccion (calle, numero, idColonia) 
+        VALUES (#{calle}, #{numero}, #{idColonia})
+    </insert>
+
+    <insert id="registrar" parameterType="pojo.Cliente">
+        INSERT INTO cliente (nombre, apellidoPaterno, apellidoMaterno, telefono, correo, idDireccion) 
+        VALUES (#{nombre}, #{apellidoPaterno}, #{apellidoMaterno}, #{telefono}, #{correo}, #{idDireccion})
+    </insert>
+    
+    <update id="editar" parameterType="pojo.Cliente">
+        UPDATE cliente SET 
+            nombre = #{nombre},
+            apellidoPaterno = #{apellidoPaterno},
+            apellidoMaterno = #{apellidoMaterno},
+            telefono = #{telefono},
+            correo = #{correo}
+        WHERE idCliente = #{idCliente}
+    </update>
+
+    <update id="editarDireccion" parameterType="pojo.Cliente">
+        UPDATE direccion SET calle = #{calle}, numero = #{numero}, idColonia = #{idColonia}
+        WHERE idDireccion = #{idDireccion}
+    </update>
+    
+    <delete id="eliminar" parameterType="int">
+        DELETE FROM cliente WHERE idCliente = #{idCliente}
+    </delete>
+
+</mapper>
