@@ -20,13 +20,15 @@ public class Colaborador {
     private byte[] fotografia;
     private String fotoBase64;
     private Integer idRol;
+    private String rol;
     private Integer idSucursal;
+    private String sucursal;
     private String numeroLicencia;
 
     public Colaborador() {
     }
 
-    public Colaborador(Integer idColaborador, String nombre, String apellidoPaterno, String apellidoMaterno, String curp, String correo, String noPersonal, String contrasenia, byte[] fotografia, String fotoBase64, Integer idRol, Integer idSucursal, String numeroLicencia) {
+    public Colaborador(Integer idColaborador, String nombre, String apellidoPaterno, String apellidoMaterno, String curp, String correo, String noPersonal, String contrasenia, byte[] fotografia, String fotoBase64, Integer idRol, String rol, Integer idSucursal, String sucursal, String numeroLicencia) {
         this.idColaborador = idColaborador;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -38,7 +40,9 @@ public class Colaborador {
         this.fotografia = fotografia;
         this.fotoBase64 = fotoBase64;
         this.idRol = idRol;
+        this.rol = rol;
         this.idSucursal = idSucursal;
+        this.sucursal = sucursal;
         this.numeroLicencia = numeroLicencia;
     }
 
@@ -113,7 +117,7 @@ public class Colaborador {
     public void setFotografia(byte[] fotografia) {
         this.fotografia = fotografia;
     }
-    
+
     public String getFotoBase64() {
         return fotoBase64;
     }
@@ -130,6 +134,14 @@ public class Colaborador {
         this.idRol = idRol;
     }
 
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+
     public Integer getIdSucursal() {
         return idSucursal;
     }
@@ -138,11 +150,19 @@ public class Colaborador {
         this.idSucursal = idSucursal;
     }
 
+    public String getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(String sucursal) {
+        this.sucursal = sucursal;
+    }
+
     public String getNumeroLicencia() {
         return numeroLicencia;
     }
 
     public void setNumeroLicencia(String numeroLicencia) {
         this.numeroLicencia = numeroLicencia;
-    }
+    } 
 }
