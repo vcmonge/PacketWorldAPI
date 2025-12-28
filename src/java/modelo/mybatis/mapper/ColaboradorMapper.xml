@@ -8,7 +8,7 @@
     <select id="obtener-todos" resultType="pojo.Colaborador">
         SELECT 
             c.idColaborador, c.nombre, c.apellidoPaterno, c.apellidoMaterno, 
-            c.curp, c.correo, c.noPersonal, 
+            c.curp, c.correo, c.noPersonal, c.contrasenia,
             c.idRol, r.rol AS rol,
             c.idSucursal, s.nombre AS sucursal, s.codigo AS codigoSucursal,
             cond.numero_licencia AS numeroLicencia
