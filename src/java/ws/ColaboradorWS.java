@@ -112,4 +112,24 @@ public class ColaboradorWS {
     public List<Colaborador> buscarPorNoPersonal(@PathParam("noPersonal") String noPersonal) {
         return ColaboradorImp.buscarPorNoPersonal(noPersonal);
     }
+    
+    @Path("subir-fotografia/{idColaborador}")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta subirFotografia(@PathParam("idColaborador") Integer idColaborador, byte[] fotografia) {
+        if(idColaborador != null && idColaborador > 0 && fotografia.length > 0) {
+            return ColaboradorImp.guardarFotografia(idColaborador, fotografia);
+        }
+        throw new BadRequestException();
+    }
+    
+    @Path("obtener-fotografia/{idColaborador}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Colaborador obtenerFotografia(@PathParam("idColaborador") Integer idColaborador) {
+        if(idColaborador != null && idColaborador > 0) {
+            return ColaboradorImp.obtenerFotografia(idColaborador);
+        }
+        throw new BadRequestException();
+    }
 }

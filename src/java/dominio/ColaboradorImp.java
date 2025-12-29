@@ -9,6 +9,7 @@ import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Colaborador;
+import utilidades.Constantes;
 
 public class ColaboradorImp {
 
@@ -200,5 +201,49 @@ public class ColaboradorImp {
             }
         }
         return colaboradores;
+    }
+    
+    public static Respuesta guardarFotografia(int idColaborador, byte[] fotografia) {
+        Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                Colaborador colaborador = new Colaborador();
+                colaborador.setIdColaborador(idColaborador);
+                colaborador.setFotografia(fotografia);
+                int filasAfectadas = conexionBD.update("colaborador.guardar-fotografia", colaborador);
+                conexionBD.commit();
+                if (filasAfectadas > 0) {
+                    respuesta.setError(false);
+                    respuesta.setMensaje("La fotografía del colaborador ha sido guardado correctamente");
+                } else {
+                    respuesta.setMensaje("La fotografía del profesor no ha sido guardada, inténtelo más tarde");
+                }
+            } catch (Exception e) {
+                respuesta.setMensaje(e.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
+        }
+        
+        return respuesta;
+    }
+    
+    public static Colaborador obtenerFotografia(int idColaborador) {
+        Colaborador colaborador = new Colaborador();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                colaborador = conexionBD.selectOne("colaborador.obtener-fotografia", idColaborador);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return colaborador;
     }
 }

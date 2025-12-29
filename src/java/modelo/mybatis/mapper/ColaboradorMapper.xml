@@ -8,7 +8,7 @@
     <select id="obtener-todos" resultType="pojo.Colaborador">
         SELECT 
             c.idColaborador, c.nombre, c.apellidoPaterno, c.apellidoMaterno, 
-            c.curp, c.correo, c.noPersonal, c.contrasenia,
+            c.curp, c.correo, c.noPersonal,
             c.idRol, r.rol AS rol,
             c.idSucursal, s.nombre AS sucursal, s.codigo AS codigoSucursal,
             cond.numero_licencia AS numeroLicencia
@@ -34,14 +34,19 @@
     </insert>
     
     <update id="editar" parameterType="pojo.Colaborador">
-        UPDATE colaborador SET 
+        UPDATE colaborador
+        <set>
             nombre = #{nombre},
             apellidoPaterno = #{apellidoPaterno},
             apellidoMaterno = #{apellidoMaterno},
             CURP = #{curp},
             correo = #{correo},
-            contrasenia = #{contrasenia},
-            idSucursal = #{idSucursal}
+            idSucursal = #{idSucursal},
+
+            <if test="contrasenia != null and contrasenia != ''">
+                contrasenia = #{contrasenia},
+            </if>
+        </set>
         WHERE idColaborador = #{idColaborador}
     </update>
 
@@ -75,8 +80,8 @@
     <select id="buscarPorNombre" parameterType="string" resultType="pojo.Colaborador">
         SELECT 
             c.idColaborador, c.nombre, c.apellidoPaterno, c.apellidoMaterno, 
-            c.curp, c.correo, c.noPersonal, c.idRol, r.rol AS nombreRol,
-            c.idSucursal, s.nombre AS nombreSucursal,
+            c.curp, c.correo, c.noPersonal, c.idRol, r.rol AS rol,
+            c.idSucursal, s.nombre AS sucursal,
             cond.numero_licencia AS numeroLicencia
         FROM colaborador c
         INNER JOIN rol r ON c.idRol = r.idRol
@@ -89,8 +94,8 @@
     <select id="buscarPorRol" parameterType="string" resultType="pojo.Colaborador">
         SELECT 
             c.idColaborador, c.nombre, c.apellidoPaterno, c.apellidoMaterno, 
-            c.curp, c.correo, c.noPersonal, c.idRol, r.rol AS nombreRol,
-            c.idSucursal, s.nombre AS nombreSucursal,
+            c.curp, c.correo, c.noPersonal, c.idRol, r.rol AS rol,
+            c.idSucursal, s.nombre AS sucursal,
             cond.numero_licencia AS numeroLicencia
         FROM colaborador c
         INNER JOIN rol r ON c.idRol = r.idRol
@@ -103,8 +108,8 @@
     <select id="buscarPorNoPersonal" parameterType="string" resultType="pojo.Colaborador">
         SELECT 
             c.idColaborador, c.nombre, c.apellidoPaterno, c.apellidoMaterno, 
-            c.curp, c.correo, c.noPersonal, c.idRol, r.rol AS nombreRol,
-            c.idSucursal, s.nombre AS nombreSucursal,
+            c.curp, c.correo, c.noPersonal, c.idRol, r.rol AS rol,
+            c.idSucursal, s.nombre AS sucursal,
             cond.numero_licencia AS numeroLicencia
         FROM colaborador c
         INNER JOIN rol r ON c.idRol = r.idRol
@@ -112,5 +117,18 @@
         LEFT JOIN conductor cond ON c.idColaborador = cond.idConductor
         WHERE 
             c.noPersonal LIKE CONCAT('%', #{filtro}, '%')
+    </select>
+    
+    <update id="guardar-fotografia" parameterType="pojo.Colaborador">
+        UPDATE colaborador
+        SET fotografia = #{fotografia}
+        WHERE idColaborador = #{idColaborador}
+    </update>
+    
+    <select id="obtener-fotografia" parameterType="int" resultType="pojo.Colaborador">
+        SELECT idColaborador,
+            TO_BASE64(fotografia) as fotoBase64
+        FROM colaborador
+        WHERE idColaborador = #{idColaborador}
     </select>
 </mapper>
