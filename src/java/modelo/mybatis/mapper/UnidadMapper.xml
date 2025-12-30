@@ -17,7 +17,6 @@
             t.tipo AS nombreTipoUnidad
         FROM unidad u
         INNER JOIN tipo_unidad t ON u.idTipoUnidad = t.idTipoUnidad
-        WHERE u.estatus = 'activa' 
     </select>
 
     <insert id="registrar" parameterType="pojo.Unidad" useGeneratedKeys="true" keyProperty="idUnidad">
