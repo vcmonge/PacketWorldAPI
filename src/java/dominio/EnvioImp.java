@@ -61,6 +61,21 @@ public class EnvioImp {
         
         return envio;
     }
+    public static List<Envio> obtenerEnvios(){
+        List<Envio> envio = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        
+        if (conexionBD != null) {
+            try {
+                envio = conexionBD.selectList("envio.obtener-envios");
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return envio;
+    }
     
     public static Respuesta crearEnvio(Envio envio){
         Respuesta respuesta = new Respuesta();

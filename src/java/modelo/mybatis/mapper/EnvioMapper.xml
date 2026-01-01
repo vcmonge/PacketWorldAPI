@@ -41,7 +41,7 @@
         WHERE e.idConductor = #{idConductor} AND e.idEstatusEnvio NOT IN (5, 6);
     </select>
     <select id="obtener-envio" parameterType="string" resultType="pojo.Envio">
-        SELECT
+        SELECT 
             e.idEnvio,
             e.noGuia,
             e.costo,
@@ -49,7 +49,7 @@
             e.destinatarioApellidoPaterno,
             e.destinatarioApellidoMaterno,
             e.destinatarioIdDireccion,
-        -- [calle] [número casa], [colonia], [código postal], [ciudad], [municipio], [estado]
+            -- [calle] [número casa], [colonia], [código postal], [ciudad], [municipio], [estado]
             CONCAT_WS(', ', CONCAT_WS(' ', dd.calle, dd.numero), NULLIF(cd.nombre, ''), CONCAT('C.P. ', NULLIF(cd.codigo_postal, '')), NULLIF(md.nombre, ''), NULLIF(ed.nombre, '') ) AS destinatarioDireccion,
             s.nombre AS sucursal,
             CONCAT_WS(', ', CONCAT_WS(' ', ds.calle, ds.numero), NULLIF(cs.nombre, ''), CONCAT('C.P. ', NULLIF(cs.codigo_postal, '')), NULLIF(ms.nombre, ''), NULLIF(es.nombre, '') ) AS sucursalDireccion,
@@ -58,24 +58,58 @@
             CONCAT_WS(' ', cli.nombre, cli.apellidoPaterno, cli.apellidoMaterno) AS cliente,
             cli.telefono AS clienteTelefono,
             cli.correo AS clienteCorreo,
-            ee.nombre AS estatus
-        FROM envio e
-                 INNER JOIN estatus_envio ee ON ee.idEstatusEnvio = e.idEstatusEnvio
-            -- JOINs para la dirección del DESTINATARIO
-                 INNER JOIN direccion dd ON dd.idDireccion = e.destinatarioIdDireccion
-                 INNER JOIN colonias cd ON cd.id = dd.idColonia
-                 INNER JOIN municipios md ON md.id = cd.municipio
-                 INNER JOIN estados ed ON ed.id = md.estado
-                 INNER JOIN sucursal s ON e.idSucursalOrigen = s.idSucursal
-            -- JOINs para la dirección de la SUCURSAL
-                 INNER JOIN direccion ds ON ds.idDireccion = s.idDireccion
-                 INNER JOIN colonias cs ON cs.id = ds.idColonia
-                 INNER JOIN municipios ms ON ms.id = cs.municipio
-                 INNER JOIN estados es ON es.id = ms.estado
-            -- /
-                 INNER JOIN cliente cli ON cli.idCliente = e.idCliente
-                 LEFT JOIN colaborador cb ON cb.idColaborador = e.idConductor
+            ee.nombre AS estatus 
+        FROM envio e 
+            INNER JOIN estatus_envio ee ON ee.idEstatusEnvio = e.idEstatusEnvio 
+            -- JOINs para la dirección del DESTINATARIO 
+            INNER JOIN direccion dd ON dd.idDireccion = e.destinatarioIdDireccion 
+            INNER JOIN colonias cd ON cd.id = dd.idColonia 
+            INNER JOIN municipios md ON md.id = cd.municipio 
+            INNER JOIN estados ed ON ed.id = md.estado 
+            INNER JOIN sucursal s ON e.idSucursalOrigen = s.idSucursal 
+            -- JOINs para la dirección de la SUCURSAL 
+            INNER JOIN direccion ds ON ds.idDireccion = s.idDireccion 
+            INNER JOIN colonias cs ON cs.id = ds.idColonia 
+            INNER JOIN municipios ms ON ms.id = cs.municipio 
+            INNER JOIN estados es ON es.id = ms.estado 
+            -- / 
+            INNER JOIN cliente cli ON cli.idCliente = e.idCliente 
+            LEFT JOIN colaborador cb ON cb.idColaborador = e.idConductor 
         WHERE e.noGuia = #{noGuia} 
+    </select>
+    <select id="obtener-envios" resultType="pojo.Envio">
+        SELECT 
+            e.idEnvio,
+            e.noGuia,
+            e.costo,
+            e.destinatarioNombre,
+            e.destinatarioApellidoPaterno,
+            e.destinatarioApellidoMaterno,
+            e.destinatarioIdDireccion,
+            CONCAT_WS(', ', CONCAT_WS(' ', dd.calle, dd.numero), NULLIF(cd.nombre, ''), CONCAT('C.P. ', NULLIF(cd.codigo_postal, '')), NULLIF(md.nombre, ''), NULLIF(ed.nombre, '') ) AS destinatarioDireccion,
+            s.nombre AS sucursal,
+            CONCAT_WS(', ', CONCAT_WS(' ', ds.calle, ds.numero), NULLIF(cs.nombre, ''), CONCAT('C.P. ', NULLIF(cs.codigo_postal, '')), NULLIF(ms.nombre, ''), NULLIF(es.nombre, '') ) AS sucursalDireccion,
+            e.idConductor,
+            CONCAT_WS(' ', cb.nombre, cb.apellidoPaterno, cb.apellidoMaterno) AS conductor,
+            CONCAT_WS(' ', cli.nombre, cli.apellidoPaterno, cli.apellidoMaterno) AS cliente,
+            cli.telefono AS clienteTelefono,
+            cli.correo AS clienteCorreo,
+            ee.nombre AS estatus 
+        FROM envio e 
+            INNER JOIN estatus_envio ee ON ee.idEstatusEnvio = e.idEstatusEnvio 
+            INNER JOIN direccion dd ON dd.idDireccion = e.destinatarioIdDireccion 
+            INNER JOIN colonias cd ON cd.id = dd.idColonia 
+            INNER JOIN municipios md ON md.id = cd.municipio 
+            INNER JOIN estados ed ON ed.id = md.estado 
+            INNER JOIN sucursal s ON e.idSucursalOrigen = s.idSucursal 
+            INNER JOIN direccion ds ON ds.idDireccion = s.idDireccion 
+            INNER JOIN colonias cs ON cs.id = ds.idColonia 
+            INNER JOIN municipios ms ON ms.id = cs.municipio 
+            INNER JOIN estados es ON es.id = ms.estado 
+            INNER JOIN cliente cli ON cli.idCliente = e.idCliente 
+            LEFT JOIN colaborador cb ON cb.idColaborador = e.idConductor 
+        ORDER BY e.idEnvio DESC
+        LIMIT 5
     </select>
     <insert id="crear-envio" parameterType="pojo.Envio">
         INSERT INTO ENVIO (
