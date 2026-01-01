@@ -56,6 +56,12 @@ public class EnvioWS {
         }
         return EnvioImp.obtenerEnvio(noGuia);
     }
+    @Path("obtener-envios")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Envio> obtenerEnvios(){
+        return EnvioImp.obtenerEnvios();
+    }
     
     @Path("crear-envio")
     @POST

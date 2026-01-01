@@ -164,4 +164,19 @@ public class UnidadImp {
         }
         return respuesta;
     }
+    
+    public static List<Unidad> buscarUnidad(String textoBusqueda) {
+        List<Unidad> unidades = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                unidades = conexionBD.selectList("unidad.buscar", textoBusqueda);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return unidades;
+    }
 }

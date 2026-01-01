@@ -48,4 +48,25 @@
     <select id="obtenerTipos" resultType="pojo.TipoUnidad">
         SELECT idTipoUnidad, tipo FROM tipo_unidad
     </select>
+    
+    <select id="buscar" resultType="pojo.Unidad" parameterType="String">
+        SELECT 
+            u.idUnidad,
+            u.marca,
+            u.modelo,
+            u.anio,
+            u.VIN,
+            u.NII,    
+            u.estatus,
+            u.idTipoUnidad,
+            t.tipo AS nombreTipoUnidad
+        FROM unidad u
+        INNER JOIN tipo_unidad t ON u.idTipoUnidad = t.idTipoUnidad
+        WHERE u.estatus = 'activa' 
+        AND (
+               u.marca LIKE CONCAT('%', #{textoBusqueda}, '%')
+            OR u.VIN   LIKE CONCAT('%', #{textoBusqueda}, '%')
+            OR u.NII   LIKE CONCAT('%', #{textoBusqueda}, '%')
+        )
+    </select>
 </mapper>

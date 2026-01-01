@@ -14,7 +14,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import pojo.TipoUnidad;
 import pojo.Unidad;
@@ -97,5 +99,16 @@ public class UnidadWS {
         }
 
         return UnidadImp.darBajaUnidad(unidadBaja);
+    }
+    
+    @Path("buscar")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Unidad> buscarUnidad(@QueryParam("texto") String busqueda) {
+        if (busqueda != null && !busqueda.trim().isEmpty()) {
+            return UnidadImp.buscarUnidad(busqueda);
+        } else {
+            return UnidadImp.obtenerUnidades();
+        }
     }
 }
