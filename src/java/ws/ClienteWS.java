@@ -44,7 +44,7 @@ public class ClienteWS {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Cliente> buscar(@PathParam("parametro") String parametro) {
         if (Validaciones.esVacio(parametro)) {
-            throw new BadRequestException("El parámetro de búsqueda es obligatorio.");
+            throw new BadRequestException();
         }
         return ClienteImp.buscar(parametro);
     }
@@ -55,7 +55,7 @@ public class ClienteWS {
     @Produces(MediaType.APPLICATION_JSON)
     public Respuesta registrar(String json) {
         if (Validaciones.esVacio(json)) {
-            throw new BadRequestException("El cuerpo de la solicitud no puede estar vacío.");
+            throw new BadRequestException();
         }
         
         Gson gson = new Gson();
@@ -67,7 +67,7 @@ public class ClienteWS {
                 Validaciones.esVacio(cliente.getApellidoPaterno()) || 
                 Validaciones.esVacio(cliente.getTelefono()) || 
                 Validaciones.esVacio(cliente.getCorreo())) {
-                throw new BadRequestException("Faltan datos obligatorios para el registro.");
+                throw new BadRequestException();
             }
             
             return ClienteImp.registrar(cliente);
@@ -82,7 +82,7 @@ public class ClienteWS {
     @Produces(MediaType.APPLICATION_JSON)
     public Respuesta editar(String json) {
         if (Validaciones.esVacio(json)) {
-            throw new BadRequestException("El cuerpo de la solicitud no puede estar vacío.");
+            throw new BadRequestException();
         }
         
         Gson gson = new Gson();
@@ -90,7 +90,7 @@ public class ClienteWS {
             Cliente cliente = gson.fromJson(json, Cliente.class);
             
             if (cliente.getIdCliente() == null || cliente.getIdCliente() <= 0) {
-                throw new BadRequestException("El ID del cliente es necesario para la edición.");
+                throw new BadRequestException();
             }
             
             return ClienteImp.editar(cliente);
@@ -104,10 +104,10 @@ public class ClienteWS {
     @Produces(MediaType.APPLICATION_JSON)
     public Respuesta eliminar(@PathParam("idCliente") String idCliente) {
         if (Validaciones.esVacio(idCliente)) {
-            throw new BadRequestException("El ID del cliente es obligatorio.");
+            throw new BadRequestException();
         }
         if (!Validaciones.esNumerico(idCliente)) {
-            throw new BadRequestException("El ID debe ser numérico.");
+            throw new BadRequestException();
         }
         
         int id = Integer.parseInt(idCliente);

@@ -15,10 +15,8 @@ public class Sucursal {
     private String estatus;
     private Integer idDireccion;
     
-    // Campo visual (Concatenado desde Base de Datos)
     private String direccionCompleta;
 
-    // Campos para Registro y Edición (Mapeo directo a tabla Direccion)
     private String calle;
     private String numero;
     private Integer idColonia;

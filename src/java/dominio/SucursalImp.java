@@ -52,11 +52,9 @@ public class SucursalImp {
         SqlSession conexionBD = MyBatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                //Insertamos dirección (se llenará el idDireccion en el objeto sucursal)
                 int filasDireccion = conexionBD.insert("sucursal.registrarDireccion", sucursal);
                 
                 if (filasDireccion > 0 && sucursal.getIdDireccion() != null) {
-                    //Insertamos sucursal usando el idDireccion generado
                     int filasSucursal = conexionBD.insert("sucursal.registrar", sucursal);
                     
                     if (filasSucursal > 0) {
@@ -74,8 +72,6 @@ public class SucursalImp {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                respuesta.setError(true);
-                respuesta.setMensaje("Error en la base de datos: " + e.getMessage());
             } finally {
                 conexionBD.close();
             }
@@ -91,7 +87,6 @@ public class SucursalImp {
         SqlSession conexionBD = MyBatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                // Actualizamos ambas tablas
                 int filasSucursal = conexionBD.update("sucursal.editar", sucursal);
                 int filasDireccion = conexionBD.update("sucursal.editarDireccion", sucursal);
                 
@@ -105,8 +100,6 @@ public class SucursalImp {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                respuesta.setError(true);
-                respuesta.setMensaje("Error al editar: " + e.getMessage());
             } finally {
                 conexionBD.close();
             }
@@ -133,8 +126,6 @@ public class SucursalImp {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                respuesta.setError(true);
-                respuesta.setMensaje("Error al eliminar: " + e.getMessage());
             } finally {
                 conexionBD.close();
             }

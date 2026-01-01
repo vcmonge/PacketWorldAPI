@@ -66,7 +66,7 @@ public class SucursalWS {
     }
     
     @Path("eliminar/{idSucursal}")
-    @DELETE
+    @PUT
     @Produces(MediaType.APPLICATION_JSON)
     public Respuesta eliminarSucursal(@PathParam("idSucursal") Integer idSucursal) {
         if (idSucursal != null && idSucursal > 0) {
