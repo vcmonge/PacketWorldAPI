@@ -54,6 +54,7 @@
         WHERE cl.nombre LIKE CONCAT('%', #{_parameter}, '%')
            OR cl.apellidoPaterno LIKE CONCAT('%', #{_parameter}, '%')
            OR cl.apellidoMaterno LIKE CONCAT('%', #{_parameter}, '%')
+           OR CONCAT_WS(' ', cl.nombre, cl.apellidoPaterno, cl.apellidoMaterno) LIKE CONCAT('%', #{_parameter}, '%')
     </select>
 
     <select id="buscar-cliente-correo" resultType="pojo.Cliente" parameterType="string">
