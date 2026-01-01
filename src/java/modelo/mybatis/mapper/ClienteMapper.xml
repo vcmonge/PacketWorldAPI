@@ -24,9 +24,9 @@
             CONCAT_WS(', ', CONCAT_WS(' ', d.calle, d.numero), NULLIF(col.nombre, ''), CONCAT('C.P. ', NULLIF(col.codigo_postal, '')), NULLIF(m.nombre, ''), NULLIF(e.nombre, '') ) AS direccionCompleta
         FROM cliente cl
         INNER JOIN direccion d ON cl.idDireccion = d.idDireccion
-        INNER JOIN colonias col ON d.idColonia = col.id
-        INNER JOIN municipios m ON col.municipio = m.id
-        INNER JOIN estados e ON m.estado = e.id
+        LEFT JOIN colonias col ON d.idColonia = col.id
+        LEFT JOIN municipios m ON col.municipio = m.id
+        LEFT JOIN estados e ON m.estado = e.id
     </select>
     
     <select id="buscar-cliente-nombre" resultType="pojo.Cliente" parameterType="string">
@@ -48,12 +48,12 @@
             CONCAT_WS(', ', CONCAT_WS(' ', d.calle, d.numero), NULLIF(col.nombre, ''), CONCAT('C.P. ', NULLIF(col.codigo_postal, '')), NULLIF(m.nombre, ''), NULLIF(e.nombre, '') ) AS direccionCompleta
         FROM cliente cl
         INNER JOIN direccion d ON cl.idDireccion = d.idDireccion
-        INNER JOIN colonias col ON d.idColonia = col.id
-        INNER JOIN municipios m ON col.municipio = m.id
-        INNER JOIN estados e ON m.estado = e.id
-        WHERE cl.nombre LIKE '%${value}%' 
-           OR cl.apellidoPaterno LIKE '%${value}%' 
-           OR cl.apellidoMaterno LIKE '%${value}%'
+        LEFT JOIN colonias col ON d.idColonia = col.id
+        LEFT JOIN municipios m ON col.municipio = m.id
+        LEFT JOIN estados e ON m.estado = e.id
+        WHERE cl.nombre LIKE CONCAT('%', #{_parameter}, '%')
+           OR cl.apellidoPaterno LIKE CONCAT('%', #{_parameter}, '%')
+           OR cl.apellidoMaterno LIKE CONCAT('%', #{_parameter}, '%')
     </select>
 
     <select id="buscar-cliente-correo" resultType="pojo.Cliente" parameterType="string">
@@ -75,10 +75,10 @@
             CONCAT_WS(', ', CONCAT_WS(' ', d.calle, d.numero), NULLIF(col.nombre, ''), CONCAT('C.P. ', NULLIF(col.codigo_postal, '')), NULLIF(m.nombre, ''), NULLIF(e.nombre, '') ) AS direccionCompleta
         FROM cliente cl
         INNER JOIN direccion d ON cl.idDireccion = d.idDireccion
-        INNER JOIN colonias col ON d.idColonia = col.id
-        INNER JOIN municipios m ON col.municipio = m.id
-        INNER JOIN estados e ON m.estado = e.id
-        WHERE cl.correo = #{value}
+        LEFT JOIN colonias col ON d.idColonia = col.id
+        LEFT JOIN municipios m ON col.municipio = m.id
+        LEFT JOIN estados e ON m.estado = e.id
+        WHERE cl.correo = #{_parameter}
     </select>
 
     <select id="buscar-cliente-telefono" resultType="pojo.Cliente" parameterType="string">
@@ -100,10 +100,10 @@
             CONCAT_WS(', ', CONCAT_WS(' ', d.calle, d.numero), NULLIF(col.nombre, ''), CONCAT('C.P. ', NULLIF(col.codigo_postal, '')), NULLIF(m.nombre, ''), NULLIF(e.nombre, '') ) AS direccionCompleta
         FROM cliente cl
         INNER JOIN direccion d ON cl.idDireccion = d.idDireccion
-        INNER JOIN colonias col ON d.idColonia = col.id
-        INNER JOIN municipios m ON col.municipio = m.id
-        INNER JOIN estados e ON m.estado = e.id
-        WHERE cl.telefono = #{value}
+        LEFT JOIN colonias col ON d.idColonia = col.id
+        LEFT JOIN municipios m ON col.municipio = m.id
+        LEFT JOIN estados e ON m.estado = e.id
+        WHERE cl.telefono = #{_parameter}
     </select>
 
     <insert id="registrar-direccion" parameterType="pojo.Cliente" useGeneratedKeys="true" keyProperty="idDireccion">
