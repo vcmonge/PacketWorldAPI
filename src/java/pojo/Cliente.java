@@ -16,14 +16,14 @@ public class Cliente {
     private String apellidoMaterno;
     private String telefono;
     private String correo;
+    
     private Integer idDireccion;
+    private Integer idColonia;
 
-    //Atributos adicionales para el manejo plano de la dirección (Estilo Envio)
-    //Se llenan automáticamente usando alias en la consulta SQL
+    // Atributos de visualización
     private String direccionCompleta;
     private String calle;
     private String numero;
-    private Integer idColonia;
     private String nombreColonia;
     private String codigoPostal;
     private String ciudad;
@@ -32,7 +32,7 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(Integer idCliente, String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String correo, Integer idDireccion, String direccionCompleta, String calle, String numero, Integer idColonia, String nombreColonia, String codigoPostal, String ciudad, String estado) {
+    public Cliente(Integer idCliente, String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String correo, Integer idDireccion, Integer idColonia, String direccionCompleta, String calle, String numero, String nombreColonia, String codigoPostal, String ciudad, String estado) {
         this.idCliente = idCliente;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -40,10 +40,10 @@ public class Cliente {
         this.telefono = telefono;
         this.correo = correo;
         this.idDireccion = idDireccion;
+        this.idColonia = idColonia;
         this.direccionCompleta = direccionCompleta;
         this.calle = calle;
         this.numero = numero;
-        this.idColonia = idColonia;
         this.nombreColonia = nombreColonia;
         this.codigoPostal = codigoPostal;
         this.ciudad = ciudad;
@@ -106,6 +106,14 @@ public class Cliente {
         this.idDireccion = idDireccion;
     }
 
+    public Integer getIdColonia() {
+        return idColonia;
+    }
+
+    public void setIdColonia(Integer idColonia) {
+        this.idColonia = idColonia;
+    }
+
     public String getDireccionCompleta() {
         return direccionCompleta;
     }
@@ -128,14 +136,6 @@ public class Cliente {
 
     public void setNumero(String numero) {
         this.numero = numero;
-    }
-
-    public Integer getIdColonia() {
-        return idColonia;
-    }
-
-    public void setIdColonia(Integer idColonia) {
-        this.idColonia = idColonia;
     }
 
     public String getNombreColonia() {
