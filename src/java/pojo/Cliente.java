@@ -20,6 +20,7 @@ public class Cliente {
     private Integer idDireccion;
     private Integer idColonia;
 
+    // Atributos de visualización
     private String direccionCompleta;
     private String calle;
     private String numero;

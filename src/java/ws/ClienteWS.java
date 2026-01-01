@@ -8,8 +8,11 @@ package ws;
  *
  * @author HECTO
  */
+import com.google.gson.Gson;
 import dominio.ClienteImp;
 import dto.Respuesta;
+import java.util.List;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -20,6 +23,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import pojo.Cliente;
+import utilidades.Validaciones;
 
 @Path("cliente")
 public class ClienteWS {
@@ -27,101 +31,87 @@ public class ClienteWS {
     @GET
     @Path("obtener-todos")
     @Produces(MediaType.APPLICATION_JSON)
-    public Respuesta obtenerClientes() {
+    public List<Cliente> obtenerClientes() {
         return ClienteImp.obtenerClientes();
     }
 
     @GET
     @Path("buscar/nombre/{nombre}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Respuesta buscarClientePorNombre(@PathParam("nombre") String nombre) {
-        if (nombre != null && !nombre.trim().isEmpty()) {
-            return ClienteImp.buscarClientePorNombre(nombre);
+    public List<Cliente> buscarClientePorNombre(@PathParam("nombre") String nombre) {
+        if (Validaciones.esVacio(nombre)) {
+            throw new BadRequestException("El parámetro nombre es obligatorio");
         }
-        Respuesta respuesta = new Respuesta();
-        respuesta.setError(true);
-        respuesta.setMensaje("El parámetro nombre es obligatorio");
-        return respuesta;
+        return ClienteImp.buscarClientePorNombre(nombre);
     }
 
     @GET
     @Path("buscar/correo/{correo}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Respuesta buscarClientePorCorreo(@PathParam("correo") String correo) {
-        if (correo != null && !correo.trim().isEmpty()) {
-            return ClienteImp.buscarClientePorCorreo(correo);
+    public List<Cliente> buscarClientePorCorreo(@PathParam("correo") String correo) {
+        if (Validaciones.esVacio(correo)) {
+            throw new BadRequestException("El parámetro correo es obligatorio");
         }
-        Respuesta respuesta = new Respuesta();
-        respuesta.setError(true);
-        respuesta.setMensaje("El parámetro correo es obligatorio");
-        return respuesta;
+        return ClienteImp.buscarClientePorCorreo(correo);
     }
 
     @GET
     @Path("buscar/telefono/{telefono}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Respuesta buscarClientePorTelefono(@PathParam("telefono") String telefono) {
-        if (telefono != null && !telefono.trim().isEmpty()) {
-            return ClienteImp.buscarClientePorTelefono(telefono);
+    public List<Cliente> buscarClientePorTelefono(@PathParam("telefono") String telefono) {
+        if (Validaciones.esVacio(telefono)) {
+            throw new BadRequestException("El parámetro teléfono es obligatorio");
         }
-        Respuesta respuesta = new Respuesta();
-        respuesta.setError(true);
-        respuesta.setMensaje("El parámetro teléfono es obligatorio");
-        return respuesta;
+        return ClienteImp.buscarClientePorTelefono(telefono);
     }
 
     @POST
     @Path("registrar")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Respuesta registrarCliente(Cliente cliente) {
-        if (cliente.getNombre() != null && !cliente.getNombre().isEmpty() &&
-            cliente.getApellidoPaterno() != null && !cliente.getApellidoPaterno().isEmpty() &&
-            cliente.getTelefono() != null && !cliente.getTelefono().isEmpty() &&
-            cliente.getCorreo() != null && !cliente.getCorreo().isEmpty() &&
-            cliente.getCalle() != null && !cliente.getCalle().isEmpty() &&
-            cliente.getIdColonia() != null && cliente.getIdColonia() > 0) {
-            
+    public Respuesta registrarCliente(String json) {
+        Gson gson = new Gson();
+        try {
+            Cliente cliente = gson.fromJson(json, Cliente.class);
+            if (Validaciones.esVacio(cliente.getNombre()) || 
+                Validaciones.esVacio(cliente.getApellidoPaterno()) ||
+                Validaciones.esVacio(cliente.getTelefono()) || 
+                Validaciones.esVacio(cliente.getCorreo()) ||
+                Validaciones.esVacio(cliente.getCalle()) || 
+                (cliente.getIdColonia() == null || cliente.getIdColonia() <= 0)) {
+                throw new BadRequestException("Todos los campos obligatorios deben ser proporcionados");
+            }
             return ClienteImp.registrarCliente(cliente);
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
         }
-        Respuesta respuesta = new Respuesta();
-        respuesta.setError(true);
-        respuesta.setMensaje("Todos los campos obligatorios del cliente y su dirección deben ser proporcionados");
-        return respuesta;
     }
 
     @PUT
     @Path("editar")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Respuesta editarCliente(Cliente cliente) {
-        if (cliente.getIdCliente() != null && cliente.getIdCliente() > 0 &&
-            cliente.getIdDireccion() != null && cliente.getIdDireccion() > 0 &&
-            cliente.getNombre() != null && !cliente.getNombre().isEmpty() &&
-            cliente.getApellidoPaterno() != null && !cliente.getApellidoPaterno().isEmpty() &&
-            cliente.getTelefono() != null && !cliente.getTelefono().isEmpty() &&
-            cliente.getCorreo() != null && !cliente.getCorreo().isEmpty() &&
-            cliente.getCalle() != null && !cliente.getCalle().isEmpty() &&
-            cliente.getIdColonia() != null && cliente.getIdColonia() > 0) {
-            
+    public Respuesta editarCliente(String json) {
+        Gson gson = new Gson();
+        try {
+            Cliente cliente = gson.fromJson(json, Cliente.class);
+            if (cliente.getIdCliente() == null || cliente.getIdCliente() <= 0) {
+                throw new BadRequestException("El ID del cliente es obligatorio para editar");
+            }
             return ClienteImp.editarCliente(cliente);
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
         }
-        Respuesta respuesta = new Respuesta();
-        respuesta.setError(true);
-        respuesta.setMensaje("Todos los campos obligatorios y los identificadores deben ser válidos para editar");
-        return respuesta;
     }
 
     @DELETE
     @Path("eliminar/{idCliente}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Respuesta eliminarCliente(@PathParam("idCliente") Integer idCliente) {
-        if (idCliente != null && idCliente > 0) {
-            return ClienteImp.eliminarCliente(idCliente);
+    public Respuesta eliminarCliente(@PathParam("idCliente") String idClienteStr) {
+        if (Validaciones.esVacio(idClienteStr) || !Validaciones.esNumerico(idClienteStr)) {
+            throw new BadRequestException("El ID del cliente debe ser numérico y obligatorio");
         }
-        Respuesta respuesta = new Respuesta();
-        respuesta.setError(true);
-        respuesta.setMensaje("El ID del cliente es obligatorio para la eliminación");
-        return respuesta;
+        int idCliente = Integer.parseInt(idClienteStr);
+        return ClienteImp.eliminarCliente(idCliente);
     }
 }

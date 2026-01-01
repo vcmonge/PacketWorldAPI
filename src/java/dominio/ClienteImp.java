@@ -13,99 +13,77 @@ import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Cliente;
+import utilidades.Constantes;
 
 public class ClienteImp {
 
-    public static Respuesta obtenerClientes() {
-        Respuesta respuesta = new Respuesta();
+    public static List<Cliente> obtenerClientes() {
+        List<Cliente> clientes = null;
         SqlSession conexion = MyBatisUtil.getSession();
         
         if (conexion != null) {
             try {
-                List<Cliente> clientes = conexion.selectList("cliente.obtener-clientes");
-                respuesta.setError(false);
-                respuesta.setMensaje("Clientes obtenidos correctamente");
+                clientes = conexion.selectList("cliente.obtener-clientes");
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 conexion.close();
             }
-        } else {
-            respuesta.setError(true);
-            respuesta.setMensaje("Error de conexión a la base de datos");
         }
-        
-        return respuesta;
+        return clientes;
     }
 
-    public static Respuesta buscarClientePorNombre(String nombre) {
-        Respuesta respuesta = new Respuesta();
+    public static List<Cliente> buscarClientePorNombre(String nombre) {
+        List<Cliente> clientes = null;
         SqlSession conexion = MyBatisUtil.getSession();
         
         if (conexion != null) {
             try {
-                List<Cliente> clientes = conexion.selectList("cliente.buscar-cliente-nombre", nombre);
-                respuesta.setError(false);
-                respuesta.setMensaje("Búsqueda por nombre realizada correctamente");
+                clientes = conexion.selectList("cliente.buscar-cliente-nombre", nombre);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 conexion.close();
             }
-        } else {
-            respuesta.setError(true);
-            respuesta.setMensaje("Error de conexión a la base de datos");
         }
-        
-        return respuesta;
+        return clientes;
     }
 
-    public static Respuesta buscarClientePorCorreo(String correo) {
-        Respuesta respuesta = new Respuesta();
+    public static List<Cliente> buscarClientePorCorreo(String correo) {
+        List<Cliente> clientes = null;
         SqlSession conexion = MyBatisUtil.getSession();
         
         if (conexion != null) {
             try {
-                List<Cliente> clientes = conexion.selectList("cliente.buscar-cliente-correo", correo);
-                respuesta.setError(false);
-                respuesta.setMensaje("Búsqueda por correo realizada correctamente");
+                clientes = conexion.selectList("cliente.buscar-cliente-correo", correo);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 conexion.close();
             }
-        } else {
-            respuesta.setError(true);
-            respuesta.setMensaje("Error de conexión a la base de datos");
         }
-        
-        return respuesta;
+        return clientes;
     }
 
-    public static Respuesta buscarClientePorTelefono(String telefono) {
-        Respuesta respuesta = new Respuesta();
+    public static List<Cliente> buscarClientePorTelefono(String telefono) {
+        List<Cliente> clientes = null;
         SqlSession conexion = MyBatisUtil.getSession();
         
         if (conexion != null) {
             try {
-                List<Cliente> clientes = conexion.selectList("cliente.buscar-cliente-telefono", telefono);
-                respuesta.setError(false);
-                respuesta.setMensaje("Búsqueda por teléfono realizada correctamente");
+                clientes = conexion.selectList("cliente.buscar-cliente-telefono", telefono);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 conexion.close();
             }
-        } else {
-            respuesta.setError(true);
-            respuesta.setMensaje("Error de conexión a la base de datos");
         }
-        
-        return respuesta;
+        return clientes;
     }
 
     public static Respuesta registrarCliente(Cliente cliente) {
         Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
         SqlSession conexion = MyBatisUtil.getSession();
         
         if (conexion != null) {
@@ -120,13 +98,9 @@ public class ClienteImp {
                         respuesta.setError(false);
                         respuesta.setMensaje("Cliente registrado correctamente");
                     } else {
-                        conexion.rollback();
-                        respuesta.setError(true);
                         respuesta.setMensaje("Error al registrar la información del cliente");
                     }
                 } else {
-                    conexion.rollback();
-                    respuesta.setError(true);
                     respuesta.setMensaje("Error al registrar la dirección del cliente");
                 }
             } catch (Exception e) {
@@ -135,8 +109,7 @@ public class ClienteImp {
                 conexion.close();
             }
         } else {
-            respuesta.setError(true);
-            respuesta.setMensaje("Error de conexión a la base de datos");
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
         }
         
         return respuesta;
@@ -144,21 +117,20 @@ public class ClienteImp {
 
     public static Respuesta editarCliente(Cliente cliente) {
         Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
         SqlSession conexion = MyBatisUtil.getSession();
         
         if (conexion != null) {
             try {
                 int filasCliente = conexion.update("cliente.editar-cliente", cliente);
                 int filasDireccion = conexion.update("cliente.editar-direccion", cliente);
-                
-                if (filasCliente > 0 && filasDireccion > 0) {
+               
+                if (filasCliente > 0 || filasDireccion > 0) {
                     conexion.commit();
                     respuesta.setError(false);
                     respuesta.setMensaje("Cliente editado correctamente");
                 } else {
-                    conexion.rollback();
-                    respuesta.setError(true);
-                    respuesta.setMensaje("No se pudo actualizar la información completa del cliente");
+                    respuesta.setMensaje("No se pudo actualizar la información del cliente. Verifique los IDs.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -166,8 +138,7 @@ public class ClienteImp {
                 conexion.close();
             }
         } else {
-            respuesta.setError(true);
-            respuesta.setMensaje("Error de conexión a la base de datos");
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
         }
         
         return respuesta;
@@ -175,6 +146,7 @@ public class ClienteImp {
 
     public static Respuesta eliminarCliente(Integer idCliente) {
         Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
         SqlSession conexion = MyBatisUtil.getSession();
         
         if (conexion != null) {
@@ -186,7 +158,6 @@ public class ClienteImp {
                     respuesta.setError(false);
                     respuesta.setMensaje("Cliente eliminado correctamente");
                 } else {
-                    respuesta.setError(true);
                     respuesta.setMensaje("No se encontró el cliente con el ID proporcionado");
                 }
             } catch (Exception e) {
@@ -195,8 +166,7 @@ public class ClienteImp {
                 conexion.close();
             }
         } else {
-            respuesta.setError(true);
-            respuesta.setMensaje("Error de conexión a la base de datos");
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
         }
         
         return respuesta;
