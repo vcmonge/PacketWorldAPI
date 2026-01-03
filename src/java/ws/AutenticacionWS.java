@@ -19,9 +19,10 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("autenticacion")
 public class AutenticacionWS {
+    
     @Path("movil")
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public RSAutenticacionColaborador autenticarConductor(
             @FormParam("noPersonal") String noPersonal,
             @FormParam("password") String password) {
