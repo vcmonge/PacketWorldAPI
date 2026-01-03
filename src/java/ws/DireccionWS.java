@@ -58,5 +58,22 @@ public class DireccionWS {
 
          return DireccionImp.obtenerDireccionCodigoPostal(cp);
     }
+    @Path("obtener-direccion-id/{idDireccion}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Direccion obtenerDireccionPorId(@PathParam("idDireccion") String idDireccion) {
+
+        if (Validaciones.esVacio(idDireccion)) {
+            throw new BadRequestException();
+        }
+
+        if (!Validaciones.esNumerico(idDireccion)) {
+            throw new BadRequestException();
+        }
+
+        int id = Integer.parseInt(idDireccion);
+
+        return DireccionImp.obtenerDireccionPorId(id);
+    }
    
 }
