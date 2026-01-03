@@ -70,7 +70,7 @@ public class ColaboradorWS {
     // EDICIÓN ESPECÍFICA (Móvil - Conductor)
     @Path("editar-conductor")
     @PUT
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Consumes(MediaType.APPLICATION_JSON)
     public Respuesta editarConductorMovil(String json) {
         Gson gson = new Gson();
