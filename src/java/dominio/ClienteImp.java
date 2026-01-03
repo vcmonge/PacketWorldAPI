@@ -171,4 +171,18 @@ public class ClienteImp {
         
         return respuesta;
     }
+    public static Cliente buscarClientePorId(int idCliente) {
+        Cliente cliente = null;
+        SqlSession conexion = MyBatisUtil.getSession();
+        if (conexion != null) {
+            try {
+                cliente = conexion.selectOne("cliente.buscar-cliente-id", idCliente);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexion.close();
+            }
+        }
+        return cliente;
+    }
 }

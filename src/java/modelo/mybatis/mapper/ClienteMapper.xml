@@ -135,5 +135,28 @@
     <delete id="eliminar-cliente" parameterType="int">
         DELETE FROM cliente WHERE idCliente = #{idCliente}
     </delete>
-
+    <select id="buscar-cliente-id" resultType="pojo.Cliente" parameterType="int">
+        SELECT 
+            cl.idCliente, 
+            cl.nombre, 
+            cl.apellidoPaterno, 
+            cl.apellidoMaterno, 
+            cl.telefono, 
+            cl.correo, 
+            cl.idDireccion,
+            d.calle,
+            d.numero,
+            d.idColonia,
+            col.nombre AS nombreColonia,
+            col.codigo_postal AS codigoPostal,
+            m.nombre AS ciudad,
+            e.nombre AS estado,
+            CONCAT_WS(', ', CONCAT_WS(' ', d.calle, d.numero), NULLIF(col.nombre, ''), CONCAT('C.P. ', NULLIF(col.codigo_postal, '')), NULLIF(m.nombre, ''), NULLIF(e.nombre, '') ) AS direccionCompleta
+        FROM cliente cl 
+        INNER JOIN direccion d ON cl.idDireccion = d.idDireccion 
+        LEFT JOIN colonias col ON d.idColonia = col.id 
+        LEFT JOIN municipios m ON col.municipio = m.id 
+        LEFT JOIN estados e ON m.estado = e.id 
+        WHERE cl.idCliente = #{idCliente}
+    </select>
 </mapper>

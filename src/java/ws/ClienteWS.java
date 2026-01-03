@@ -114,4 +114,14 @@ public class ClienteWS {
         int idCliente = Integer.parseInt(idClienteStr);
         return ClienteImp.eliminarCliente(idCliente);
     }
+
+    @GET
+    @Path("buscar/id/{idCliente}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Cliente buscarClientePorId(@PathParam("idCliente") int idCliente) {
+        if (idCliente <= 0) {
+            throw new BadRequestException("El parámetro idCliente debe ser un número entero mayor que cero");
+        }
+        return ClienteImp.buscarClientePorId(idCliente);
+    }
 }
