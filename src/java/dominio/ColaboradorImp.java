@@ -246,4 +246,19 @@ public class ColaboradorImp {
         }
         return colaborador;
     }
+    
+    public static Colaborador obtenerPorId(int idColaborador) {
+        Colaborador colaborador = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                colaborador = conexionBD.selectOne("colaborador.obtenerPorId", idColaborador);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return colaborador;
+    }
 }

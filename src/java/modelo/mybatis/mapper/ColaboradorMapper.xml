@@ -131,4 +131,21 @@
         FROM colaborador
         WHERE idColaborador = #{idColaborador}
     </select>
+    
+    <select id="obtenerPorId" resultType="pojo.Colaborador">
+        SELECT 
+            c.idColaborador,
+            c.nombre,
+            c.apellidoPaterno,
+            c.apellidoMaterno,
+            c.curp,
+            c.correo,
+            c.noPersonal,
+            c.idRol,
+            c.idSucursal,
+            d.numero_licencia AS numeroLicencia
+        FROM colaborador c
+        LEFT JOIN conductor d ON c.idColaborador = d.idConductor
+        WHERE c.idColaborador = #{idColaborador}
+    </select>
 </mapper>
