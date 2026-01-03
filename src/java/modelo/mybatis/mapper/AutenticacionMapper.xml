@@ -15,7 +15,6 @@
             c.correo,
             c.noPersonal,
             c.contrasenia,
-            c.fotografia,
             c.idRol,
             c.idSucursal,
             d.numero_licencia AS numeroLicencia
@@ -28,7 +27,7 @@
     <select id="loginEscritorio" resultType="pojo.Colaborador">
         SELECT 
             c.idColaborador, c.nombre, c.apellidoPaterno, c.apellidoMaterno, 
-            c.curp, c.correo, c.noPersonal, c.contrasenia, c.fotografia,
+            c.curp, c.correo, c.noPersonal, c.contrasenia,
             c.idRol, r.rol AS nombreRol,
             c.idSucursal, s.nombre AS nombreSucursal
         FROM colaborador c
