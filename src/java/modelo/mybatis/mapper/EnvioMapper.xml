@@ -58,6 +58,7 @@
             CONCAT_WS(' ', cli.nombre, cli.apellidoPaterno, cli.apellidoMaterno) AS cliente,
             cli.telefono AS clienteTelefono,
             cli.correo AS clienteCorreo,
+            cli.idCliente as idCliente,
             ee.nombre AS estatus 
         FROM envio e 
             INNER JOIN estatus_envio ee ON ee.idEstatusEnvio = e.idEstatusEnvio 
@@ -94,6 +95,7 @@
             CONCAT_WS(' ', cli.nombre, cli.apellidoPaterno, cli.apellidoMaterno) AS cliente,
             cli.telefono AS clienteTelefono,
             cli.correo AS clienteCorreo,
+            cli.idCliente as idCliente,
             ee.nombre AS estatus 
         FROM envio e 
             INNER JOIN estatus_envio ee ON ee.idEstatusEnvio = e.idEstatusEnvio 
