@@ -51,6 +51,7 @@
             e.destinatarioIdDireccion,
             -- [calle] [número casa], [colonia], [código postal], [ciudad], [municipio], [estado]
             CONCAT_WS(', ', CONCAT_WS(' ', dd.calle, dd.numero), NULLIF(cd.nombre, ''), CONCAT('C.P. ', NULLIF(cd.codigo_postal, '')), NULLIF(md.nombre, ''), NULLIF(ed.nombre, '') ) AS destinatarioDireccion,
+            e.idSucursalOrigen,
             s.nombre AS sucursal,
             CONCAT_WS(', ', CONCAT_WS(' ', ds.calle, ds.numero), NULLIF(cs.nombre, ''), CONCAT('C.P. ', NULLIF(cs.codigo_postal, '')), NULLIF(ms.nombre, ''), NULLIF(es.nombre, '') ) AS sucursalDireccion,
             e.idConductor,
@@ -88,6 +89,7 @@
             e.destinatarioApellidoMaterno,
             e.destinatarioIdDireccion,
             CONCAT_WS(', ', CONCAT_WS(' ', dd.calle, dd.numero), NULLIF(cd.nombre, ''), CONCAT('C.P. ', NULLIF(cd.codigo_postal, '')), NULLIF(md.nombre, ''), NULLIF(ed.nombre, '') ) AS destinatarioDireccion,
+            e.idSucursalOrigen,
             s.nombre AS sucursal,
             CONCAT_WS(', ', CONCAT_WS(' ', ds.calle, ds.numero), NULLIF(cs.nombre, ''), CONCAT('C.P. ', NULLIF(cs.codigo_postal, '')), NULLIF(ms.nombre, ''), NULLIF(es.nombre, '') ) AS sucursalDireccion,
             e.idConductor,
