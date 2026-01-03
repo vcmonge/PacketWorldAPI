@@ -53,4 +53,20 @@ public class DireccionImp {
         
         return colonias;
     }
+    public static Direccion obtenerDireccionPorId(int idDireccion) {
+        Direccion direccion = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                direccion = conexionBD.selectOne("direccion.obtener-direccion-id", idDireccion);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+
+        return direccion;
+    }
 }
