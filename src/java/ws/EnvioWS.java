@@ -33,7 +33,7 @@ public class EnvioWS {
     
     @Path("obtener-envios-conductor/{idConductor}")
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public List<Envio> obtenerEnviosConductor(@PathParam("idConductor") String idConductor){
         if(Validaciones.esVacio(idConductor)){
             throw new BadRequestException();

@@ -29,7 +29,7 @@ public class CatalogoWS {
    
    @Path("obtener-estatus-envios")
    @GET
-   @Produces(MediaType.APPLICATION_JSON)
+   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
    public List<EstatusEnvio> obtenerEstatusEnviosSistema() {
        return CatalogoImp.obtenerEstatusEnviosSistema();
    }
