@@ -3,7 +3,6 @@ package dominio;
 
 import dto.EnvioCompletoDTO;
 import dto.Respuesta;
-import dto.RespuestaGenerica;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;

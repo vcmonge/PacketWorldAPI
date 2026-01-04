@@ -31,4 +31,10 @@
     <insert id="crear-direccion" parameterType="pojo.Direccion" useGeneratedKeys="true" keyProperty="idDireccion">
         INSERT INTO direccion(calle, numero, idColonia) VALUES (#{calle}, #{numero}, #{idColonia})
     </insert>
+    <select id="obtener-cp-sucursal" parameterType="int" resultType="pojo.Direccion">
+        SELECT c.codigo_postal as codigoPostal FROM 
+        SUCURSAL s INNER JOIN DIRECCION d ON s.idDireccion = d.idDireccion 
+        INNER JOIN COLONIAS c ON d.idColonia = c.id 
+        WHERE s.idSucursal = #{idSucursal}
+    </select>
 </mapper>

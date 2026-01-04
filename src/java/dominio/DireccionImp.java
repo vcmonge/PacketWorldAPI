@@ -69,4 +69,29 @@ public class DireccionImp {
 
         return direccion;
     }
+    public static Respuesta obtenerCodigoPostalSucursal(Integer idSucursal){
+        Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        
+        if ( conexionBD != null ){
+            try {
+                Direccion direccion = conexionBD.selectOne("obtener-cp-sucursal", idSucursal);
+                if( direccion != null ){
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Codigo postal encontrado.");
+                    respuesta.setValor(direccion.getCodigoPostal().toString());
+                } else {
+                    respuesta.setMensaje("Codigo postal de sucursal no encontrado");
+                }
+            } catch (Exception e) {
+                
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
+        }
+        return respuesta;
+    }
 }

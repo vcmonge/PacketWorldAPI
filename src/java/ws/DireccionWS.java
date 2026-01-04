@@ -67,5 +67,15 @@ public class DireccionWS {
         }
         throw new BadRequestException();
     }
+    
+    @Path("obtener-cp-sucursal/{idSucursal}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta obtenerCodigoPostalSucursal(@PathParam("idSucursal") Integer idSucursal) {
+        if(idSucursal != null && idSucursal > 0){
+            return DireccionImp.obtenerCodigoPostalSucursal(idSucursal);
+        }
+        throw new BadRequestException();
+    }
    
 }
