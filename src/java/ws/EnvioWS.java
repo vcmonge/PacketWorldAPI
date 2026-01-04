@@ -3,6 +3,7 @@ package ws;
 
 import com.google.gson.Gson;
 import dominio.EnvioImp;
+import dto.EnvioCompletoDTO;
 import dto.Respuesta;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
@@ -88,5 +89,19 @@ public class EnvioWS {
        } catch (Exception e) {
            throw new BadRequestException(e.getMessage());
        }
+    }
+    
+    @Path("crear-envio-completo")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta crearEnvioCompleto(String json){
+        Gson gson = new Gson();
+        try {
+            EnvioCompletoDTO envioCompleto = gson.fromJson(json, EnvioCompletoDTO.class);
+            return EnvioImp.crearEnvioCompleto(envioCompleto);
+        } catch(Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
     }
 }

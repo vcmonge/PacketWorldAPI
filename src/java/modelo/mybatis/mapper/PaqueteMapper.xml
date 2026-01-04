@@ -9,4 +9,8 @@
         FROM paquete p
         INNER JOIN envio e ON e.idEnvio = #{idEnvio} ORDER BY p.idPaquete;
     </select>
+    <insert id="crear-paquete" parameterType="pojo.Paquete">
+        INSERT INTO paquete (idEnvio, descripcion, peso, alto, ancho, profundidad) VALUES 
+        (#{idEnvio}, #{descripcion}, #{peso}, #{alto}, #{ancho}, #{profundidad})
+    </insert>
 </mapper>

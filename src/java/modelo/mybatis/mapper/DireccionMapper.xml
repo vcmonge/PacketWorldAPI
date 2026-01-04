@@ -28,7 +28,7 @@
         INNER JOIN ESTADOS e ON m.estado = e.id 
         WHERE d.idDireccion = #{idDireccion}
     </select>
-    <insert id="crear-direccion" parameterType="pojo.Direccion">
+    <insert id="crear-direccion" parameterType="pojo.Direccion" useGeneratedKeys="true" keyProperty="idDireccion">
         INSERT INTO direccion(calle, numero, idColonia) VALUES (#{calle}, #{numero}, #{idColonia})
     </insert>
 </mapper>

@@ -115,7 +115,7 @@
         ORDER BY e.idEnvio DESC
         LIMIT 5
     </select>
-    <insert id="crear-envio" parameterType="pojo.Envio">
+    <insert id="crear-envio" parameterType="pojo.Envio" useGeneratedKeys="true" keyProperty="idEnvio">
         INSERT INTO ENVIO (
             noGuia, 
             costo, 
