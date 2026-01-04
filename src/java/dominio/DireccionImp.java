@@ -53,7 +53,7 @@ public class DireccionImp {
         
         return colonias;
     }
-    public static Direccion obtenerDireccionPorId(int idDireccion) {
+    public static Direccion obtenerDireccionPorId(Integer idDireccion) {
         Direccion direccion = null;
         SqlSession conexionBD = MyBatisUtil.getSession();
 

@@ -61,19 +61,11 @@ public class DireccionWS {
     @Path("obtener-direccion-id/{idDireccion}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Direccion obtenerDireccionPorId(@PathParam("idDireccion") String idDireccion) {
-
-        if (Validaciones.esVacio(idDireccion)) {
-            throw new BadRequestException();
+    public Direccion obtenerDireccionPorId(@PathParam("idDireccion") Integer idDireccion) {
+        if(idDireccion != null && idDireccion > 0){
+            return DireccionImp.obtenerDireccionPorId(idDireccion);
         }
-
-        if (!Validaciones.esNumerico(idDireccion)) {
-            throw new BadRequestException();
-        }
-
-        int id = Integer.parseInt(idDireccion);
-
-        return DireccionImp.obtenerDireccionPorId(id);
+        throw new BadRequestException();
     }
    
 }

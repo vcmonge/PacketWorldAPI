@@ -13,6 +13,9 @@
     </select>
     <select id="obtener-direccion-id" resultType="pojo.Direccion" parameterType="int">
         SELECT 
+            d.idDireccion,
+            d.calle,
+            d.numero,
             c.id AS idColonia, 
             c.nombre AS colonia, 
             c.ciudad AS ciudad, 
