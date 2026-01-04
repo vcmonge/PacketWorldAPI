@@ -5,6 +5,7 @@
 package dominio;
 
 import dto.Respuesta;
+import java.util.HashMap;
 import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
@@ -260,5 +261,40 @@ public class ColaboradorImp {
             }
         }
         return colaborador;
+    }
+    
+    public static Respuesta cambiarPassword(int idColaborador, String passwordActual, String passwordNueva) {
+        Respuesta respuesta = new Respuesta();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                HashMap<String, Object> parametros = new HashMap<>();
+                parametros.put("idColaborador", idColaborador);
+                parametros.put("passwordActual", passwordActual);
+                parametros.put("passwordNueva", passwordNueva);
+
+                int filas = conexionBD.update("colaborador.cambiarPassword", parametros);
+                conexionBD.commit();
+
+                if (filas > 0) {
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Contraseña actualizada correctamente.");
+                } else {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("La contraseña actual es incorrecta.");
+                }
+            } catch (Exception e) {
+                if (conexionBD != null) conexionBD.rollback();
+                e.printStackTrace();
+                respuesta.setError(true);
+                respuesta.setMensaje("Error al cambiar la contraseña.");
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setError(true);
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
+        }
+        return respuesta;
     }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -139,6 +140,23 @@ public class ColaboradorWS {
     public Colaborador obtenerPorId(@PathParam("idColaborador") Integer idColaborador) {
         if (idColaborador != null && idColaborador > 0) {
             return ColaboradorImp.obtenerPorId(idColaborador);
+        }
+        throw new BadRequestException();
+    }
+    
+    @Path("cambiar-password")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta cambiarPassword(
+            @FormParam("idColaborador") Integer idColaborador,
+            @FormParam("passwordActual") String passwordActual,
+            @FormParam("passwordNueva") String passwordNueva) {
+        
+        if (idColaborador != null && idColaborador > 0 && 
+            passwordActual != null && !passwordActual.isEmpty() &&
+            passwordNueva != null && !passwordNueva.isEmpty()) {
+            
+            return ColaboradorImp.cambiarPassword(idColaborador, passwordActual, passwordNueva);
         }
         throw new BadRequestException();
     }

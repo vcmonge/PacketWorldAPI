@@ -32,22 +32,16 @@
         INSERT INTO conductor (idConductor, numero_licencia)
         VALUES (#{idColaborador}, #{numeroLicencia})
     </insert>
-    
+      
     <update id="editar" parameterType="pojo.Colaborador">
         UPDATE colaborador
-        <set>
-            nombre = #{nombre},
+        SET nombre = #{nombre},
             apellidoPaterno = #{apellidoPaterno},
             apellidoMaterno = #{apellidoMaterno},
-            CURP = #{curp},
+            curp = #{curp},
             correo = #{correo},
-            idSucursal = #{idSucursal},
-
-            <if test="contrasenia != null and contrasenia != ''">
-                contrasenia = #{contrasenia},
-            </if>
-        </set>
-        WHERE idColaborador = #{idColaborador}
+            idSucursal = #{idSucursal}
+            WHERE idColaborador = #{idColaborador}
     </update>
 
     <update id="editarConductor" parameterType="pojo.Colaborador">
@@ -148,4 +142,11 @@
         LEFT JOIN conductor d ON c.idColaborador = d.idConductor
         WHERE c.idColaborador = #{idColaborador}
     </select>
+    
+    <update id="cambiarPassword" parameterType="map">
+        UPDATE colaborador 
+        SET contrasenia = #{passwordNueva}
+        WHERE idColaborador = #{idColaborador} 
+          AND contrasenia = #{passwordActual}
+    </update>
 </mapper>
