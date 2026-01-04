@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import dominio.EnvioImp;
 import dto.EnvioCompletoDTO;
 import dto.Respuesta;
+import dto.RespuestaGenerica;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;

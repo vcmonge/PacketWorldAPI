@@ -3,6 +3,7 @@ package dominio;
 
 import dto.EnvioCompletoDTO;
 import dto.Respuesta;
+import dto.RespuestaGenerica;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -197,7 +198,8 @@ public static Respuesta crearEnvioCompleto(EnvioCompletoDTO envioCompleto) {
         // Commit si todo salió bien
         conexionBD.commit();
         respuesta.setError(false);
-        respuesta.setMensaje("Envío "+noGuia+" registrado correctamente");
+        respuesta.setMensaje("Envío registrado correctamente");
+        respuesta.setValor(noGuia);
 
     } catch (Exception e) {
         conexionBD.rollback();
