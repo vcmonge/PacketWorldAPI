@@ -14,7 +14,6 @@
             c.CURP,
             c.correo,
             c.noPersonal,
-            c.contrasenia,
             c.idRol,
             c.idSucursal,
             d.numero_licencia AS numeroLicencia
@@ -27,7 +26,7 @@
     <select id="loginEscritorio" resultType="pojo.Colaborador">
         SELECT 
             c.idColaborador, c.nombre, c.apellidoPaterno, c.apellidoMaterno, 
-            c.curp, c.correo, c.noPersonal, c.contrasenia,
+            c.curp, c.correo, c.noPersonal,
             c.idRol, r.rol AS nombreRol,
             c.idSucursal, s.nombre AS nombreSucursal
         FROM colaborador c
@@ -35,7 +34,6 @@
         INNER JOIN sucursal s ON c.idSucursal = s.idSucursal
         WHERE c.noPersonal = #{noPersonal} 
           AND c.contrasenia = #{password}
-          -- AQUÍ ESTÁ EL FILTRO MÁGICO
           AND r.rol != 'Conductor'
     </select>
 </mapper>
