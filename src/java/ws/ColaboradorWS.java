@@ -60,7 +60,7 @@ public class ColaboradorWS {
     // EDICIÓN GENÉRICA (Admin - Desktop)
     @Path("editar")
     @PUT 
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Consumes(MediaType.APPLICATION_JSON)
     public Respuesta editarColaborador(String json) {
         Gson gson = new Gson();
