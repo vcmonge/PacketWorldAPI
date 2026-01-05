@@ -160,4 +160,11 @@ public class ColaboradorWS {
         }
         throw new BadRequestException();
     }
+    
+    @Path("obtener-conductores")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Colaborador> obtenerConductores() {
+        return ColaboradorImp.obtenerConductores();
+    }
 }

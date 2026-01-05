@@ -149,4 +149,18 @@
         WHERE idColaborador = #{idColaborador} 
           AND contrasenia = #{passwordActual}
     </update>
+    
+    <select id="obtener-conductores" resultType="pojo.Colaborador">
+        SELECT 
+            c.idColaborador, c.nombre, c.apellidoPaterno, c.apellidoMaterno, 
+            c.curp, c.correo, c.noPersonal,
+            c.idRol, r.rol AS rol,
+            c.idSucursal, s.nombre AS sucursal, s.codigo AS codigoSucursal,
+            cond.numero_licencia AS numeroLicencia
+        FROM colaborador c
+        INNER JOIN rol r ON c.idRol = r.idRol
+        INNER JOIN sucursal s ON c.idSucursal = s.idSucursal
+        INNER JOIN conductor cond ON c.idColaborador = cond.idConductor
+        ORDER BY c.nombre ASC
+    </select>
 </mapper>

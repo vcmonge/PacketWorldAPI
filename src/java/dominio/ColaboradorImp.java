@@ -297,4 +297,19 @@ public class ColaboradorImp {
         }
         return respuesta;
     }
+    
+    public static List<Colaborador> obtenerConductores() {
+        List<Colaborador> colaboradores = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                colaboradores = conexionBD.selectList("colaborador.obtener-conductores");
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return colaboradores;
+    }
 }
