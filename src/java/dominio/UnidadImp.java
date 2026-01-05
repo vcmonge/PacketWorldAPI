@@ -179,4 +179,19 @@ public class UnidadImp {
         }
         return unidades;
     }
+    
+    public static List<Unidad> obtenerDisponibles() {
+        List<Unidad> unidades = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                unidades = conexionBD.selectList("unidad.obtener-disponibles");
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return unidades;
+    }
 }

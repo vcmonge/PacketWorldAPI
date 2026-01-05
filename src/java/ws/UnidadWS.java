@@ -111,4 +111,11 @@ public class UnidadWS {
             return UnidadImp.obtenerUnidades();
         }
     }
+    
+    @Path("obtener-disponibles")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Unidad> obtenerUnidadesDisponibles() {
+        return UnidadImp.obtenerDisponibles();
+    }
 }

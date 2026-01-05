@@ -69,4 +69,24 @@
             OR u.NII   LIKE CONCAT('%', #{textoBusqueda}, '%')
         )
     </select>
+    
+    <select id="obtener-disponibles" resultType="pojo.Unidad">
+        SELECT 
+            u.idUnidad, 
+            u.marca, 
+            u.modelo, 
+            u.anio, 
+            u.VIN, 
+            u.NII,
+            u.estatus, 
+            u.idTipoUnidad, 
+            tu.tipo AS tipo
+        FROM unidad u
+        INNER JOIN tipo_unidad tu ON u.idTipoUnidad = tu.idTipoUnidad
+        LEFT JOIN unidad_conductor uc ON u.idUnidad = uc.idUnidad
+        
+        WHERE uc.idUnidad IS NULL
+          AND u.estatus = 'activa'
+        ORDER BY u.marca ASC, u.modelo ASC
+    </select>
 </mapper>
