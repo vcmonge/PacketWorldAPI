@@ -303,7 +303,7 @@ public class ColaboradorImp {
         SqlSession conexionBD = MyBatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                colaboradores = conexionBD.selectList("colaborador.obtener-conductores");
+                colaboradores = conexionBD.selectList("obtener-conductores-disponibles");
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {

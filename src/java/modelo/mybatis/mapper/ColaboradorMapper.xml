@@ -150,7 +150,7 @@
           AND contrasenia = #{passwordActual}
     </update>
     
-    <select id="obtener-conductores" resultType="pojo.Colaborador">
+    <select id="obtener-conductores-disponibles" resultType="pojo.Colaborador">
         SELECT 
             c.idColaborador, c.nombre, c.apellidoPaterno, c.apellidoMaterno, 
             c.curp, c.correo, c.noPersonal,
@@ -161,6 +161,9 @@
         INNER JOIN rol r ON c.idRol = r.idRol
         INNER JOIN sucursal s ON c.idSucursal = s.idSucursal
         INNER JOIN conductor cond ON c.idColaborador = cond.idConductor
-        ORDER BY c.nombre ASC
+        
+        LEFT JOIN unidad_conductor uc ON c.idColaborador = uc.idConductor
+        
+        WHERE uc.idConductor IS NULL
     </select>
 </mapper>

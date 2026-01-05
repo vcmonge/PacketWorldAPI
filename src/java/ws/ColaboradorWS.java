@@ -161,7 +161,7 @@ public class ColaboradorWS {
         throw new BadRequestException();
     }
     
-    @Path("obtener-conductores")
+    @Path("obtener-conductores-disponibles")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Colaborador> obtenerConductores() {
