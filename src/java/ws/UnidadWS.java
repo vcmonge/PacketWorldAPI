@@ -10,6 +10,8 @@ import dto.Respuesta;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -117,5 +119,39 @@ public class UnidadWS {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Unidad> obtenerUnidadesDisponibles() {
         return UnidadImp.obtenerDisponibles();
+    }
+    
+    @Path("asignar")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Respuesta asignar(@FormParam("idUnidad") Integer idUnidad, 
+                             @FormParam("idConductor") Integer idConductor) {
+        if(idUnidad != null && idUnidad > 0 && idConductor != null && idConductor > 0){
+            return UnidadImp.asignarConductor(idUnidad, idConductor);
+        }
+        throw new BadRequestException();
+    }
+
+    @Path("cambiar")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Respuesta cambiar(@FormParam("idUnidad") Integer idUnidad, 
+                             @FormParam("idConductor") Integer idConductor) {
+        if(idUnidad != null && idUnidad > 0 && idConductor != null && idConductor > 0){
+            return UnidadImp.cambiarAsignacion(idUnidad, idConductor);
+        }
+        throw new BadRequestException();
+    }
+
+    @Path("desasignar/{idConductor}")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta desasignar(@PathParam("idConductor") Integer idConductor) {
+        if(idConductor != null && idConductor > 0){
+            return UnidadImp.desasignarConductor(idConductor);
+        }
+        throw new BadRequestException();
     }
 }
