@@ -5,9 +5,19 @@
 
 <mapper namespace="paquete">
     <select id="obtener-paquetes-envio" parameterType="int" resultType="pojo.Paquete">
-        SELECT idPaquete, p.idEnvio, e.noGuia, descripcion, peso, alto, ancho, profundidad
+        SELECT 
+            p.idPaquete, 
+            p.idEnvio, 
+            e.noGuia, 
+            p.descripcion, 
+            p.peso, 
+            p.alto, 
+            p.ancho, 
+            p.profundidad
         FROM paquete p
-        INNER JOIN envio e ON e.idEnvio = #{idEnvio} ORDER BY p.idPaquete;
+        INNER JOIN envio e ON p.idEnvio = e.idEnvio
+        WHERE p.idEnvio = #{idEnvio}
+        ORDER BY p.idPaquete;
     </select>
     <insert id="crear-paquete" parameterType="pojo.Paquete">
         INSERT INTO paquete (idEnvio, descripcion, peso, alto, ancho, profundidad) VALUES 
