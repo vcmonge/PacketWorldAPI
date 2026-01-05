@@ -172,4 +172,9 @@
             idCliente = #{idCliente} 
         WHERE idEnvio = #{idEnvio}
     </update>
+    <update id="actualizar-costo" parameterType="pojo.Envio">
+        UPDATE envio 
+        SET costo = #{costo} 
+        WHERE idEnvio = #{idEnvio}
+    </update>
 </mapper>
