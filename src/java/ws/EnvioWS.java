@@ -119,4 +119,18 @@ public class EnvioWS {
             throw new BadRequestException(e.getMessage());
         }
     }
+    
+    @Path("actualizar-costo")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta actualizarCosto(String json){
+        Gson gson = new Gson();
+        try {
+            Envio envio = gson.fromJson(json, Envio.class);
+            return EnvioImp.actualizarCosto(envio);
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
 }

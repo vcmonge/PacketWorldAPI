@@ -236,4 +236,30 @@ public class EnvioImp {
         
         return respuesta;
     }
+    
+    public static Respuesta actualizarCosto(Envio envio){
+        Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if( conexionBD != null ){
+            try {
+                int filasAfectadas = conexionBD.update("envio.actualizar-costo", envio);
+                conexionBD.commit();
+                if( filasAfectadas > 0 ){
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Costo del envío actualizado");
+                } else {
+                    respuesta.setMensaje("Lo sentimos no se pudo actualizar el costo del envío del envío.");
+                }
+            } catch (Exception e) {
+                respuesta.setMensaje(e.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
+        }
+        
+        return respuesta;
+    }
 }
