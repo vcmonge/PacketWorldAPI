@@ -60,6 +60,7 @@
             cli.telefono AS clienteTelefono,
             cli.correo AS clienteCorreo,
             cli.idCliente as idCliente,
+            e.idEstatusEnvio,
             ee.nombre AS estatus 
         FROM envio e 
             INNER JOIN estatus_envio ee ON ee.idEstatusEnvio = e.idEstatusEnvio 
@@ -98,6 +99,7 @@
             cli.telefono AS clienteTelefono,
             cli.correo AS clienteCorreo,
             cli.idCliente as idCliente,
+            e.idEstatusEnvio,
             ee.nombre AS estatus 
         FROM envio e 
             INNER JOIN estatus_envio ee ON ee.idEstatusEnvio = e.idEstatusEnvio 
