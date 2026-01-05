@@ -180,4 +180,13 @@
         INNER JOIN conductor cond ON c.idColaborador = cond.idConductor
         ORDER BY c.nombre ASC
     </select>
+    
+    <select id="verificar-licencia-duplicada" parameterType="map" resultType="int">
+        SELECT COUNT(*) 
+        FROM conductor
+        WHERE numero_licencia = #{numeroLicencia}
+        <if test="idConductor != null and idConductor > 0">
+            AND idConductor != #{idConductor}
+        </if>
+    </select>
 </mapper>

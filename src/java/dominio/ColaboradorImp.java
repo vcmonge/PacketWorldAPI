@@ -35,6 +35,14 @@ public class ColaboradorImp {
 
         if (conexionBD != null) {
             try {
+                if (colaborador.getNumeroLicencia() != null && !colaborador.getNumeroLicencia().trim().isEmpty()) {
+                    if (existeLicencia(conexionBD, colaborador.getNumeroLicencia(), 0)) { 
+                        respuesta.setError(true);
+                        respuesta.setMensaje("El número de licencia ya se encuentra registrado.");
+                        conexionBD.close();
+                        return respuesta;
+                    }
+                }
                 // 1. Insertar Colaborador (Padre)
                 int filas = conexionBD.insert("colaborador.registrar", colaborador);
 
@@ -57,7 +65,7 @@ public class ColaboradorImp {
                 if (conexionBD != null) conexionBD.rollback();
                 e.printStackTrace();
                 respuesta.setError(true);
-                respuesta.setMensaje(manejarErrorBD(e)); // Extraje la lógica de errores a un método privado abajo
+                respuesta.setMensaje(manejarErrorBD(e)); 
             } finally {
                 conexionBD.close();
             }
@@ -74,7 +82,14 @@ public class ColaboradorImp {
 
         if (conexionBD != null) {
             try {
-                // 1. Update Colaborador
+                if (colaborador.getNumeroLicencia() != null && !colaborador.getNumeroLicencia().trim().isEmpty()) {
+                    if (existeLicencia(conexionBD, colaborador.getNumeroLicencia(), colaborador.getIdColaborador())) {
+                        respuesta.setError(true);
+                        respuesta.setMensaje("El número de licencia ya pertenece a otro conductor.");
+                        conexionBD.close();
+                        return respuesta;
+                    }
+                }
                 int filas = conexionBD.update("colaborador.editar", colaborador);
 
                 // 2. Update Conductor (Si trae licencia)
@@ -104,6 +119,15 @@ public class ColaboradorImp {
             respuesta.setMensaje("Sin conexión a la base de datos.");
         }
         return respuesta;
+    }
+    
+    private static boolean existeLicencia(SqlSession conexionBD, String licencia, int idColaborador) {
+        HashMap<String, Object> parametros = new HashMap<>();
+        parametros.put("numeroLicencia", licencia);
+        parametros.put("idConductor", idColaborador);
+        
+        int coincidencias = conexionBD.selectOne("colaborador.verificar-licencia-duplicada", parametros);
+        return coincidencias > 0;
     }
     
     public static Respuesta eliminarColaborador(int idColaborador) {
