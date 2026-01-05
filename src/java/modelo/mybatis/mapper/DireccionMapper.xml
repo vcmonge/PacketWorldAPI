@@ -37,4 +37,8 @@
         INNER JOIN COLONIAS c ON d.idColonia = c.id 
         WHERE s.idSucursal = #{idSucursal}
     </select>
+    <update id="editar" parameterType="pojo.Direccion">
+        UPDATE direccion SET calle = #{calle}, numero = #{numero}, idColonia = #{idColonia} 
+        WHERE idDireccion = #{idDireccion} 
+    </update>
 </mapper>

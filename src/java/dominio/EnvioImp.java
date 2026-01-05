@@ -153,62 +153,87 @@ public class EnvioImp {
        return respuesta;
    }
    
-public static Respuesta crearEnvioCompleto(EnvioCompletoDTO envioCompleto) {
-    Respuesta respuesta = new Respuesta();
-    respuesta.setError(true);
-    SqlSession conexionBD = MyBatisUtil.getSession();
+    public static Respuesta crearEnvioCompleto(EnvioCompletoDTO envioCompleto) {
+        Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
+        SqlSession conexionBD = MyBatisUtil.getSession();
 
-    if (conexionBD == null) {
-        respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
+        if (conexionBD == null) {
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
+            return respuesta;
+        }
+
+        try {
+            // Se inserta dirección, tienen useGeneratedKeys=true para que guarde el idDireccion
+            conexionBD.insert("direccion.crear-direccion", envioCompleto.getDireccion());
+
+            Integer idDireccion = envioCompleto.getDireccion().getIdDireccion();
+            if (idDireccion == null) {
+                throw new Exception("No se generó ID de dirección");
+            }
+            // Se guarda en envio la id de la direccion de envio
+            envioCompleto.getEnvio().setDestinatarioIdDireccion(idDireccion);
+            String noGuia = GeneradorNumeroGuia.generarGuia();
+            envioCompleto.getEnvio().setNoGuia(noGuia);
+
+            // Se inserta envío, tienen useGeneratedKeys=true para que guarde el idEnvio
+            conexionBD.insert("envio.crear-envio", envioCompleto.getEnvio());
+
+            Integer idEnvio = envioCompleto.getEnvio().getIdEnvio();
+            if (idEnvio == null) {
+                throw new Exception("No se generó ID de envío");
+            }
+
+            // Validacion por si llega vacia, caso extraño
+            if (envioCompleto.getPaquetes() == null || envioCompleto.getPaquetes().isEmpty()) {
+                throw new Exception("El envío debe contener al menos un paquete.");
+            }
+            // Se insertan los paquetes
+            for (Paquete paquete : envioCompleto.getPaquetes()) {
+                paquete.setIdEnvio(idEnvio);
+                conexionBD.insert("paquete.crear-paquete", paquete);
+            }
+
+            // Commit si todo salió bien
+            conexionBD.commit();
+            respuesta.setError(false);
+            respuesta.setMensaje("Envío registrado correctamente");
+            respuesta.setValor(noGuia);
+
+        } catch (Exception e) {
+            conexionBD.rollback();
+            respuesta.setError(true);
+            respuesta.setMensaje("Error al registrar el envío: " + e.getMessage());
+        } finally {
+            conexionBD.close();
+        }
+
+        return respuesta;
+    } 
+
+    public static Respuesta editar(Envio envio){
+        Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if( conexionBD != null ){
+            try {
+                int filasAfectadas = conexionBD.update("envio.editar", envio);
+                conexionBD.commit();
+                if( filasAfectadas > 0 ){
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Información del envío actualizada.");
+                } else {
+                    respuesta.setMensaje("Lo sentimos no se pudo actualizar la iformación del envío.");
+                }
+            } catch (Exception e) {
+                respuesta.setMensaje(e.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
+        }
+        
         return respuesta;
     }
-
-    try {
-        // Se inserta dirección, tienen useGeneratedKeys=true para que guarde el idDireccion
-        conexionBD.insert("direccion.crear-direccion", envioCompleto.getDireccion());
-
-        Integer idDireccion = envioCompleto.getDireccion().getIdDireccion();
-        if (idDireccion == null) {
-            throw new Exception("No se generó ID de dirección");
-        }
-        // Se guarda en envio la id de la direccion de envio
-        envioCompleto.getEnvio().setDestinatarioIdDireccion(idDireccion);
-        String noGuia = GeneradorNumeroGuia.generarGuia();
-        envioCompleto.getEnvio().setNoGuia(noGuia);
-
-        // Se inserta envío, tienen useGeneratedKeys=true para que guarde el idEnvio
-        conexionBD.insert("envio.crear-envio", envioCompleto.getEnvio());
-        
-        Integer idEnvio = envioCompleto.getEnvio().getIdEnvio();
-        if (idEnvio == null) {
-            throw new Exception("No se generó ID de envío");
-        }
-        
-        // Validacion por si llega vacia, caso extraño
-        if (envioCompleto.getPaquetes() == null || envioCompleto.getPaquetes().isEmpty()) {
-            throw new Exception("El envío debe contener al menos un paquete.");
-        }
-        // Se insertan los paquetes
-        for (Paquete paquete : envioCompleto.getPaquetes()) {
-            paquete.setIdEnvio(idEnvio);
-            conexionBD.insert("paquete.crear-paquete", paquete);
-        }
-
-        // Commit si todo salió bien
-        conexionBD.commit();
-        respuesta.setError(false);
-        respuesta.setMensaje("Envío registrado correctamente");
-        respuesta.setValor(noGuia);
-
-    } catch (Exception e) {
-        conexionBD.rollback();
-        respuesta.setError(true);
-        respuesta.setMensaje("Error al registrar el envío: " + e.getMessage());
-    } finally {
-        conexionBD.close();
-    }
-
-    return respuesta;
-} 
-
 }

@@ -94,4 +94,30 @@ public class DireccionImp {
         }
         return respuesta;
     }
+    
+    public static Respuesta editar(Direccion direccion){
+        Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if( conexionBD != null ){
+            try {
+                int filasAfectadas = conexionBD.update("direccion.editar", direccion);
+                conexionBD.commit();
+                if( filasAfectadas > 0 ){
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Información de la dirección actualizada.");
+                } else {
+                    respuesta.setMensaje("Lo sentimos no se pudo actualizar la iformación de la dirección.");
+                }
+            } catch (Exception e) {
+                respuesta.setMensaje(e.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
+        }
+        
+        return respuesta;
+    }
 }

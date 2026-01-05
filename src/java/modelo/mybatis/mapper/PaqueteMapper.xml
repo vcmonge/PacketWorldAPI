@@ -23,4 +23,17 @@
         INSERT INTO paquete (idEnvio, descripcion, peso, alto, ancho, profundidad) VALUES 
         (#{idEnvio}, #{descripcion}, #{peso}, #{alto}, #{ancho}, #{profundidad})
     </insert>
+    <update id="modificar-paquete" parameterType="pojo.Paquete">
+        UPDATE paquete 
+        SET 
+            descripcion = #{descripcion},
+            peso = #{peso},
+            alto = #{alto},
+            ancho = #{ancho},
+            profundidad = #{profundidad} 
+        WHERE idPaquete = #{idPaquete}
+    </update>
+    <delete id="eliminar-paquete" parameterType="int">
+        DELETE FROM paquete WHERE idPaquete = #{idPaquete};
+    </delete>
 </mapper>
