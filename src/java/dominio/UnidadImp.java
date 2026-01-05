@@ -5,12 +5,14 @@
 package dominio;
 
 import dto.Respuesta;
+import java.util.HashMap;
 import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.TipoUnidad;
 import pojo.Unidad;
 import pojo.UnidadBaja;
+import utilidades.Constantes;
 
 public class UnidadImp {
 
@@ -193,5 +195,175 @@ public class UnidadImp {
             }
         }
         return unidades;
+    }
+    
+    public static Respuesta asignarConductor(int idUnidad, int idConductor) {
+        Respuesta respuesta = new Respuesta();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                int esConductor = conexionBD.selectOne("unidad.es-conductor-registrado", idConductor);
+                if (esConductor == 0) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("El colaborador seleccionado no está registrado como conductor o no existe.");
+                    conexionBD.close();
+                    return respuesta;
+                }
+
+                String errorUnidad = validarUnidadParaAsignacion(conexionBD, idUnidad);
+                if (errorUnidad != null) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(errorUnidad);
+                    conexionBD.close();
+                    return respuesta;
+                }
+
+                HashMap<String, Integer> parametros = new HashMap<>();
+                parametros.put("idUnidad", idUnidad);
+                parametros.put("idConductor", idConductor);
+
+                int filas = conexionBD.insert("unidad.asignar-conductor", parametros);
+                conexionBD.commit();
+
+                if (filas > 0) {
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Unidad asignada correctamente.");
+                } else {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("No se pudo realizar la asignación.");
+                }
+            } catch (Exception e) {
+                if (conexionBD != null) conexionBD.rollback();
+                e.printStackTrace();
+                respuesta.setError(true);
+                respuesta.setMensaje("Error al asignar: " + e.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setError(true);
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
+        }
+        return respuesta;
+    }
+
+    public static Respuesta desasignarConductor(int idConductor) {
+        Respuesta respuesta = new Respuesta();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                int filas = conexionBD.delete("unidad.desasignar-conductor", idConductor);
+                conexionBD.commit();
+
+                if (filas > 0) {
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Vehículo desasignado correctamente.");
+                } else {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("El conductor no tenía vehículo asignado.");
+                }
+            } catch (Exception e) {
+                if (conexionBD != null) conexionBD.rollback();
+                e.printStackTrace();
+                respuesta.setError(true);
+                respuesta.setMensaje("Error al desasignar vehículo.");
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setError(true);
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
+        }
+        return respuesta;
+    }
+    
+    public static Respuesta cambiarAsignacion(int idUnidadNueva, int idConductor) {
+        Respuesta respuesta = new Respuesta();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                int esConductor = conexionBD.selectOne("unidad.es-conductor-registrado", idConductor);
+                if (esConductor == 0) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("El conductor no existe o no tiene licencia registrada.");
+                    conexionBD.close();
+                    return respuesta;
+                }
+
+                String estatusUnidad = conexionBD.selectOne("unidad.obtener-estatus", idUnidadNueva);
+                
+                if (estatusUnidad == null) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("La unidad seleccionada no existe.");
+                    conexionBD.close();
+                    return respuesta;
+                }
+
+                if (!estatusUnidad.equalsIgnoreCase("activa")) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("La unidad seleccionada no está activa (Estatus: " + estatusUnidad + ").");
+                    conexionBD.close();
+                    return respuesta;
+                }
+
+                Integer idConductorActual = conexionBD.selectOne("unidad.obtener-conductor-asignado", idUnidadNueva);
+                
+                if (idConductorActual != null) {
+                    if (idConductorActual == idConductor) {
+                        respuesta.setError(false);
+                        respuesta.setMensaje("El conductor ya tiene asignada esta unidad. No se realizaron cambios.");
+                        conexionBD.close();
+                        return respuesta;
+                    } else {
+                        respuesta.setError(true);
+                        respuesta.setMensaje("La unidad ya está ocupada por otro conductor.");
+                        conexionBD.close();
+                        return respuesta;
+                    }
+                }
+
+                conexionBD.delete("unidad.desasignar-conductor", idConductor);
+
+                HashMap<String, Integer> parametros = new HashMap<>();
+                parametros.put("idUnidad", idUnidadNueva);
+                parametros.put("idConductor", idConductor);
+                
+                int filas = conexionBD.insert("unidad.asignar-conductor", parametros);
+                conexionBD.commit();
+
+                if (filas > 0) {
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Cambio de unidad realizado correctamente.");
+                } else {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("No se pudo asignar la nueva unidad.");
+                }
+
+            } catch (Exception e) {
+                if (conexionBD != null) conexionBD.rollback();
+                e.printStackTrace();
+                respuesta.setError(true);
+                respuesta.setMensaje("Error al cambiar unidad: " + e.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setError(true);
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
+        }
+        return respuesta;
+    }
+    
+    private static String validarUnidadParaAsignacion(SqlSession conexionBD, int idUnidad) {
+        String estatus = conexionBD.selectOne("unidad.obtener-estatus", idUnidad);
+        if (estatus == null) return "La unidad no existe.";
+        if (!estatus.equalsIgnoreCase("activa")) return "La unidad no está disponible (Baja o Mantenimiento).";
+
+        Integer conductorAsignado = conexionBD.selectOne("unidad.obtener-conductor-asignado", idUnidad);
+        if (conductorAsignado != null) return "La unidad ya está asignada a otro conductor.";
+
+        return null; 
     }
 }

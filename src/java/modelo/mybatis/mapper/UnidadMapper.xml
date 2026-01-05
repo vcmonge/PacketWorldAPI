@@ -89,4 +89,40 @@
           AND u.estatus = 'activa'
         ORDER BY u.marca ASC, u.modelo ASC
     </select>
+    
+    <insert id="asignar-conductor" parameterType="map">
+        INSERT INTO unidad_conductor (idUnidad, idConductor)
+        VALUES (#{idUnidad}, #{idConductor})
+    </insert>
+
+    <delete id="desasignar-conductor" parameterType="int">
+        DELETE FROM unidad_conductor 
+        WHERE idConductor = #{idConductor}
+    </delete>
+    
+    <select id="obtener-asignacion-por-conductor" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM unidad_conductor WHERE idConductor = #{idConductor}
+    </select>
+    
+    <select id="obtener-asignacion-por-unidad" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM unidad_conductor WHERE idUnidad = #{idUnidad}
+    </select>
+    
+    <select id="verificar-unidad-ocupada" parameterType="int" resultType="int">
+        SELECT COUNT(*) 
+        FROM unidad_conductor 
+        WHERE idUnidad = #{idUnidad}
+    </select>
+    
+    <select id="es-conductor-registrado" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM conductor WHERE idConductor = #{idConductor}
+    </select>
+
+    <select id="obtener-estatus" parameterType="int" resultType="string">
+        SELECT estatus FROM unidad WHERE idUnidad = #{idUnidad}
+    </select>
+    
+    <select id="obtener-conductor-asignado" parameterType="int" resultType="java.lang.Integer">
+        SELECT idConductor FROM unidad_conductor WHERE idUnidad = #{idUnidad}
+    </select>
 </mapper>
