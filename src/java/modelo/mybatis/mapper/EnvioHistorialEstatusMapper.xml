@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="EnvioHistorialEstatus">
+    <select id="obtener-por-noguia" resultType="pojo.EnvioHistorialEstatus" parameterType="string">
+        SELECT 
+            es.nombre AS estatus,
+            h.fechaHora,
+            h.comentario,
+            e.noGuia,
+            h.idHistorial,
+            h.idEnvio,
+            h.idEstatusEnvio,
+            h.idColaborador 
+        FROM 
+            envio_historial_estatus h 
+                INNER JOIN 
+            envio e ON h.idEnvio = e.idEnvio 
+                INNER JOIN 
+            estatus_envio es ON h.idEstatusEnvio = es.idEstatusEnvio 
+        WHERE 
+            e.noGuia = #{noGuia}
+        ORDER BY 
+            h.fechaHora DESC
+    </select>
+</mapper>

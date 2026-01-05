@@ -1,33 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package pojo;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-/**
- *
- * @author julia
- */
+
 public class EnvioHistorialEstatus {
     private Integer idHistorial;
     private Integer idEnvio;
     private Integer idColaborador;
     private Integer idEstatusEnvio;
     private String comentario; 
-    private LocalDateTime fechaHora;
+    private Timestamp fechaHora;
+    
+    private String estatus;
 
     public EnvioHistorialEstatus() {
     }
 
-    public EnvioHistorialEstatus(Integer idHistorial, Integer idEnvio, Integer idColaborador, Integer idEstatusEnvio, String comentario, LocalDateTime fechaHora) {
+    public EnvioHistorialEstatus(Integer idHistorial, Integer idEnvio, Integer idColaborador, Integer idEstatusEnvio, String comentario, Timestamp fechaHora, String estatus) {
         this.idHistorial = idHistorial;
         this.idEnvio = idEnvio;
         this.idColaborador = idColaborador;
         this.idEstatusEnvio = idEstatusEnvio;
         this.comentario = comentario;
         this.fechaHora = fechaHora;
+        this.estatus = estatus;
     }
 
     public Integer getIdHistorial() {
@@ -70,11 +68,19 @@ public class EnvioHistorialEstatus {
         this.comentario = comentario;
     }
 
-    public LocalDateTime getFechaHora() {
+    public Timestamp getFechaHora() {
         return fechaHora;
     }
 
-    public void setFechaHora(LocalDateTime fechaHora) {
+    public void setFechaHora(Timestamp fechaHora) {
         this.fechaHora = fechaHora;
+    }
+
+    public String getEstatus() {
+        return estatus;
+    }
+
+    public void setEstatus(String estatus) {
+        this.estatus = estatus;
     }
 }
