@@ -312,4 +312,19 @@ public class ColaboradorImp {
         }
         return colaboradores;
     }
+    
+    public static List<Colaborador> obtenerTodosLosConductores() {
+        List<Colaborador> colaboradores = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                colaboradores = conexionBD.selectList("colaborador.obtener-todos-conductores");
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return colaboradores;
+    }
 }

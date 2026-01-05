@@ -167,4 +167,11 @@ public class ColaboradorWS {
     public List<Colaborador> obtenerConductores() {
         return ColaboradorImp.obtenerConductores();
     }
+    
+    @Path("obtener-conductores-todos") 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Colaborador> obtenerTodosLosConductores() {
+        return ColaboradorImp.obtenerTodosLosConductores();
+    }
 }

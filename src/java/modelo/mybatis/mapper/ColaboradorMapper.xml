@@ -166,4 +166,18 @@
         
         WHERE uc.idConductor IS NULL
     </select>
+    
+    <select id="obtener-todos-conductores" resultType="pojo.Colaborador">
+        SELECT 
+            c.idColaborador,
+            c.nombre,
+            c.apellidoPaterno,
+            c.apellidoMaterno,
+            c.noPersonal,
+            c.correo,
+            cond.numero_licencia AS numeroLicencia
+        FROM colaborador c
+        INNER JOIN conductor cond ON c.idColaborador = cond.idConductor
+        ORDER BY c.nombre ASC
+    </select>
 </mapper>
