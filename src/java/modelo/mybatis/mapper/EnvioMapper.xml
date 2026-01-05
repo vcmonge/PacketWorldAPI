@@ -167,7 +167,6 @@
             destinatarioNombre = #{destinatarioNombre},
             destinatarioApellidoPaterno = #{destinatarioApellidoPaterno},
             destinatarioApellidoMaterno = #{destinatarioApellidoMaterno},
-            idEstatusEnvio = #{idEstatusEnvio},
             idSucursalOrigen = #{idSucursalOrigen},
             idConductor = #{idConductor},
             idCliente = #{idCliente} 
