@@ -11,31 +11,37 @@ package pojo;
 public class Sucursal {
     private Integer idSucursal;
     private String codigo;
-    private String nombre;
-    private String estatus;
-    private Integer idDireccion;
+    private String nombre; 
+    private String estatus; 
     
-    private String direccionCompleta;
+    private Integer idDireccion;
+    private Integer idColonia;
 
+    private String direccionCompleta;
     private String calle;
     private String numero;
-    private Integer idColonia;
-    private String nombreColonia; 
+    private String nombreColonia;
+    private String codigoPostal;
+    private String ciudad;
+    private String estado;
 
     public Sucursal() {
     }
 
-    public Sucursal(Integer idSucursal, String codigo, String nombre, String estatus, Integer idDireccion, String direccionCompleta, String calle, String numero, Integer idColonia, String nombreColonia) {
+    public Sucursal(Integer idSucursal, String codigo, String nombre, String estatus, Integer idDireccion, Integer idColonia, String direccionCompleta, String calle, String numero, String nombreColonia, String codigoPostal, String ciudad, String estado) {
         this.idSucursal = idSucursal;
         this.codigo = codigo;
         this.nombre = nombre;
         this.estatus = estatus;
         this.idDireccion = idDireccion;
+        this.idColonia = idColonia;
         this.direccionCompleta = direccionCompleta;
         this.calle = calle;
         this.numero = numero;
-        this.idColonia = idColonia;
         this.nombreColonia = nombreColonia;
+        this.codigoPostal = codigoPostal;
+        this.ciudad = ciudad;
+        this.estado = estado;
     }
 
     public Integer getIdSucursal() {
@@ -78,6 +84,14 @@ public class Sucursal {
         this.idDireccion = idDireccion;
     }
 
+    public Integer getIdColonia() {
+        return idColonia;
+    }
+
+    public void setIdColonia(Integer idColonia) {
+        this.idColonia = idColonia;
+    }
+
     public String getDireccionCompleta() {
         return direccionCompleta;
     }
@@ -102,19 +116,35 @@ public class Sucursal {
         this.numero = numero;
     }
 
-    public Integer getIdColonia() {
-        return idColonia;
-    }
-
-    public void setIdColonia(Integer idColonia) {
-        this.idColonia = idColonia;
-    }
-
     public String getNombreColonia() {
         return nombreColonia;
     }
 
     public void setNombreColonia(String nombreColonia) {
         this.nombreColonia = nombreColonia;
+    }
+
+    public String getCodigoPostal() {
+        return codigoPostal;
+    }
+
+    public void setCodigoPostal(String codigoPostal) {
+        this.codigoPostal = codigoPostal;
+    }
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }
