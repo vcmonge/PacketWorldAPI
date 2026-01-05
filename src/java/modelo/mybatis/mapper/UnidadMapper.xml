@@ -62,14 +62,12 @@
             t.tipo AS nombreTipoUnidad
         FROM unidad u
         INNER JOIN tipo_unidad t ON u.idTipoUnidad = t.idTipoUnidad
-        WHERE u.estatus = 'activa' 
-        AND (
+        WHERE 
                u.marca LIKE CONCAT('%', #{textoBusqueda}, '%')
             OR u.VIN   LIKE CONCAT('%', #{textoBusqueda}, '%')
             OR u.NII   LIKE CONCAT('%', #{textoBusqueda}, '%')
-        )
     </select>
-    
+
     <select id="obtener-disponibles" resultType="pojo.Unidad">
         SELECT 
             u.idUnidad, 
@@ -134,14 +132,26 @@
             u.anio, 
             u.VIN, 
             u.estatus,
+            u.NII,
+            u.idTipoUnidad,
+            t.tipo AS nombreTipoUnidad,
             CONCAT_WS(' ', c.nombre, c.apellidoPaterno, c.apellidoMaterno) AS nombreConductor,
             c.idColaborador AS idConductor
         FROM unidad u
+        INNER JOIN tipo_unidad t ON u.idTipoUnidad = t.idTipoUnidad
         LEFT JOIN unidad_conductor uc ON u.idUnidad = uc.idUnidad
         LEFT JOIN conductor cond ON uc.idConductor = cond.idConductor
         LEFT JOIN colaborador c ON cond.idConductor = c.idColaborador
-        
-        WHERE u.estatus = 'activa'
-        ORDER BY u.marca ASC
+        ORDER BY 
+            CASE 
+                WHEN u.estatus = 'activa' THEN 0
+                ELSE 1
+            END,
+            u.estatus
     </select>
+
+    
+    <delete id="desasignar-por-unidad" parameterType="int">
+        DELETE FROM unidad_conductor WHERE idUnidad = #{idUnidad}
+    </delete>
 </mapper>

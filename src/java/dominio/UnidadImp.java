@@ -134,19 +134,18 @@ public class UnidadImp {
 
         if (conexionBD != null) {
             try {
-                // PASO 1: Cambiar estatus en tabla 'unidad' a 'baja'
+
+                conexionBD.delete("unidad.desasignar-por-unidad", unidadBaja.getIdUnidad());
+
                 int filasUnidad = conexionBD.update("unidad.actualizarEstatusBaja", unidadBaja.getIdUnidad());
 
-                // PASO 2: Insertar el motivo en tabla 'unidad_baja'
                 int filasHistorial = conexionBD.insert("unidad.registrarBaja", unidadBaja);
 
-                // Si ambos pasos funcionan, hacemos commit.
                 if (filasUnidad > 0 && filasHistorial > 0) {
                     conexionBD.commit();
                     respuesta.setError(false);
-                    respuesta.setMensaje("Unidad dada de baja correctamente.");
+                    respuesta.setMensaje("Unidad dada de baja y liberada correctamente.");
                 } else {
-                    // Si algo falló (ej. la unidad no existía), hacemos rollback
                     conexionBD.rollback();
                     respuesta.setError(true);
                     respuesta.setMensaje("No se pudo completar la baja de la unidad.");
@@ -162,7 +161,7 @@ public class UnidadImp {
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a la base de datos.");
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
         }
         return respuesta;
     }
