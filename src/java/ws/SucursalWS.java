@@ -4,12 +4,8 @@
  */
 package ws;
 
-/**
- *
- * @author HECTO
- */
+import com.google.gson.Gson;
 import dominio.SucursalImp;
-import dto.RSSucursal;
 import dto.Respuesta;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
@@ -23,55 +19,86 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import pojo.Sucursal;
+import utilidades.Validaciones;
 
+/**
+ *
+ * @author HECTO
+ */
 @Path("sucursal")
 public class SucursalWS {
-    
-    @Path("obtener-todos")
+
     @GET
+    @Path("obtener-todos")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Sucursal> obtenerSucursales() {
         return SucursalImp.obtenerSucursales();
     }
     
-    @Path("obtener-activas")
     @GET
+    @Path("obtener-activas")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Sucursal> obtenerSucursalesActivas() {
         return SucursalImp.obtenerSucursalesActivas();
     }
-    
-    @Path("registrar")
+
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
+    @Path("registrar")
     @Consumes(MediaType.APPLICATION_JSON)
-    public RSSucursal registrarSucursal(Sucursal sucursal) {
-        if (sucursal != null && sucursal.getNombre() != null && !sucursal.getNombre().isEmpty() 
-            && sucursal.getCalle() != null && sucursal.getIdColonia() != null) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta registrarSucursal(String json) {
+        Gson gson = new Gson();
+        try {
+            Sucursal sucursal = gson.fromJson(json, Sucursal.class);
+            if (Validaciones.esVacio(sucursal.getNombre()) || 
+                Validaciones.esVacio(sucursal.getCalle()) || 
+                (sucursal.getIdColonia() == null || sucursal.getIdColonia() <= 0)) {
+                throw new BadRequestException("Todos los campos obligatorios (nombre, calle, colonia) deben ser proporcionados");
+            }
+            if (Validaciones.esVacio(sucursal.getEstatus())) {
+                sucursal.setEstatus("activa");
+            }
             return SucursalImp.registrarSucursal(sucursal);
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
         }
-        throw new BadRequestException();
     }
-    
+
+    @PUT
     @Path("editar")
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Respuesta editarSucursal(Sucursal sucursal) {
-        if (sucursal != null && sucursal.getIdSucursal() != null && sucursal.getIdSucursal() > 0 
-            && sucursal.getIdDireccion() != null) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta editarSucursal(String json) {
+        Gson gson = new Gson();
+        try {
+            Sucursal sucursal = gson.fromJson(json, Sucursal.class);
+            if (sucursal.getIdSucursal() == null || sucursal.getIdSucursal() <= 0) {
+                throw new BadRequestException("El ID de la sucursal es obligatorio para editar");
+            }
             return SucursalImp.editarSucursal(sucursal);
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
         }
-        throw new BadRequestException();
+    }
+
+    @PUT
+    @Path("bajar/{idSucursal}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta eliminarSucursal(@PathParam("idSucursal") String idSucursalStr) {
+        if (Validaciones.esVacio(idSucursalStr) || !Validaciones.esNumerico(idSucursalStr)) {
+            throw new BadRequestException("El ID de la sucursal debe ser numérico y obligatorio");
+        }
+        int idSucursal = Integer.parseInt(idSucursalStr);
+        return SucursalImp.bajarSucursal(idSucursal);
     }
     
-    @Path("eliminar/{idSucursal}")
-    @PUT
+    @GET
+    @Path("buscar/id/{idSucursal}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Respuesta eliminarSucursal(@PathParam("idSucursal") Integer idSucursal) {
-        if (idSucursal != null && idSucursal > 0) {
-            return SucursalImp.eliminarSucursal(idSucursal);
+    public Sucursal buscarSucursalPorId(@PathParam("idSucursal") int idSucursal) {
+        if (idSucursal <= 0) {
+            throw new BadRequestException("El parámetro idSucursal debe ser un número entero mayor que cero");
         }
-        throw new BadRequestException();
+        return SucursalImp.buscarSucursalPorId(idSucursal);
     }
 }

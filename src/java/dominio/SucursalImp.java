@@ -4,29 +4,30 @@
  */
 package dominio;
 
-/**
- *
- * @author HECTO
- */
-import dto.RSSucursal;
 import dto.Respuesta;
 import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Sucursal;
+import utilidades.Constantes;
 
+/**
+ *
+ * @author HECTO
+ */
 public class SucursalImp {
-    
+
     public static List<Sucursal> obtenerSucursales() {
         List<Sucursal> sucursales = null;
-        SqlSession conexionBD = MyBatisUtil.getSession();
-        if (conexionBD != null) {
+        SqlSession conexion = MyBatisUtil.getSession();
+        
+        if (conexion != null) {
             try {
-                sucursales = conexionBD.selectList("sucursal.obtenerTodos");
+                sucursales = conexion.selectList("sucursal.obtener-sucursales");
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                conexionBD.close();
+                conexion.close();
             }
         }
         return sucursales;
@@ -34,105 +35,123 @@ public class SucursalImp {
     
     public static List<Sucursal> obtenerSucursalesActivas() {
         List<Sucursal> sucursales = null;
-        SqlSession conexionBD = MyBatisUtil.getSession();
-        if (conexionBD != null) {
+        SqlSession conexion = MyBatisUtil.getSession();
+        
+        if (conexion != null) {
             try {
-                sucursales = conexionBD.selectList("sucursal.obtenerActivas");
+                sucursales = conexion.selectList("sucursal.obtener-activas");
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                conexionBD.close();
+                conexion.close();
             }
         }
         return sucursales;
     }
-    
-    public static RSSucursal registrarSucursal(Sucursal sucursal) {
-        RSSucursal respuesta = new RSSucursal();
-        SqlSession conexionBD = MyBatisUtil.getSession();
-        if (conexionBD != null) {
+
+    public static Respuesta registrarSucursal(Sucursal sucursal) {
+        Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
+        SqlSession conexion = MyBatisUtil.getSession();
+        
+        if (conexion != null) {
             try {
-                int filasDireccion = conexionBD.insert("sucursal.registrarDireccion", sucursal);
+                int filasDireccion = conexion.insert("sucursal.registrar-direccion", sucursal);
                 
                 if (filasDireccion > 0 && sucursal.getIdDireccion() != null) {
-                    int filasSucursal = conexionBD.insert("sucursal.registrar", sucursal);
+                    int filasSucursal = conexion.insert("sucursal.registrar-sucursal", sucursal);
                     
                     if (filasSucursal > 0) {
-                        conexionBD.commit();
+                        conexion.commit();
                         respuesta.setError(false);
-                        respuesta.setMensaje("Sucursal registrada correctamente.");
-                        respuesta.setSucursal(sucursal);
+                        respuesta.setMensaje("Sucursal registrada correctamente");
                     } else {
-                        respuesta.setError(true);
-                        respuesta.setMensaje("Error al registrar los datos de la sucursal.");
+                        respuesta.setMensaje("Error al registrar la información de la sucursal");
                     }
                 } else {
-                    respuesta.setError(true);
-                    respuesta.setMensaje("Error al registrar la dirección.");
+                    respuesta.setMensaje("Error al registrar la dirección de la sucursal");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                conexionBD.close();
+                conexion.close();
             }
         } else {
-            respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a la base de datos.");
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
         }
+        
         return respuesta;
     }
-    
+
     public static Respuesta editarSucursal(Sucursal sucursal) {
         Respuesta respuesta = new Respuesta();
-        SqlSession conexionBD = MyBatisUtil.getSession();
-        if (conexionBD != null) {
+        respuesta.setError(true);
+        SqlSession conexion = MyBatisUtil.getSession();
+        
+        if (conexion != null) {
             try {
-                int filasSucursal = conexionBD.update("sucursal.editar", sucursal);
-                int filasDireccion = conexionBD.update("sucursal.editarDireccion", sucursal);
-                
+                int filasSucursal = conexion.update("sucursal.editar-sucursal", sucursal);
+                int filasDireccion = conexion.update("sucursal.editar-direccion", sucursal);
+               
                 if (filasSucursal > 0 || filasDireccion > 0) {
-                    conexionBD.commit();
+                    conexion.commit();
                     respuesta.setError(false);
-                    respuesta.setMensaje("Sucursal actualizada correctamente.");
+                    respuesta.setMensaje("Sucursal editada correctamente");
                 } else {
-                    respuesta.setError(true);
-                    respuesta.setMensaje("No se pudo actualizar la información.");
+                    respuesta.setMensaje("No se pudo actualizar la información de la sucursal. Verifique los IDs.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                conexionBD.close();
+                conexion.close();
             }
         } else {
-            respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a la base de datos.");
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
         }
+        
+        return respuesta;
+    }
+
+    public static Respuesta bajarSucursal(Integer idSucursal) {
+        Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
+        SqlSession conexion = MyBatisUtil.getSession();
+        
+        if (conexion != null) {
+            try {
+                int filasAfectadas = conexion.update("sucursal.baja-sucursal", idSucursal);
+                
+                if (filasAfectadas > 0) {
+                    conexion.commit();
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Sucursal dada de baja correctamente");
+                } else {
+                    respuesta.setMensaje("No se encontró la sucursal con el ID proporcionado");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexion.close();
+            }
+        } else {
+            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
+        }
+        
         return respuesta;
     }
     
-    public static Respuesta eliminarSucursal(int idSucursal) {
-        Respuesta respuesta = new Respuesta();
-        SqlSession conexionBD = MyBatisUtil.getSession();
-        if (conexionBD != null) {
+    public static Sucursal buscarSucursalPorId(int idSucursal) {
+        Sucursal sucursal = null;
+        SqlSession conexion = MyBatisUtil.getSession();
+        if (conexion != null) {
             try {
-                int filas = conexionBD.update("sucursal.eliminar", idSucursal);
-                if (filas > 0) {
-                    conexionBD.commit();
-                    respuesta.setError(false);
-                    respuesta.setMensaje("Sucursal dada de baja correctamente.");
-                } else {
-                    respuesta.setError(true);
-                    respuesta.setMensaje("No se encontró la sucursal para dar de baja.");
-                }
+                sucursal = conexion.selectOne("sucursal.buscar-sucursal-id", idSucursal);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                conexionBD.close();
+                conexion.close();
             }
-        } else {
-            respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a la base de datos.");
         }
-        return respuesta;
+        return sucursal;
     }
 }
