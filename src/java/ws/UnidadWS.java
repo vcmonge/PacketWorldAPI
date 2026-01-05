@@ -154,4 +154,11 @@ public class UnidadWS {
         }
         throw new BadRequestException();
     }
+    
+    @Path("obtener-asignadas")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Unidad> obtenerUnidadesAsignadas() {
+        return UnidadImp.obtenerUnidadesAsignadas();
+    }
 }

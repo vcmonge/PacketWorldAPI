@@ -14,17 +14,18 @@ public class Unidad {
     private String modelo;
     private Integer anio;
     private String vin;
-    private String nii;   // Solo lectura (lo genera la BD)
-    private String estatus; // 'activa' o 'baja'
+    private String nii;  
+    private String estatus; 
+    private String nombreConductor; 
+    private Integer idConductor;
     
-    // Relación con Tipo de Unidad
-    private Integer idTipoUnidad; // Para el INSERT/UPDATE
-    private String nombreTipoUnidad; // Para mostrar en la tabla (del JOIN)
+    private Integer idTipoUnidad; 
+    private String nombreTipoUnidad; 
 
     public Unidad() {
     }
 
-    public Unidad(Integer idUnidad, String marca, String modelo, Integer anio, String vin, String nii, String estatus, Integer idTipoUnidad, String nombreTipoUnidad) {
+    public Unidad(Integer idUnidad, String marca, String modelo, Integer anio, String vin, String nii, String estatus, String nombreConductor, Integer idConductor, Integer idTipoUnidad, String nombreTipoUnidad) {
         this.idUnidad = idUnidad;
         this.marca = marca;
         this.modelo = modelo;
@@ -32,6 +33,8 @@ public class Unidad {
         this.vin = vin;
         this.nii = nii;
         this.estatus = estatus;
+        this.nombreConductor = nombreConductor;
+        this.idConductor = idConductor;
         this.idTipoUnidad = idTipoUnidad;
         this.nombreTipoUnidad = nombreTipoUnidad;
     }
@@ -90,6 +93,29 @@ public class Unidad {
 
     public void setEstatus(String estatus) {
         this.estatus = estatus;
+    }
+
+    public String getNombreConductor() {
+        return nombreConductor;
+    }
+
+    public void setNombreConductor(String nombreConductor) {
+        this.nombreConductor = nombreConductor;
+    }
+    
+    public String getConductorLegible() {
+        if (nombreConductor == null || nombreConductor.trim().isEmpty()) {
+            return "SIN ASIGNAR";
+        }
+        return nombreConductor;
+    }
+
+    public Integer getIdConductor() {
+        return idConductor;
+    }
+
+    public void setIdConductor(Integer idConductor) {
+        this.idConductor = idConductor;
     }
 
     public Integer getIdTipoUnidad() {

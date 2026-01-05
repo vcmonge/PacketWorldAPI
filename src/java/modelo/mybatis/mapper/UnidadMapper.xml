@@ -125,4 +125,23 @@
     <select id="obtener-conductor-asignado" parameterType="int" resultType="java.lang.Integer">
         SELECT idConductor FROM unidad_conductor WHERE idUnidad = #{idUnidad}
     </select>
+    
+   <select id="obtener-unidades-asignadas" resultType="pojo.Unidad">
+        SELECT 
+            u.idUnidad, 
+            u.marca, 
+            u.modelo, 
+            u.anio, 
+            u.VIN, 
+            u.estatus,
+            CONCAT_WS(' ', c.nombre, c.apellidoPaterno, c.apellidoMaterno) AS nombreConductor,
+            c.idColaborador AS idConductor
+        FROM unidad u
+        LEFT JOIN unidad_conductor uc ON u.idUnidad = uc.idUnidad
+        LEFT JOIN conductor cond ON uc.idConductor = cond.idConductor
+        LEFT JOIN colaborador c ON cond.idConductor = c.idColaborador
+        
+        WHERE u.estatus = 'activa'
+        ORDER BY u.marca ASC
+    </select>
 </mapper>
