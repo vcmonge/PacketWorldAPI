@@ -114,8 +114,7 @@
             INNER JOIN estados es ON es.id = ms.estado 
             INNER JOIN cliente cli ON cli.idCliente = e.idCliente 
             LEFT JOIN colaborador cb ON cb.idColaborador = e.idConductor 
-        ORDER BY e.idEnvio DESC
-        LIMIT 5
+        ORDER BY e.idEnvio DESC 
     </select>
     <insert id="crear-envio" parameterType="pojo.Envio" useGeneratedKeys="true" keyProperty="idEnvio">
         INSERT INTO ENVIO (
