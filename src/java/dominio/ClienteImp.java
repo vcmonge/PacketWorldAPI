@@ -144,6 +144,7 @@ public class ClienteImp {
         return respuesta;
     }
 
+        /*
     public static Respuesta eliminarCliente(Integer idCliente) {
         Respuesta respuesta = new Respuesta();
         respuesta.setError(true);
@@ -171,6 +172,8 @@ public class ClienteImp {
         
         return respuesta;
     }
+    */
+    
     public static Cliente buscarClientePorId(int idCliente) {
         Cliente cliente = null;
         SqlSession conexion = MyBatisUtil.getSession();
@@ -184,5 +187,55 @@ public class ClienteImp {
             }
         }
         return cliente;
+    }
+    
+    public static Respuesta eliminarCliente(Integer idCliente) {
+    Respuesta respuesta = new Respuesta();
+    respuesta.setError(true);
+    SqlSession conexion = MyBatisUtil.getSession();
+    
+    if (conexion != null) {
+        try {
+            String mensajeValidacion = validarClienteParaEliminacion(conexion, idCliente);
+            
+            if (mensajeValidacion != null) {
+                respuesta.setMensaje(mensajeValidacion);
+                return respuesta; 
+            }
+
+            int filasAfectadas = conexion.delete("cliente.eliminar-cliente", idCliente);
+            
+            if (filasAfectadas > 0) {
+                conexion.commit();
+                respuesta.setError(false);
+                respuesta.setMensaje("Cliente eliminado correctamente.");
+            } else {
+                respuesta.setMensaje("No se encontró el cliente con el ID proporcionado.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            conexion.close();
+        }
+    } else {
+        respuesta.setMensaje(utilidades.Constantes.MSJ_ERROR_BD);
+    }
+    
+    return respuesta;
+    }
+
+    private static String validarClienteParaEliminacion(SqlSession conexion, int idCliente) {
+
+        pojo.Cliente cliente = conexion.selectOne("cliente.buscar-cliente-id", idCliente);
+        if (cliente == null) {
+            return "El cliente no existe.";
+        }
+
+        Integer enviosAsociados = conexion.selectOne("cliente.verificar-cliente-asociado", idCliente);
+        if (enviosAsociados != null && enviosAsociados > 0) {
+            return "No se puede eliminar el cliente porque tiene envíos registrados en el sistema.";
+        }
+
+        return null; 
     }
 }

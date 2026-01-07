@@ -159,4 +159,11 @@
         LEFT JOIN estados e ON m.estado = e.id 
         WHERE cl.idCliente = #{idCliente}
     </select>
+    
+    <select id="verificar-cliente-asociado" resultType="int" parameterType="int">
+        SELECT COUNT(*) 
+        FROM ENVIO 
+        WHERE idCliente = #{idCliente}
+    </select>
+    
 </mapper>
