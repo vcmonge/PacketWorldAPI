@@ -11,6 +11,7 @@ import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Colaborador;
 import utilidades.Constantes;
+import utilidades.Seguridad;
 
 public class ColaboradorImp {
 
@@ -43,6 +44,9 @@ public class ColaboradorImp {
                         return respuesta;
                     }
                 }
+                
+                String passwordHash = Seguridad.hashearContrasenia(colaborador.getContrasenia());
+                colaborador.setContrasenia(passwordHash);
                 // 1. Insertar Colaborador (Padre)
                 int filas = conexionBD.insert("colaborador.registrar", colaborador);
 
@@ -294,8 +298,10 @@ public class ColaboradorImp {
             try {
                 HashMap<String, Object> parametros = new HashMap<>();
                 parametros.put("idColaborador", idColaborador);
-                parametros.put("passwordActual", passwordActual);
-                parametros.put("passwordNueva", passwordNueva);
+                String hashActual = Seguridad.hashearContrasenia(passwordActual);
+                String hashNueva = Seguridad.hashearContrasenia(passwordNueva);
+                parametros.put("passwordActual", hashActual);
+                parametros.put("passwordNueva", hashNueva);
 
                 int filas = conexionBD.update("colaborador.cambiarPassword", parametros);
                 conexionBD.commit();

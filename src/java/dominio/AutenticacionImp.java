@@ -11,6 +11,7 @@ import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Colaborador;
 import pojo.Conductor;
+import utilidades.Seguridad;
 
 /**
  *
@@ -24,7 +25,8 @@ public class AutenticacionImp {
             try {
                 HashMap<String, String> parametros = new LinkedHashMap<>();
                 parametros.put("noPersonal", noPersonal);
-                parametros.put("password", password);
+                String hashPassword = Seguridad.hashearContrasenia(password);
+                parametros.put("password", hashPassword);
                 Colaborador conductor = conexionBD.selectOne("autenticacion.conductor", parametros);
                 if (conductor != null) {
                     respuesta.setError(false);
@@ -53,7 +55,8 @@ public class AutenticacionImp {
             try {
                 HashMap<String, String> parametros = new HashMap<>();
                 parametros.put("noPersonal", noPersonal);
-                parametros.put("password", password);
+                String hashPassword = Seguridad.hashearContrasenia(password);
+                parametros.put("password", hashPassword);
 
                 // La consulta ya filtra a los conductores.
                 Colaborador colaborador = conexionBD.selectOne("autenticacion.loginEscritorio", parametros);
