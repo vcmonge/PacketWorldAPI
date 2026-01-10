@@ -133,4 +133,11 @@ public class EnvioWS {
             throw new BadRequestException(e.getMessage());
         }
     }
+    
+    @Path("calcular-costo/{distancia}/{numPaquetes}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta calcularCosto(@PathParam("distancia") double distancia, @PathParam("numPaquetes") int numPaquetes){
+        return EnvioImp.calcularCosto(distancia, numPaquetes);
+    }
 }
