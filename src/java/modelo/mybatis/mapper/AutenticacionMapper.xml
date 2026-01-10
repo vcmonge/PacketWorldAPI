@@ -11,7 +11,7 @@
             c.nombre,
             c.apellidoPaterno,
             c.apellidoMaterno,
-            c.CURP,
+            c.curp,
             c.correo,
             c.noPersonal,
             c.idRol,
@@ -27,8 +27,8 @@
         SELECT 
             c.idColaborador, c.nombre, c.apellidoPaterno, c.apellidoMaterno, 
             c.curp, c.correo, c.noPersonal,
-            c.idRol, r.rol AS nombreRol,
-            c.idSucursal, s.nombre AS nombreSucursal
+            c.idRol, r.rol AS rol,
+            c.idSucursal, s.nombre AS sucursal
         FROM colaborador c
         INNER JOIN rol r ON c.idRol = r.idRol
         INNER JOIN sucursal s ON c.idSucursal = s.idSucursal
