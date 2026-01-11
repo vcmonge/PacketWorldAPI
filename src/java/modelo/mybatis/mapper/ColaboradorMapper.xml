@@ -198,4 +198,18 @@
             AND idConductor != #{idConductor}
         </if>
     </select>
+    
+    <select id="obtener-conductores-por-sucursal" parameterType="int" resultType="pojo.Colaborador">
+        SELECT 
+            c.idColaborador, c.nombre, c.apellidoPaterno, c.apellidoMaterno, 
+            c.curp, c.correo, c.noPersonal,
+            c.idRol, r.rol AS rol,
+            c.idSucursal, s.nombre AS sucursal, s.codigo AS codigoSucursal,
+            cond.numero_licencia AS numeroLicencia
+        FROM colaborador c
+        INNER JOIN rol r ON c.idRol = r.idRol
+        INNER JOIN sucursal s ON c.idSucursal = s.idSucursal
+        INNER JOIN conductor cond ON c.idColaborador = cond.idConductor
+        WHERE c.idSucursal = #{idSucursal}
+    </select>
 </mapper>

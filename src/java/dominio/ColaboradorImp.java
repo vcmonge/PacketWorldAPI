@@ -357,4 +357,19 @@ public class ColaboradorImp {
         }
         return colaboradores;
     }
+    
+    public static List<Colaborador> obtenerConductoresPorSucursal(int idSucursal) {
+        List<Colaborador> colaboradores = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                colaboradores = conexionBD.selectList("colaborador.obtener-conductores-por-sucursal", idSucursal);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return colaboradores;
+    }
 }

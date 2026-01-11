@@ -205,4 +205,14 @@ public class ColaboradorWS {
     public List<Colaborador> obtenerTodosLosConductores() {
         return ColaboradorImp.obtenerTodosLosConductores();
     }
+    
+    @Path("obtener-conductores-sucursal/{idSucursal}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Colaborador> obtenerConductoresPorSucursal(@PathParam("idSucursal") int idSucursal) {
+        if (idSucursal > 0) {
+            return ColaboradorImp.obtenerConductoresPorSucursal(idSucursal);
+        }
+        throw new BadRequestException("El ID de sucursal no es válido.");
+    }
 }
