@@ -18,6 +18,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import pojo.Colaborador;
 
@@ -91,7 +92,7 @@ public class ColaboradorWS {
     }
 
     // URL: .../ws/colaborador/buscar-nombre/Juan%20Perez
-    @Path("buscar-nombre/{nombre}")
+    /*@Path("buscar-nombre/{nombre}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Colaborador> buscarPorNombre(@PathParam("nombre") String nombre) {
@@ -112,6 +113,36 @@ public class ColaboradorWS {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Colaborador> buscarPorNoPersonal(@PathParam("noPersonal") String noPersonal) {
         return ColaboradorImp.buscarPorNoPersonal(noPersonal);
+    }*/
+    
+    @Path("buscar")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Colaborador> buscarColaboradores(
+            @QueryParam("criterio") String criterio, 
+            @QueryParam("valor") String valor) {
+        
+        List<Colaborador> resultado = null;
+        
+        if (criterio != null && valor != null) {
+            switch (criterio.toLowerCase()) {
+                case "nombre":
+                    resultado = ColaboradorImp.buscarPorNombre(valor);
+                    break;
+                case "rol":
+                    resultado = ColaboradorImp.buscarPorRol(valor);
+                    break;
+                case "nopersonal":
+                    resultado = ColaboradorImp.buscarPorNoPersonal(valor);
+                    break;
+                default:
+                    throw new BadRequestException("Criterio de búsqueda no válido");
+            }
+        } else {
+             throw new BadRequestException("Faltan parámetros de búsqueda");
+        }
+        
+        return resultado;
     }
     
     @Path("subir-fotografia/{idColaborador}")
