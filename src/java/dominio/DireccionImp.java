@@ -120,4 +120,28 @@ public class DireccionImp {
         
         return respuesta;
     }
+    
+    public static boolean eliminar(Integer idDireccion){
+        if (idDireccion == null || idDireccion <= 0) {
+            System.out.println("\nDireccionImp.eliminar(): identificador direccion invalido.");
+            return false;
+        }
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if ( conexionBD != null ) {
+            try {
+                int filasAfectadas = conexionBD.delete("direccion.eliminar", idDireccion);
+                conexionBD.commit();
+                return filasAfectadas > 0;
+            } catch (Exception e) {
+                System.out.println("\nDireccionImp.eliminar(): " + e.getMessage());
+                conexionBD.rollback();
+                return false;
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            System.out.println("\nDireccionImp.eliminar(): " + Constantes.MSJ_ERROR_BD);
+            return false;
+        }
+    }
 }

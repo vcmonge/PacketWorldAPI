@@ -41,4 +41,7 @@
         UPDATE direccion SET calle = #{calle}, numero = #{numero}, idColonia = #{idColonia} 
         WHERE idDireccion = #{idDireccion} 
     </update>
+    <delete id="eliminar" parameterType="int">
+        DELETE FROM DIRECCION WHERE idDireccion = #{value}
+    </delete>
 </mapper>
