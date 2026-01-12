@@ -26,8 +26,6 @@ import pojo.UnidadBaja;
 
 @Path("unidades")
 public class UnidadWS {
-
-    // 1. OBTENER TODAS (Para llenar la tabla)
     @Path("obtener-todas")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -35,7 +33,6 @@ public class UnidadWS {
         return UnidadImp.obtenerUnidades();
     }
 
-    // 2. OBTENER TIPOS (Para el ComboBox de registro)
     @Path("obtener-tipos")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -43,7 +40,6 @@ public class UnidadWS {
         return UnidadImp.obtenerTiposUnidad();
     }
 
-    // 3. REGISTRAR UNIDAD
     @Path("registrar")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -52,7 +48,6 @@ public class UnidadWS {
         Gson gson = new Gson();
         Unidad unidad = gson.fromJson(json, Unidad.class);
 
-        // Validaciones básicas antes de tocar la BD
         if (unidad.getVin() == null || unidad.getVin().isEmpty()) {
             return new Respuesta(true, "El VIN es obligatorio.");
         }
@@ -63,7 +58,6 @@ public class UnidadWS {
         return UnidadImp.registrarUnidad(unidad);
     }
 
-    // 4. EDITAR UNIDAD
     @Path("editar")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
@@ -79,8 +73,6 @@ public class UnidadWS {
         return UnidadImp.editarUnidad(unidad);
     }
 
-    // 5. DAR DE BAJA 
-    // Usamos PUT porque enviamos un objeto JSON con el motivo, no un simple ID en la URL.
     @Path("dar-baja")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)

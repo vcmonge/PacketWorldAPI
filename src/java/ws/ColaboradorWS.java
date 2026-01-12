@@ -32,7 +32,6 @@ public class ColaboradorWS {
         return ColaboradorImp.obtenerColaboradores();
     }
     
-    // REGISTRO GENÉRICO (Admin)
     @Path("registrar")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -42,23 +41,7 @@ public class ColaboradorWS {
         Colaborador colaborador = gson.fromJson(json, Colaborador.class);
         return ColaboradorImp.registrarColaborador(colaborador);
     }
-
-    // REGISTRO ESPECÍFICO (Para validar licencia obligatoria)
-    @Path("registrar-conductor")
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Respuesta registrarConductor(String json) {
-        Gson gson = new Gson();
-        Colaborador conductor = gson.fromJson(json, Colaborador.class);
-        
-        if(conductor.getNumeroLicencia() == null || conductor.getNumeroLicencia().isEmpty()) {
-            return new Respuesta(true, "La licencia es obligatoria para registrar un conductor.");
-        }
-        return ColaboradorImp.registrarColaborador(conductor);
-    }
     
-    // EDICIÓN GENÉRICA (Admin - Desktop)
     @Path("editar")
     @PUT 
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -68,21 +51,6 @@ public class ColaboradorWS {
         Colaborador colaborador = gson.fromJson(json, Colaborador.class);
         return ColaboradorImp.editarColaborador(colaborador);
     }
-
-    // EDICIÓN ESPECÍFICA (Móvil - Conductor)
-    @Path("editar-conductor")
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Respuesta editarConductorMovil(String json) {
-        Gson gson = new Gson();
-        Colaborador conductor = gson.fromJson(json, Colaborador.class);
-
-        if (conductor.getNumeroLicencia() == null || conductor.getNumeroLicencia().isEmpty()) {
-            return new Respuesta(true, "El número de licencia es obligatorio.");
-        }
-        return ColaboradorImp.editarColaborador(conductor);
-    }
     
     @Path("eliminar/{idColaborador}")
     @DELETE
@@ -90,30 +58,6 @@ public class ColaboradorWS {
     public Respuesta eliminar(@PathParam("idColaborador") int idColaborador) {
         return ColaboradorImp.eliminarColaborador(idColaborador);
     }
-
-    // URL: .../ws/colaborador/buscar-nombre/Juan%20Perez
-    /*@Path("buscar-nombre/{nombre}")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Colaborador> buscarPorNombre(@PathParam("nombre") String nombre) {
-        return ColaboradorImp.buscarPorNombre(nombre);
-    }
-
-    // URL: .../ws/colaborador/buscar-rol/Conductor
-    @Path("buscar-rol/{rol}")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Colaborador> buscarPorRol(@PathParam("rol") String rol) {
-        return ColaboradorImp.buscarPorRol(rol);
-    }
-
-    // URL: .../ws/colaborador/buscar-nopersonal/C001
-    @Path("buscar-nopersonal/{noPersonal}")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Colaborador> buscarPorNoPersonal(@PathParam("noPersonal") String noPersonal) {
-        return ColaboradorImp.buscarPorNoPersonal(noPersonal);
-    }*/
     
     @Path("buscar")
     @GET
