@@ -22,6 +22,8 @@ public class DireccionImp {
                 if (filasAfectadas == 1) {
                     respuesta.setError(false);
                     respuesta.setMensaje("Dirección guardada");
+                    
+                    respuesta.setValor(String.valueOf(direccion.getIdDireccion()));
                 } else {
                     respuesta.setMensaje("La dirección no se pudo guardar, verifique la información");
                 }
