@@ -86,7 +86,6 @@ public class SucursalImp {
         } else {
             respuesta.setMensaje(utilidades.Constantes.MSJ_ERROR_BD);
         }
-        
         return respuesta;
     }
 
@@ -177,4 +176,5 @@ public class SucursalImp {
         Sucursal s = conexion.selectOne("sucursal.buscar-sucursal-id", idSucursal);
         return s != null;
     }
+    
 }

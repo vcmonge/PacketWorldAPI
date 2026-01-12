@@ -33,7 +33,6 @@ public class ApplicationConfig extends Application {
         resources.add(ws.PruebaWS.class);
         resources.add(ws.SucursalWS.class);
         resources.add(ws.UnidadWS.class);
-        resources.add(ws.CorsFilter.class);
     }
     
 }
