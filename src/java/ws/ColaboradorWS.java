@@ -167,7 +167,7 @@ public class ColaboradorWS {
     
     @Path("obtener/{idColaborador}")
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public Colaborador obtenerPorId(@PathParam("idColaborador") Integer idColaborador) {
         if (idColaborador != null && idColaborador > 0) {
             return ColaboradorImp.obtenerPorId(idColaborador);
@@ -177,7 +177,7 @@ public class ColaboradorWS {
     
     @Path("cambiar-password")
     @PUT
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public Respuesta cambiarPassword(
             @FormParam("idColaborador") Integer idColaborador,
             @FormParam("passwordActual") String passwordActual,
