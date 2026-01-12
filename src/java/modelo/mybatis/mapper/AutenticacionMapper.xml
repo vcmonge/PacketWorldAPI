@@ -16,12 +16,17 @@
             c.noPersonal,
             c.idRol,
             c.idSucursal,
+            s.nombre AS sucursal,
             d.numero_licencia AS numeroLicencia
         FROM COLABORADOR c
-        INNER JOIN CONDUCTOR d ON c.idColaborador = d.idConductor
+        INNER JOIN CONDUCTOR d 
+            ON c.idColaborador = d.idConductor
+        INNER JOIN SUCURSAL s
+            ON c.idSucursal = s.idSucursal
         WHERE c.noPersonal = #{noPersonal} 
           AND c.contrasenia = #{password}
     </select>
+
     
     <select id="loginEscritorio" resultType="pojo.Colaborador">
         SELECT 
