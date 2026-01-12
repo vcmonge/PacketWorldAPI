@@ -56,24 +56,35 @@ public class SucursalImp {
         
         if (conexion != null) {
             try {
+                int existeNombre = conexion.selectOne("sucursal.verificar-nombre", sucursal.getNombre());
+                if (existeNombre > 0) {
+                    respuesta.setMensaje("El nombre de la sucursal ya existe, por favor intenta con otro.");
+                    return respuesta;
+                }
+
+                int existeCodigo = conexion.selectOne("sucursal.verificar-codigo", sucursal.getCodigo());
+                if (existeCodigo > 0) {
+                    respuesta.setMensaje("El código " + sucursal.getCodigo() + " ya está asignado a otra sucursal.");
+                    return respuesta;
+                }
+
+                int filasAfectadas = conexion.insert("sucursal.registrar-sucursal", sucursal);
                 
-                int filasSucursal = conexion.insert("sucursal.registrar-sucursal", sucursal);
-                
-                if (filasSucursal > 0) {
+                if (filasAfectadas > 0) {
                     conexion.commit();
                     respuesta.setError(false);
-                    respuesta.setMensaje("Sucursal registrada correctamente");
+                    respuesta.setMensaje("Sucursal registrada correctamente.");
                 } else {
-                    respuesta.setMensaje("Error al registrar la información de la sucursal");
+                    respuesta.setMensaje("No se pudo registrar la información de la sucursal.");
                 }
             } catch (Exception e) {
+                respuesta.setMensaje("Error interno del servidor: " + e.getMessage());
                 e.printStackTrace();
-                respuesta.setMensaje("Error al procesar el registro. Verifique que los datos sean correctos.");
             } finally {
                 conexion.close();
             }
         } else {
-            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
+            respuesta.setMensaje(utilidades.Constantes.MSJ_ERROR_BD);
         }
         
         return respuesta;

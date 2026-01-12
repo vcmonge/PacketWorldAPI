@@ -89,5 +89,13 @@
             estatus = 'inactiva'
         WHERE idSucursal = #{idSucursal}
     </update>
-
+    
+    <select id="verificar-nombre" resultType="int" parameterType="string">
+        SELECT COUNT(*) FROM sucursal WHERE nombre = #{nombre}
+    </select>
+    
+    <select id="verificar-codigo" resultType="int" parameterType="string">
+        SELECT COUNT(*) FROM sucursal WHERE codigo = #{codigo}
+    </select>
+    
 </mapper>
