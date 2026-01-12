@@ -106,12 +106,7 @@
         LEFT JOIN estados e ON m.estado = e.id
         WHERE cl.telefono = #{_parameter}
     </select>
-
-    <insert id="registrar-direccion" parameterType="pojo.Cliente" useGeneratedKeys="true" keyProperty="idDireccion">
-        INSERT INTO direccion (calle, numero, idColonia) 
-        VALUES (#{calle}, #{numero}, #{idColonia})
-    </insert>
-
+    
     <insert id="registrar-cliente" parameterType="pojo.Cliente">
         INSERT INTO cliente (nombre, apellidoPaterno, apellidoMaterno, telefono, correo, idDireccion) 
         VALUES (#{nombre}, #{apellidoPaterno}, #{apellidoMaterno}, #{telefono}, #{correo}, #{idDireccion})
@@ -126,15 +121,11 @@
             correo = #{correo}
         WHERE idCliente = #{idCliente}
     </update>
-
-    <update id="editar-direccion" parameterType="pojo.Cliente">
-        UPDATE direccion SET calle = #{calle}, numero = #{numero}, idColonia = #{idColonia}
-        WHERE idDireccion = #{idDireccion}
-    </update>
-    
-    <delete id="eliminar-cliente" parameterType="int">
+  
+   <delete id="eliminar-cliente" parameterType="int">
         DELETE FROM cliente WHERE idCliente = #{idCliente}
     </delete>
+    
     <select id="buscar-cliente-id" resultType="pojo.Cliente" parameterType="int">
         SELECT 
             cl.idCliente, 
@@ -159,11 +150,4 @@
         LEFT JOIN estados e ON m.estado = e.id 
         WHERE cl.idCliente = #{idCliente}
     </select>
-    
-    <select id="verificar-cliente-asociado" resultType="int" parameterType="int">
-        SELECT COUNT(*) 
-        FROM ENVIO 
-        WHERE idCliente = #{idCliente}
-    </select>
-    
 </mapper>

@@ -56,23 +56,19 @@ public class SucursalImp {
         
         if (conexion != null) {
             try {
-                int filasDireccion = conexion.insert("sucursal.registrar-direccion", sucursal);
                 
-                if (filasDireccion > 0 && sucursal.getIdDireccion() != null) {
-                    int filasSucursal = conexion.insert("sucursal.registrar-sucursal", sucursal);
-                    
-                    if (filasSucursal > 0) {
-                        conexion.commit();
-                        respuesta.setError(false);
-                        respuesta.setMensaje("Sucursal registrada correctamente");
-                    } else {
-                        respuesta.setMensaje("Error al registrar la información de la sucursal");
-                    }
+                int filasSucursal = conexion.insert("sucursal.registrar-sucursal", sucursal);
+                
+                if (filasSucursal > 0) {
+                    conexion.commit();
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Sucursal registrada correctamente");
                 } else {
-                    respuesta.setMensaje("Error al registrar la dirección de la sucursal");
+                    respuesta.setMensaje("Error al registrar la información de la sucursal");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                respuesta.setMensaje("Error al procesar el registro. Verifique que los datos sean correctos.");
             } finally {
                 conexion.close();
             }
@@ -90,18 +86,23 @@ public class SucursalImp {
         
         if (conexion != null) {
             try {
+                if (!existeSucursal(conexion, sucursal.getIdSucursal())) {
+                    respuesta.setMensaje("La sucursal que intenta editar no existe.");
+                    return respuesta;
+                }
+
                 int filasSucursal = conexion.update("sucursal.editar-sucursal", sucursal);
-                int filasDireccion = conexion.update("sucursal.editar-direccion", sucursal);
                
-                if (filasSucursal > 0 || filasDireccion > 0) {
+                if (filasSucursal > 0) {
                     conexion.commit();
                     respuesta.setError(false);
                     respuesta.setMensaje("Sucursal editada correctamente");
                 } else {
-                    respuesta.setMensaje("No se pudo actualizar la información de la sucursal. Verifique los IDs.");
+                    respuesta.setMensaje("No se pudo actualizar la información de la sucursal.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                respuesta.setMensaje("Error al editar la sucursal.");
             } finally {
                 conexion.close();
             }
@@ -119,6 +120,11 @@ public class SucursalImp {
         
         if (conexion != null) {
             try {
+                if (!existeSucursal(conexion, idSucursal)) {
+                    respuesta.setMensaje("La sucursal que intenta bajar  no existe.");
+                    return respuesta;
+                }
+
                 int filasAfectadas = conexion.update("sucursal.baja-sucursal", idSucursal);
                 
                 if (filasAfectadas > 0) {
@@ -126,10 +132,11 @@ public class SucursalImp {
                     respuesta.setError(false);
                     respuesta.setMensaje("Sucursal dada de baja correctamente");
                 } else {
-                    respuesta.setMensaje("No se encontró la sucursal con el ID proporcionado");
+                    respuesta.setMensaje("No se pudo dar de baja la sucursal.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                respuesta.setMensaje("Error al eliminar la sucursal.");
             } finally {
                 conexion.close();
             }
@@ -153,5 +160,10 @@ public class SucursalImp {
             }
         }
         return sucursal;
+    }
+    
+    private static boolean existeSucursal(SqlSession conexion, int idSucursal) {
+        Sucursal s = conexion.selectOne("sucursal.buscar-sucursal-id", idSucursal);
+        return s != null;
     }
 }

@@ -73,11 +73,6 @@
         WHERE s.idSucursal = #{idSucursal}
     </select>
 
-    <insert id="registrar-direccion" parameterType="pojo.Sucursal" useGeneratedKeys="true" keyProperty="idDireccion">
-        INSERT INTO direccion (calle, numero, idColonia) 
-        VALUES (#{calle}, #{numero}, #{idColonia})
-    </insert>
-
     <insert id="registrar-sucursal" parameterType="pojo.Sucursal">
         INSERT INTO sucursal (codigo, nombre, estatus, idDireccion) 
         VALUES (#{codigo}, #{nombre}, 'activa', #{idDireccion})
@@ -89,14 +84,6 @@
         WHERE idSucursal = #{idSucursal}
     </update>
 
-    <update id="editar-direccion" parameterType="pojo.Sucursal">
-        UPDATE direccion SET 
-            calle = #{calle}, 
-            numero = #{numero}, 
-            idColonia = #{idColonia}
-        WHERE idDireccion = #{idDireccion}
-    </update>
-    
     <update id="baja-sucursal" parameterType="int">
         UPDATE sucursal SET 
             estatus = 'inactiva'

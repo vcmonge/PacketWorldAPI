@@ -77,9 +77,8 @@ public class ClienteWS {
                 Validaciones.esVacio(cliente.getApellidoPaterno()) ||
                 Validaciones.esVacio(cliente.getTelefono()) || 
                 Validaciones.esVacio(cliente.getCorreo()) ||
-                Validaciones.esVacio(cliente.getCalle()) || 
-                (cliente.getIdColonia() == null || cliente.getIdColonia() <= 0)) {
-                throw new BadRequestException("Todos los campos obligatorios deben ser proporcionados");
+                (cliente.getIdDireccion() == null || cliente.getIdDireccion() <= 0)) {
+                throw new BadRequestException("Todos los campos obligatorios (nombre, apellidos, teléfono, correo, idDireccion) deben ser proporcionados");
             }
             return ClienteImp.registrarCliente(cliente);
         } catch (Exception e) {

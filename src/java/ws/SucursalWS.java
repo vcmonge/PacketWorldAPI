@@ -51,9 +51,8 @@ public class SucursalWS {
         try {
             Sucursal sucursal = gson.fromJson(json, Sucursal.class);
             if (Validaciones.esVacio(sucursal.getNombre()) || 
-                Validaciones.esVacio(sucursal.getCalle()) || 
-                (sucursal.getIdColonia() == null || sucursal.getIdColonia() <= 0)) {
-                throw new BadRequestException("Todos los campos obligatorios (nombre, calle, colonia) deben ser proporcionados");
+                sucursal.getIdDireccion() == null || sucursal.getIdDireccion() <= 0) {
+                throw new BadRequestException("El nombre y un ID de dirección válido son obligatorios.");
             }
             if (Validaciones.esVacio(sucursal.getEstatus())) {
                 sucursal.setEstatus("activa");

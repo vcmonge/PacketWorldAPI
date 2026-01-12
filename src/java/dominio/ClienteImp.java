@@ -88,23 +88,18 @@ public class ClienteImp {
         
         if (conexion != null) {
             try {
-                int filasDireccion = conexion.insert("cliente.registrar-direccion", cliente);
+                int filasCliente = conexion.insert("cliente.registrar-cliente", cliente);
                 
-                if (filasDireccion > 0 && cliente.getIdDireccion() != null) {
-                    int filasCliente = conexion.insert("cliente.registrar-cliente", cliente);
-                    
-                    if (filasCliente > 0) {
-                        conexion.commit();
-                        respuesta.setError(false);
-                        respuesta.setMensaje("Cliente registrado correctamente");
-                    } else {
-                        respuesta.setMensaje("Error al registrar la información del cliente");
-                    }
+                if (filasCliente > 0) {
+                    conexion.commit();
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Cliente registrado correctamente.");
                 } else {
-                    respuesta.setMensaje("Error al registrar la dirección del cliente");
+                    respuesta.setMensaje("No se pudo registrar la información del cliente.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                respuesta.setMensaje("Error interno al registrar el cliente. Verifique los datos.");
             } finally {
                 conexion.close();
             }
@@ -122,47 +117,23 @@ public class ClienteImp {
         
         if (conexion != null) {
             try {
-                int filasCliente = conexion.update("cliente.editar-cliente", cliente);
-                int filasDireccion = conexion.update("cliente.editar-direccion", cliente);
-               
-                if (filasCliente > 0 || filasDireccion > 0) {
-                    conexion.commit();
-                    respuesta.setError(false);
-                    respuesta.setMensaje("Cliente editado correctamente");
-                } else {
-                    respuesta.setMensaje("No se pudo actualizar la información del cliente. Verifique los IDs.");
+                if (!existeCliente(conexion, cliente.getIdCliente())) {
+                    respuesta.setMensaje("El cliente que intenta editar no existe.");
+                    return respuesta;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                conexion.close();
-            }
-        } else {
-            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
-        }
-        
-        return respuesta;
-    }
 
-        /*
-    public static Respuesta eliminarCliente(Integer idCliente) {
-        Respuesta respuesta = new Respuesta();
-        respuesta.setError(true);
-        SqlSession conexion = MyBatisUtil.getSession();
-        
-        if (conexion != null) {
-            try {
-                int filasAfectadas = conexion.delete("cliente.eliminar-cliente", idCliente);
-                
-                if (filasAfectadas > 0) {
+                int filasCliente = conexion.update("cliente.editar-cliente", cliente);
+               
+                if (filasCliente > 0) {
                     conexion.commit();
                     respuesta.setError(false);
-                    respuesta.setMensaje("Cliente eliminado correctamente");
+                    respuesta.setMensaje("Cliente editado correctamente.");
                 } else {
-                    respuesta.setMensaje("No se encontró el cliente con el ID proporcionado");
+                    respuesta.setMensaje("No se pudo actualizar la información del cliente.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                respuesta.setMensaje("Error interno al editar el cliente.");
             } finally {
                 conexion.close();
             }
@@ -172,8 +143,7 @@ public class ClienteImp {
         
         return respuesta;
     }
-    */
-    
+        
     public static Cliente buscarClientePorId(int idCliente) {
         Cliente cliente = null;
         SqlSession conexion = MyBatisUtil.getSession();
@@ -190,52 +160,41 @@ public class ClienteImp {
     }
     
     public static Respuesta eliminarCliente(Integer idCliente) {
-    Respuesta respuesta = new Respuesta();
-    respuesta.setError(true);
-    SqlSession conexion = MyBatisUtil.getSession();
-    
-    if (conexion != null) {
-        try {
-            String mensajeValidacion = validarClienteParaEliminacion(conexion, idCliente);
-            
-            if (mensajeValidacion != null) {
-                respuesta.setMensaje(mensajeValidacion);
-                return respuesta; 
-            }
+        Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
+        SqlSession conexion = MyBatisUtil.getSession();
+        
+        if (conexion != null) {
+            try {
+                if (!existeCliente(conexion, idCliente)) {
+                    respuesta.setMensaje("El cliente que intenta eliminar no existe.");
+                    return respuesta;
+                }
 
-            int filasAfectadas = conexion.delete("cliente.eliminar-cliente", idCliente);
-            
-            if (filasAfectadas > 0) {
-                conexion.commit();
-                respuesta.setError(false);
-                respuesta.setMensaje("Cliente eliminado correctamente.");
-            } else {
-                respuesta.setMensaje("No se encontró el cliente con el ID proporcionado.");
+                int filasAfectadas = conexion.delete("cliente.eliminar-cliente", idCliente);
+                
+                if (filasAfectadas > 0) {
+                    conexion.commit();
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Cliente eliminado correctamente.");
+                } else {
+                    respuesta.setMensaje("No se pudo completar la eliminación del cliente.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                respuesta.setMensaje("Error al procesar la eliminación. Es posible que tenga registros asociados.");
+            } finally {
+                conexion.close();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            conexion.close();
+        } else {
+            respuesta.setMensaje(utilidades.Constantes.MSJ_ERROR_BD);
         }
-    } else {
-        respuesta.setMensaje(utilidades.Constantes.MSJ_ERROR_BD);
-    }
-    
-    return respuesta;
+        
+        return respuesta;
     }
 
-    private static String validarClienteParaEliminacion(SqlSession conexion, int idCliente) {
-
+    private static boolean existeCliente(SqlSession conexion, int idCliente) {
         pojo.Cliente cliente = conexion.selectOne("cliente.buscar-cliente-id", idCliente);
-        if (cliente == null) {
-            return "El cliente no existe.";
-        }
-
-        Integer enviosAsociados = conexion.selectOne("cliente.verificar-cliente-asociado", idCliente);
-        if (enviosAsociados != null && enviosAsociados > 0) {
-            return "No se puede eliminar el cliente porque tiene envíos registrados en el sistema.";
-        }
-
-        return null; 
+        return cliente != null;
     }
 }
