@@ -88,9 +88,22 @@ public class ClienteImp {
         
         if (conexion != null) {
             try {
-                int filasCliente = conexion.insert("cliente.registrar-cliente", cliente);
                 
-                if (filasCliente > 0) {
+                int existeCorreo = conexion.selectOne("cliente.verificar-correo", cliente.getCorreo());
+                if (existeCorreo > 0) {
+                    respuesta.setMensaje("El correo electrónico " + cliente.getCorreo() + " ya está registrado.");
+                    return respuesta;
+                }
+
+                int existeTelefono = conexion.selectOne("cliente.verificar-telefono", cliente.getTelefono());
+                if (existeTelefono > 0) {
+                    respuesta.setMensaje("El número de teléfono " + cliente.getTelefono() + " ya está registrado.");
+                    return respuesta;
+                }
+
+                int filasAfectadas = conexion.insert("cliente.registrar-cliente", cliente);
+                
+                if (filasAfectadas > 0) {
                     conexion.commit();
                     respuesta.setError(false);
                     respuesta.setMensaje("Cliente registrado correctamente.");
@@ -98,13 +111,13 @@ public class ClienteImp {
                     respuesta.setMensaje("No se pudo registrar la información del cliente.");
                 }
             } catch (Exception e) {
+                respuesta.setMensaje("Error interno del servidor: " + e.getMessage());
                 e.printStackTrace();
-                respuesta.setMensaje("Error interno al registrar el cliente. Verifique los datos.");
             } finally {
                 conexion.close();
             }
         } else {
-            respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
+            respuesta.setMensaje(utilidades.Constantes.MSJ_ERROR_BD);
         }
         
         return respuesta;

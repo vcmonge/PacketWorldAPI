@@ -150,4 +150,12 @@
         LEFT JOIN estados e ON m.estado = e.id 
         WHERE cl.idCliente = #{idCliente}
     </select>
+    
+    <select id="verificar-correo" resultType="int" parameterType="string">
+        SELECT COUNT(*) FROM cliente WHERE correo = #{correo}
+    </select>
+    
+    <select id="verificar-telefono" resultType="int" parameterType="string">
+        SELECT COUNT(*) FROM cliente WHERE telefono = #{telefono}
+    </select>
 </mapper>
